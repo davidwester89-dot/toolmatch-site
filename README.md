@@ -1,8 +1,8 @@
 # ToolMatch (toolmatch.nl)
 
-Statische landingspagina voor toolmatch.nl: de juiste (AI-)tools voor zzp'ers. Gehost via GitHub Pages vanaf `main` (CNAME toolmatch.nl). Geen build-stap nodig.
+Statische landingspagina voor toolmatch.nl: de juiste (AI-)tools voor ondernemers. Gehost via GitHub Pages vanaf `main` (CNAME toolmatch.nl). Geen build-stap nodig.
 
-- `index.html`, `over/`, `privacy/`, `style.css`, `favicon.svg`, `og.png`, `fonts/` (Inter, OFL)
+- `index.html` (eigen design, hero-SVG inline), `over/`, `privacy/`, `style.css`, `favicon.svg`, `og.png`, `fonts/` (Inter, OFL)
 - `js/consent.js` + `js/lib/consent.js`: cookiemelding (Accepteren/Weigeren); GA4 (`G-Y7V72FDMBZ`) laadt pas na toestemming. Zelfde patroon als ShopMatch.
 - `robots.txt`, `sitemap.xml`
 

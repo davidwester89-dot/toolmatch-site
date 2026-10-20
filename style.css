@@ -26,7 +26,7 @@ header.site .wrap{display:flex;align-items:center;justify-content:space-between;
 nav.main{display:flex;align-items:center;gap:4px}
 nav.main a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:99px;text-decoration:none;color:var(--ink);font-weight:600;font-size:.97rem}
 nav.main a:hover{background:var(--tint);color:var(--brand-d)}
-nav.main a.nav-cta{background:var(--brand);color:#fff;margin-left:6px;padding:0 18px}nav.main a.nav-cta:hover{background:var(--brand-d);color:#fff}
+nav.main a.nav-cta{white-space:nowrap;background:var(--brand);color:#fff;margin-left:6px;padding:0 18px}nav.main a.nav-cta:hover{background:var(--brand-d);color:#fff}
 @media(max-width:899px){nav.main a:not(.nav-cta){display:none}}
 @media(max-width:380px){nav.main a.nav-cta{padding:0 14px;font-size:.92rem}}
 /* buttons */
@@ -140,3 +140,44 @@ body.has-consent{padding-bottom:140px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 button{font:inherit;font-weight:700;display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 22px;border-radius:99px;border:2px solid var(--brand);background:var(--brand);color:#fff;cursor:pointer}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+/* keuzehulp */
+.kh-wrap{max-width:900px;padding:48px 0 16px}
+.kh{display:grid;gap:20px}
+.kh .q{border:1px solid var(--line);border-radius:var(--r);padding:20px 22px 22px;margin:0;background:#fff}
+.kh legend{font-weight:800;font-size:1.15rem;padding:0 6px;margin-left:-6px}
+.kh .hint{margin:4px 0 0;color:var(--muted);font-size:.97rem}
+.opts{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.opt{position:relative;display:inline-flex}
+.opt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.opt span{display:inline-flex;align-items:center;min-height:48px;padding:10px 18px;border-radius:99px;border:2px solid var(--line);background:var(--tint);font-weight:600;font-size:1rem;cursor:pointer;transition:border-color .15s,background .15s}
+.opt input:hover+span{border-color:rgba(15,110,110,.45)}
+.opt input:checked+span{background:var(--brand);border-color:var(--brand);color:#fff}
+.opt input:focus-visible+span{outline:3px solid var(--amber);outline-offset:2px}
+.kh .btn{justify-self:start}
+.kh-res{padding:48px 0 8px}
+.kh-res h2:focus{outline:none}
+.kh-res .lead{color:var(--muted);margin:0 0 24px}
+.results{display:grid;gap:20px}
+.res{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px 24px}
+.res.top{border:2px solid var(--brand);box-shadow:0 18px 40px -22px rgba(11,47,49,.35)}
+.res .rank{display:inline-block;margin:0 0 8px;font-size:.85rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--warm-d);background:var(--warm-l);border-radius:99px;padding:2px 12px}
+.res.top .rank{background:var(--brand);color:#fff}
+.res h3{font-size:1.4rem}
+.res p{color:#33434b;font-size:1rem}
+.res ul{margin:0 0 12px;padding-left:1.3em;font-size:1rem}
+.res .pros li::marker{content:"✓  ";color:var(--brand)}
+.res .cons li::marker{content:"!  ";color:var(--warm-d);font-weight:800}
+.facts{display:grid;gap:8px 20px;grid-template-columns:minmax(0,1fr);margin:16px 0;padding:16px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line)}
+@media(min-width:700px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.facts dt{font-size:.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.facts dd{margin:0;font-size:1rem}
+.res .priv,.res .src{font-size:.95rem;color:var(--muted)}
+.res .go{margin:16px 0 0}
+.partner{display:inline-block;margin-left:10px;font-size:.85rem;font-weight:700;color:var(--warm-d);background:var(--warm-l);border-radius:6px;padding:2px 8px;vertical-align:middle}
+.prose.wide{max-width:1000px}
+.tbl{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:14px}
+.tbl table{border-collapse:collapse;width:100%;min-width:860px;font-size:.95rem}
+.tbl th,.tbl td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line)}
+.tbl thead th{background:var(--tint);font-size:.85rem;text-transform:uppercase;letter-spacing:.04em}
+.tbl tbody tr:last-child th,.tbl tbody tr:last-child td{border-bottom:0}
+@media(max-width:479px){.nm{display:none}}

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://toolmatch.nl/</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://toolmatch.nl/over/</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://toolmatch.nl/partnerlinks/</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://toolmatch.nl/contact/</loc><lastmod>2026-10-20</lastmod></url>
+  <url><loc>https://toolmatch.nl/disclaimer/</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://toolmatch.nl/privacy/</loc><lastmod>2026-10-20</lastmod></url>
 </urlset>

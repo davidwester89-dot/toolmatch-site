@@ -17,7 +17,7 @@ const consent = createConsent({
 export const track = (name, params) => consent.track(name, params);
 
 const BASE = body.dataset.base || '';
-const TOOLS = {};
+const TOOLS = { '/keuzehulp/': 'keuzehulp' };
 
 let banner = null;
 let returnFocus = null;

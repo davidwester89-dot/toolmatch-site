@@ -1,0 +1,100 @@
+// Tools in de keuzehulp. Alleen feiten van de eigen site van de aanbieder, met bron en controledatum.
+// Weten we iets niet zeker, dan staat het op null ("niet gecontroleerd") en telt het niet als pluspunt.
+// 'instap' is onze eigen indeling (eenvoudig / gemiddeld / technisch), uitgelegd op /keuzehulp/.
+// Dit bestand bevat GEEN partnerlinks: die staan alleen in partnerlinks.js en tellen nooit mee.
+export const GECONTROLEERD = '2026-10-20';
+
+export const DOELEN = {
+  schrijven: 'Teksten schrijven',
+  notuleren: 'Vergaderen en notuleren',
+  klantcontact: 'Klantcontact en chatbot',
+  automatiseren: 'Werk automatiseren',
+  beeld: 'Beeld en design',
+  data: 'Data en analyse',
+};
+
+/**
+ * prijs: tekst zoals de aanbieder hem vermeldt (goedkoopste betaalde abonnement).
+ * prijsMaand: dat bedrag per maand als getal (valuta van de aanbieder), alleen voor de budgetvraag.
+ * prijsPer: 'gebruiker' of 'team' (vast bedrag voor een team).
+ * gratis: is er een gratis versie (geen proefperiode)?
+ * eu: 'ja' = de aanbieder zegt dat gegevens standaard in de EU staan; 'deels' = grotendeels; null = niet gecontroleerd.
+ * team: is er een abonnement voor meerdere gebruikers?
+ */
+export const TOOLS = [
+  { id: 'chatgpt', naam: 'ChatGPT', url: 'https://chatgpt.com/', doelen: ['schrijven', 'data', 'beeld'],
+    wat: 'Algemene AI-assistent van OpenAI voor tekst, samenvatten, data-analyse en afbeeldingen.',
+    gratis: true, prijs: 'Plus: $20 per maand', prijsMaand: 20, prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
+    eu: null, privacy: 'Je kunt uitzetten dat je gesprekken worden gebruikt om modellen te trainen (Data Controls).',
+    bronnen: [['ChatGPT Pricing', 'https://chatgpt.com/pricing'], ['OpenAI Help: What is ChatGPT Plus?', 'https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus']] },
+  { id: 'lechat', naam: 'Le Chat (Mistral AI)', url: 'https://mistral.ai/', doelen: ['schrijven', 'beeld'],
+    wat: 'AI-assistent van het Franse Mistral AI voor tekst, zoeken en eenvoudige afbeeldingen.',
+    gratis: true, prijs: 'Pro: $14,99 per maand (excl. belasting); Team: $24,99 per gebruiker', prijsMaand: 14.99, prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
+    eu: 'ja', privacy: 'Gegevens staan standaard in de EU; bij sommige functies kunnen ze tijdelijk naar subverwerkers buiten de EU gaan.',
+    bronnen: [['Mistral AI Pricing', 'https://mistral.ai/pricing'], ['Mistral Help: Where do you store my data?', 'https://help.mistral.ai/en/articles/347629-where-do-you-store-my-data-or-my-organization-s-data']] },
+  { id: 'deepl', naam: 'DeepL', url: 'https://www.deepl.com/', doelen: ['schrijven'],
+    wat: 'Vertalen en teksten verbeteren (DeepL Write), ook in je browser en Google Docs.',
+    gratis: true, prijs: 'Individual: €7,49 per maand bij jaarbetaling (incl. btw)', prijsMaand: 7.49, prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
+    eu: null, privacy: 'Bij betaalde abonnementen wordt je tekst niet gebruikt om de AI van DeepL te trainen.',
+    bronnen: [['DeepL Pro', 'https://www.deepl.com/en/pro']] },
+  { id: 'amberscript', naam: 'Amberscript', url: 'https://www.amberscript.com/', doelen: ['notuleren'],
+    wat: 'Opnames en gesprekken laten uitschrijven, automatisch of nagekeken door mensen.',
+    gratis: false, prijs: '€29 per maand voor 5 uur', prijsMaand: 29, prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
+    eu: 'ja', privacy: 'Opslag op servers in de EU; verwerkersovereenkomst (DPA) en NDA mogelijk.',
+    bronnen: [['Amberscript Pricing', 'https://www.amberscript.com/en/pricing/']] },
+  { id: 'tldv', naam: 'tl;dv', url: 'https://tldv.io/', doelen: ['notuleren'],
+    wat: 'Neemt online meetings op en maakt er notities en samenvattingen van.',
+    gratis: true, prijs: 'Pro: €18 per gebruiker per maand bij jaarbetaling (€29 maandelijks)', prijsMaand: 18, prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
+    eu: null, privacy: null,
+    bronnen: [['tl;dv Pricing', 'https://tldv.io/pricing/']] },
+  { id: 'fireflies', naam: 'Fireflies.ai', url: 'https://fireflies.ai/', doelen: ['notuleren'],
+    wat: 'Notulist voor Zoom, Google Meet en Teams met samenvattingen en zoeken in gesprekken.',
+    gratis: true, prijs: null, prijsMaand: null, prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
+    eu: null, privacy: 'Volgens de aanbieder worden je gegevens niet gebruikt om AI te trainen. Engels is de hoofdtaal; andere talen zijn in bèta.',
+    bronnen: [['Fireflies Pricing', 'https://fireflies.ai/pricing']] },
+  { id: 'trengo', naam: 'Trengo', url: 'https://trengo.com/', doelen: ['klantcontact'],
+    wat: 'Eén inbox voor mail, WhatsApp, chat en social, met AI-antwoorden en automatisering.',
+    gratis: false, prijs: 'Boost: €299 per maand bij jaarbetaling, 10 gebruikers inbegrepen', prijsMaand: 299, prijsPer: 'team', team: true, instap: 'gemiddeld',
+    eu: null, privacy: null,
+    bronnen: [['Trengo Pricing', 'https://trengo.com/pricing']] },
+  { id: 'tidio', naam: 'Tidio', url: 'https://www.tidio.com/', doelen: ['klantcontact'],
+    wat: 'Livechat en AI-chatbot (Lyro) voor je website of webshop.',
+    gratis: true, prijs: 'Starter: $24,17 per maand bij jaarbetaling', prijsMaand: 24.17, prijsPer: 'team', team: true, instap: 'eenvoudig',
+    eu: 'deels', privacy: 'Gegevens worden vooral binnen de EER verwerkt; het contract loopt via een Amerikaanse entiteit.',
+    bronnen: [['Tidio Pricing', 'https://www.tidio.com/pricing/'], ['Tidio Privacy Policy', 'https://www.tidio.com/privacy-policy/']] },
+  { id: 'intercom', naam: 'Intercom', url: 'https://www.intercom.com/', doelen: ['klantcontact'],
+    wat: 'Klantenservice-platform met inbox, helpcenter en AI-agent Fin.',
+    gratis: false, prijs: 'Essential: $29 per gebruiker per maand bij jaarbetaling, plus $0,99 per opgeloste Fin-vraag', prijsMaand: 29, prijsPer: 'gebruiker', team: true, instap: 'gemiddeld',
+    eu: null, privacy: null,
+    bronnen: [['Intercom Pricing', 'https://www.intercom.com/pricing']] },
+  { id: 'zapier', naam: 'Zapier', url: 'https://zapier.com/', doelen: ['automatiseren'],
+    wat: 'Koppelt duizenden apps zodat terugkerend werk vanzelf gaat, zonder programmeren.',
+    gratis: true, prijs: 'Professional: $19,99 per maand bij jaarbetaling (750 taken)', prijsMaand: 19.99, prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
+    eu: null, privacy: null,
+    bronnen: [['Zapier Pricing', 'https://zapier.com/pricing']] },
+  { id: 'make', naam: 'Make', url: 'https://www.make.com/', doelen: ['automatiseren'],
+    wat: 'Visuele bouwer voor automatiseringen met veel controle over elke stap.',
+    gratis: true, prijs: 'Core: $9 per maand bij jaarbetaling (10.000 credits)', prijsMaand: 9, prijsPer: 'team', team: true, instap: 'gemiddeld',
+    eu: null, privacy: null,
+    bronnen: [['Make Pricing', 'https://www.make.com/en/pricing'], ['Make vs Zapier (Make)', 'https://www.make.com/en/compare/make-vs-zapier']] },
+  { id: 'n8n', naam: 'n8n', url: 'https://n8n.io/', doelen: ['automatiseren'],
+    wat: 'Automatiseren met AI-agents en code-stappen; ook zelf te hosten (Community Edition).',
+    gratis: false, prijs: 'Starter: €20 per maand bij jaarbetaling', prijsMaand: 20, prijsPer: 'team', team: true, instap: 'technisch',
+    eu: 'ja', privacy: 'Bij hosting door n8n staan gegevens in de EU (Frankfurt). Zelf hosten kan ook.',
+    bronnen: [['n8n Pricing', 'https://n8n.io/pricing/']] },
+  { id: 'canva', naam: 'Canva', url: 'https://www.canva.com/', doelen: ['beeld'],
+    wat: 'Ontwerpen voor social media, presentaties en drukwerk, met AI-functies.',
+    gratis: true, prijs: 'Pro: €110 per jaar voor één persoon', prijsMaand: 9.17, prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
+    eu: null, privacy: null,
+    bronnen: [['Canva Pricing', 'https://www.canva.com/pricing/']] },
+  { id: 'lookerstudio', naam: 'Looker Studio', url: 'https://lookerstudio.google.com/', doelen: ['data'],
+    wat: 'Gratis dashboards en rapporten van Google, bijvoorbeeld op basis van Sheets of Analytics.',
+    gratis: true, prijs: 'Pro: $9 per gebruiker per project per maand', prijsMaand: 9, prijsPer: 'gebruiker', team: true, instap: 'gemiddeld',
+    eu: null, privacy: null,
+    bronnen: [['Google Cloud: Looker Studio', 'https://cloud.google.com/looker-studio']] },
+  { id: 'powerbi', naam: 'Power BI', url: 'https://www.microsoft.com/nl-nl/power-platform/products/power-bi', doelen: ['data'],
+    wat: 'Rapporten en dashboards van Microsoft; Power BI Desktop is gratis te downloaden.',
+    gratis: true, prijs: 'Pro: €12,10 per gebruiker per maand bij jaarbetaling (excl. btw)', prijsMaand: 12.1, prijsPer: 'gebruiker', team: true, instap: 'gemiddeld',
+    eu: null, privacy: null,
+    bronnen: [['Microsoft: Prijzen voor Power BI', 'https://www.microsoft.com/nl-nl/power-platform/products/power-bi/pricing']] },
+];

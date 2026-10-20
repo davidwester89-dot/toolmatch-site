@@ -177,5 +177,9 @@ export const TOOLS = [
     gratis: null, prijs: 'Standard: vanaf $99 per maand', prijsMaand: 99, prijsPer: 'team', team: true, instap: 'gemiddeld',
     eu: null, privacy: null,
     bronnen: [['Hootsuite Plans', 'https://www.hootsuite.com/plans']] },
+  { id: 'googlecloudtranslate', naam: 'Google Cloud Translation', url: 'https://cloud.google.com/translate', doelen: [],
+    wat: 'Vertaal-API van Google om teksten en documenten vanuit je eigen software of website te laten vertalen.',
+    gratis: true, prijs: 'Eerste 500.000 tekens per maand gratis (als tegoed van $10); daarboven $20 per miljoen tekens', prijsMaand: 0, prijsPer: 'team', team: true, instap: 'technisch',
+    eu: null, privacy: null,
+    bronnen: [['Google Cloud: Translation pricing', 'https://cloud.google.com/translate/pricing']] },
 ];
-

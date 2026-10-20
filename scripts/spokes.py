@@ -104,7 +104,8 @@ cat('/ai-tekst-schrijven/','AI-tools om Nederlandse teksten te schrijven | ToolM
   ('lechat','je liever een Europese aanbieder gebruikt.')],
  ['<strong>Schrijven of verbeteren?</strong> Wil je dat de tool de tekst maakt, kies een assistent. Schrijf je liever zelf, dan is een schrijfhulp vaak genoeg.',
   '<strong>Geef context mee.</strong> Vertel voor wie de tekst is, hoe lang hij moet zijn en welke toon je wilt. Hoe preciezer de opdracht, hoe minder je hoeft te herschrijven.',
-  f'<strong>Lees alles na.</strong> Controleer namen, cijfers en beloftes. Een tekst publiceer je onder je eigen naam. Klaar met schrijven? Dan kun je {L("/social-media-inplannen/","je LinkedIn-posts inplannen")}.'],
+  f'<strong>Lees alles na.</strong> Controleer namen, cijfers en beloftes. Een tekst publiceer je onder je eigen naam. Klaar met schrijven? Dan kun je {L("/social-media-inplannen/","je LinkedIn-posts inplannen")}.',
+  f'<strong>Begin niet blanco.</strong> Gebruik onze {L("/gids/prompts-voor-ondernemers/","voorbeeldprompts voor je teksten")}. Moet de tekst ook in een andere taal? Lees over {L("/ai-vertalen/","teksten vertalen met AI")}.'],
  [('Welke AI schrijft het beste Nederlands?','Dat hebben we niet gemeten, dus daar doen we geen uitspraak over. Probeer twee tools met dezelfde opdracht uit je eigen werk en vergelijk het resultaat.'),
   ('Kan ik een AI-tekst zomaar op mijn website zetten?','Je bent zelf verantwoordelijk voor wat je publiceert. Lees de tekst na op fouten en verzonnen feiten, en pas hem aan zodat hij klinkt als jouw bedrijf.'),
   ('Wat is het verschil tussen DeepL en ChatGPT?','DeepL is gemaakt voor vertalen en het verbeteren van bestaande tekst. ChatGPT is een algemene assistent die ook nieuwe teksten schrijft en andere taken doet.')])
@@ -608,6 +609,77 @@ for g in GIDS:
     graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":GC,"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),('Gidsen','/gids/'),(g['crumb'],g['slug'])]),faq_ld(g['slug'],g['faq'])]
     zet(g['slug'],g['title'],g['desc'],crumb,g['h1'],g['lead'],body,graph)
+
+
+# ======================= VRIJDAG: VERTALEN + PROMPTS =======================
+DEEPL_NL=('DeepL Pro (Nederlandse prijspagina)','https://www.deepl.com/nl/pro')
+vt=dict(slug='/ai-vertalen/',title='AI-vertaaltools voor je bedrijf: DeepL en meer | ToolMatch',
+ desc='Zakelijke teksten en documenten vertalen met AI. Vergelijk DeepL, Google Translate en AI-assistenten op kwaliteit, privacy van je bestanden en prijs.',
+ crumb='Vertalen',h1='AI-vertaaltools voor je bedrijf',
+ lead='Een offerte in het Engels, een webpagina in het Duits of een document van een buitenlandse klant. Zo vergelijk je vertaaltools op prijs en wat er met je bestanden gebeurt.',
+ intro=f'''      <p>Voor vertalen heb je drie soorten tools: een <strong>vertaaldienst</strong> zoals DeepL, een <strong>algemene AI-assistent</strong> die ook kan vertalen, en een <strong>vertaal-API</strong> voor als je vertalingen in je eigen website of software wilt inbouwen.</p>
+      <p>Google Translate kun je ook gebruiken om bestanden en websites te vertalen, volgens Google. De voorwaarden en wat er met je bestanden gebeurt, hebben we voor de gratis webversie niet gecontroleerd; daarom staat die hier niet als tool met prijs. Hoe goed een tool vertaalt, hebben we niet gemeten. Laat een belangrijke vertaling altijd nalezen door iemand die de taal goed kent.</p>
+''',
+ tools=[('chatgpt','je af en toe iets vertaalt en de vertaling meteen wilt laten aanpassen aan je doelgroep.'),
+  ('deepl','je regelmatig teksten en documenten vertaalt; bij Individual zit volgens DeepL geen training op je gegevens en 3 documentvertalingen per maand. Team kost €24,99 per gebruiker per maand bij jaarbetaling.'),
+  ('googlecloudtranslate','je vertalingen wilt inbouwen in je eigen website of software; daar heb je technische kennis voor nodig.'),
+  ('lechat','je liever een Europese AI-assistent gebruikt om te vertalen.')],
+ kies=['<strong>Wat vertaal je?</strong> Losse zinnen en mails kun je met elke tool vertalen. Voor hele documenten in dezelfde opmaak is een vertaaldienst handiger.',
+  '<strong>Wat staat er in je bestanden?</strong> Gaat het om klantgegevens of vertrouwelijke stukken, kies dan een abonnement waarvan je weet dat je tekst niet voor training wordt gebruikt.',
+  '<strong>Laat nalezen.</strong> Een vertaling voor een klant of je website laat je controleren door iemand die de taal goed kent.'],
+ faq=[('Is DeepL beter dan Google Translate?','Dat hebben we niet gemeten. Vergelijk ze zelf met een echte tekst uit je werk. Voor zakelijk gebruik is ook belangrijk wat er met je tekst gebeurt: bij betaalde DeepL-abonnementen wordt je tekst volgens DeepL niet gebruikt voor training.'),
+  ('Kan ik een heel document laten vertalen?','Ja. DeepL Individual heeft volgens DeepL 3 documentvertalingen per maand, en ook Google Translate kan volgens Google bestanden vertalen.'),
+  ('Wat kost DeepL voor een bedrijf?','DeepL Individual kost €7,49 per maand en Team €24,99 per gebruiker per maand, allebei bij jaarbetaling. Er is een gratis proefperiode van 30 dagen.')],
+ src=[DEEPL_NL,('Google Translate: over','https://translate.google.com/intl/nl/about/')])
+c=vt; ids=[i for i,_ in c['tools']]
+assert all(T[i]['prijs'] for i in ids) and len(ids)>=3
+srcs=[tuple(b) for i in ids for b in T[i]['bronnen']]+c['src']
+body=c['intro']+'      <h2 id="overzicht">In het kort</h2>\n      <p>De tools staan op alfabetische volgorde, niet op rangorde.</p>\n'+kort_tabel(ids,'Overzicht van de vertaaltools')
+body+='      <h2 id="tools">De tools</h2>\n      <div class="results">\n'+''.join(kaart(T[i],p) for i,p in c['tools'])+'      </div>\n'
+body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
+body+=f'      <p>Schrijf je de tekst eerst zelf? Bekijk dan de {L("/ai-tekst-schrijven/","AI-tools voor Nederlandse teksten")}.</p>\n'
+body+=faq_html(c['faq'])+bronnen_html(srcs)+byline()
+graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":GC},
+  {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
+  crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
+zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)
+
+def prompt(titel,tekst): return f'''      <div class="pledge-n prompt">
+        <p><strong>{titel}</strong></p>
+        <p>{tekst}</p>
+      </div>
+'''
+PR=f'''      <h2 id="zo-werkt-het">Zo haal je meer uit een prompt</h2>
+      <ul>
+        <li><strong>Zeg wie je bent en voor wie het is.</strong> "Ik heb een schildersbedrijf, de tekst is voor particuliere klanten."</li>
+        <li><strong>Geef een voorbeeld of je eigen opzet mee.</strong> Dan hoeft de AI niet te raden naar je toon.</li>
+        <li><strong>Vraag om een vorm.</strong> Een lengte, een opsomming of drie varianten.</li>
+        <li><strong>Laat persoonsgegevens weg.</strong> Gebruik [klantnaam] in plaats van een echte naam. Lees waarom in onze gids over <a href="/gids/ai-veilig-gebruiken/">AI veilig gebruiken</a>.</li>
+        <li><strong>Controleer het resultaat.</strong> AI kan fouten maken en dingen verzinnen. Wat je verstuurt, staat onder jouw naam.</li>
+      </ul>
+      <h2 id="mail">Mail en offertes</h2>
+{prompt('Offertemail','Schrijf een korte, vriendelijke mail bij een offerte voor [soort werk] voor [klantnaam]. Noem dat de offerte in de bijlage zit, dat de offerte [aantal] dagen geldig is en dat de klant met vragen kan bellen. Toon: zakelijk maar persoonlijk. Maximaal 120 woorden. Noem geen bedragen.')}{prompt('Herinnering zonder te drammen','Schrijf een korte mail om [klantnaam] te herinneren aan de offerte die ik op [datum] stuurde. Vraag of er nog vragen zijn. Geen druk, wel een duidelijke vraag aan het eind. Maximaal 80 woorden.')}{prompt('Lastige mail beantwoorden','Hier is een mail van een klant die ontevreden is: [tekst zonder namen]. Schrijf een rustig antwoord dat begrip toont, uitlegt wat we gaan doen ([wat je gaat doen]) en eindigt met een concrete volgende stap. Maximaal 150 woorden.')}
+      <h2 id="social">LinkedIn en social media</h2>
+{prompt('LinkedIn-post','Schrijf een LinkedIn-post over [onderwerp] voor [doelgroep]. Begin met een korte, concrete openingszin, geen vraag. Gebruik korte alinea’s, geen emoji’s en maximaal drie hashtags. Lengte: ongeveer 150 woorden. Geef drie varianten.')}{prompt('Van blog naar posts','Hier is een blog van mijn website: [tekst]. Maak er vier korte posts van voor LinkedIn, elk met een ander punt uit de blog. Maximaal 80 woorden per post.')}
+      <h2 id="meetings">Meetings en samenvatten</h2>
+{prompt('Samenvatting van een meeting','Hier zijn de aantekeningen van een overleg: [aantekeningen zonder namen van klanten]. Maak een samenvatting met drie kopjes: besluiten, actiepunten (met wie en wanneer) en open vragen. Kort en zakelijk.')}{prompt('Lang document samenvatten','Vat dit document samen in vijf punten voor iemand die weinig tijd heeft: [tekst]. Zet bij elk punt waar in het document het staat. Verzin niets dat er niet in staat.')}
+      <h2 id="website">Website en teksten</h2>
+{prompt('Tekst voor een dienstpagina','Schrijf een tekst voor de pagina [dienst] op de website van mijn bedrijf [soort bedrijf] in [plaats of regio]. Leg uit wat de klant krijgt, hoe het werkt in drie stappen en sluit af met een uitnodiging om contact op te nemen. Ongeveer 300 woorden, eenvoudig Nederlands.')}{prompt('Tekst verbeteren','Verbeter deze tekst op spelling, lengte van de zinnen en duidelijkheid. Houd mijn toon en verander de inhoud niet. Zet de belangrijkste wijzigingen onder de tekst: [tekst].')}
+      <h2 id="volgende-stap">Welke tool?</h2>
+      <p>Deze prompts werken in elke algemene AI-assistent. Welke bij je past, lees je bij de <a href="/ai-assistenten/">AI-assistenten</a> en de <a href="/ai-tekst-schrijven/">tools voor teksten</a>.</p>
+'''
+PF=[('Werken deze prompts in elke AI-tool?','Ja, het zijn gewone opdrachten in het Nederlands. Ze werken in elke algemene AI-assistent, zoals ChatGPT, Claude, Le Chat, Copilot of Gemini. Het resultaat verschilt per tool.'),
+ ('Mag ik klantgegevens in een prompt zetten?','Liever niet. Gebruik [klantnaam] of een andere plaatshouder en vul de echte gegevens daarna zelf in. Zo komen er geen persoonsgegevens in de AI-tool.'),
+ ('Waarom krijg ik steeds een ander antwoord?','AI-assistenten geven bij dezelfde vraag vaak een iets ander antwoord. Vraag om drie varianten en kies de beste, of geef een voorbeeld mee van wat je wilt.')]
+g=dict(slug='/gids/prompts-voor-ondernemers/',title='AI-prompts voor ondernemers: voorbeelden | ToolMatch',
+ desc='Kant-en-klare prompts voor je werk: een offertemail, een LinkedIn-post, een samenvatting van een meeting. Kopieer, pas aan en controleer het resultaat.',
+ crumb='Prompts voor ondernemers',h1='AI-prompts voor ondernemers: voorbeelden',
+ lead='Prompts die je meteen kunt gebruiken voor mail, social media, meetings en je website. Vul de plekken tussen [haken] in en controleer altijd wat eruit komt.')
+body=PR+faq_html(PF)+f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}</p>\n'
+graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":GC,"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+  crumbs_ld([('Home','/'),('Gidsen','/gids/'),(g['crumb'],g['slug'])]),faq_ld(g['slug'],PF)]
+zet(g['slug'],g['title'],g['desc'],f'<a href="/gids/">Gidsen</a> › {g["crumb"]}',g['h1'],g['lead'],body,graph)
+GIDS.append(dict(slug=g['slug'],h1=g['h1'],lead=g['lead']))
 hub('/gids/','Gidsen: AI veilig en slim gebruiken | ToolMatch',
  'Praktische gidsen voor ondernemers: AI veilig gebruiken, wat de AI Act van je vraagt, een AI-beleid opstellen en wat AI-abonnementen echt kosten.',
  'Gidsen','Gidsen: AI veilig en slim gebruiken',

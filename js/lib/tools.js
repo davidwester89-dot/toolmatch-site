@@ -97,9 +97,9 @@ export const TOOLS = [
     gratis: true, prijs: 'Pro: €12,10 per gebruiker per maand bij jaarbetaling (excl. btw)', prijsMaand: 12.1, prijsPer: 'gebruiker', team: true, instap: 'gemiddeld',
     eu: null, privacy: null,
     bronnen: [['Microsoft: Prijzen voor Power BI', 'https://www.microsoft.com/nl-nl/power-platform/products/power-bi/pricing']] },  // ---- toegevoegd voor de categoriepagina's (fase 2) ----
-  { id: 'copilot', naam: 'Microsoft 365 Copilot', url: 'https://www.microsoft.com/nl-nl/microsoft-365/copilot/business', doelen: ['schrijven', 'data'],
+  { id: 'copilot', naam: 'Copilot Business', url: 'https://www.microsoft.com/nl-nl/microsoft-365/copilot/business', doelen: ['schrijven', 'data'],
     wat: 'AI-assistent in Word, Excel, PowerPoint, Outlook en Teams, voor bedrijven die al in Microsoft 365 werken.',
-    gratis: null, prijs: 'Copilot Bedrijven: €18,20 per gebruiker per maand bij jaarbetaling (excl. btw); bij aanschaf tot en met 31-12-2026 actieprijs €15,60 voor het eerste jaar. Invoegtoepassing bij een geschikt Microsoft 365 Business-abonnement', prijsMaand: 18.2, prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
+    gratis: null, prijs: 'Copilot Business: €18,20 per gebruiker per maand bij jaarbetaling (excl. btw); bij aanschaf tot en met 31-12-2026 actieprijs €15,60 voor het eerste jaar. Invoegtoepassing bij een geschikt Microsoft 365 Business-abonnement', prijsMaand: 18.2, prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
     eu: null, dpa: 'ja', privacy: 'Volgens Microsoft worden prompts en antwoorden niet gebruikt om de taalmodellen te trainen; het Microsoft-addendum voor gegevensbescherming (DPA) is van toepassing.',
     bronnen: [['Microsoft: Copilot voor kleine bedrijven', 'https://www.microsoft.com/nl-nl/microsoft-365/copilot/business']] },
   { id: 'gemini', naam: 'Gemini in Google Workspace', url: 'https://workspace.google.com/intl/nl/', doelen: ['schrijven'],

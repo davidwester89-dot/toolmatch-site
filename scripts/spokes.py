@@ -88,7 +88,7 @@ cat('/ai-assistenten/','ChatGPT-alternatief kiezen: AI-assistenten | ToolMatch',
   ('gemini','je team in Gmail en Google Docs werkt; Gemini zit in de Workspace-abonnementen.')],
  [f'<strong>Begin bij wat je al hebt.</strong> Heb je Microsoft 365 of Google Workspace, kijk dan eerst wat daar al in zit. Bij geschikte Microsoft 365-plannen is Copilot Chat zonder extra kosten beschikbaar, volgens Microsoft.',
   '<strong>Reken per gebruiker.</strong> Zakelijke plannen tellen per persoon. Met vijf mensen is een verschil van een paar euro per maand al snel honderden euro per jaar.',
-  '<strong>Kijk naar training op je invoer.</strong> Bij ChatGPT en Claude kun je training op je gesprekken uitzetten. Volgens Microsoft worden prompts en antwoorden bij Copilot voor bedrijven niet gebruikt om de modellen te trainen.',
+  '<strong>Kijk naar training op je invoer.</strong> Bij ChatGPT en Claude kun je training op je gesprekken uitzetten. Volgens Microsoft worden prompts en antwoorden bij Copilot Business niet gebruikt om de modellen te trainen.',
   f'<strong>Test met echt werk.</strong> Geef twee assistenten dezelfde opdracht uit je eigen werk, in het Nederlands. Daarna weet je meer dan na tien reviews. Wat de abonnementen kosten, zie je in {L("/gids/wat-kosten-ai-abonnementen/","alle abonnementsprijzen op een rij")}.'],
  [('Wat is het beste alternatief voor ChatGPT?','Dat hangt af van waar je werkt. In Microsoft 365 ligt Copilot voor de hand, in Google Workspace Gemini. Wil je een Europese aanbieder, dan is Le Chat van Mistral een optie. Claude is een losse assistent, net als ChatGPT. Wij zetten ze hier op alfabetische volgorde, niet op rangorde.'),
   ('Is er een gratis AI-assistent?','ChatGPT, Claude en Le Chat hebben een gratis versie, met beperkingen. Bij Copilot en Gemini hangt het af van je Microsoft 365- of Google-abonnement.'),
@@ -129,7 +129,7 @@ cat('/ai-mail-en-offertes/','AI voor offertes en zakelijke mail: welke tool? | T
   '<strong>Laat bedragen en afspraken staan.</strong> Laat AI de tekst schrijven, maar zet prijzen, data en voorwaarden er zelf in. Zo voorkom je dat er een verkeerd bedrag in je offerte belandt.',
   f'<strong>Volg op.</strong> Een offerte die je verstuurt, wil je ook terugzien. Met een CRM kun je {L("/crm-klein-bedrijf/","offertes opvolgen")} en zie je welke nog openstaan.'],
  [('Kan AI een offerte voor mij maken?','AI kan de tekst opzetten: de inleiding, de omschrijving van het werk en de afsluiting. De bedragen en afspraken moet je zelf invullen en controleren.'),
-  ('Werkt Copilot ook in de gratis Outlook?','Copilot voor bedrijven is een betaalde invoegtoepassing bij een geschikt Microsoft 365 Business-abonnement. Wat er in andere versies van Outlook zit, hebben we niet gecontroleerd.'),
+  ('Werkt Copilot ook in de gratis Outlook?','Copilot Business is een betaalde invoegtoepassing bij een geschikt Microsoft 365 Business-abonnement. Wat er in andere versies van Outlook zit, hebben we niet gecontroleerd.'),
   ('Is het veilig om klantmails in een AI-tool te plakken?','Daar staan namen en andere persoonsgegevens in. Doe dat alleen met een zakelijk abonnement waarvan je weet wat er met je gegevens gebeurt, of haal die gegevens eerst weg.')])
 
 cat('/ai-notuleren/','AI-notulist kiezen: notuleren en transcriptie | ToolMatch',
@@ -172,7 +172,7 @@ cat('/online-afspraken-plannen/','Online afspraken laten plannen door klanten | 
  'Afspraken plannen','Online afspraken laten plannen door klanten',
  'Geen heen-en-weer gemail meer over een tijd: klanten kiezen zelf een moment in je agenda. Dit zijn de tools, met prijs en wat de gratis versie kan.',
  f'''      <p>Een afsprakenplanner geeft je een boekingspagina met de tijden waarop je beschikbaar bent. De klant kiest een moment, de afspraak staat in je agenda en beide krijgen een bevestiging. Voor een kapper, coach of adviseur werkt dat anders dan voor een salesgesprek, dus kijk goed wat je nodig hebt.</p>
-      <p>Na de afspraak wil je de klant vaak vastleggen. Daarvoor is een {L('/crm-klein-bedrijf/','CRM om klantgegevens bij te houden')}. En met een koppeling kun je {L('/automatiseren-zonder-code/','herinneringen automatisch versturen')}.</p>
+      <p>Na de afspraak wil je de klant vaak vastleggen. Daarvoor gebruik je een {L('/crm-klein-bedrijf/','CRM om klantgegevens bij te houden')}. En met een koppeling kun je {L('/automatiseren-zonder-code/','herinneringen automatisch versturen')}.</p>
 ''',
  [('acuity','je als dienstverlener afspraken plant en intakeformulieren en herinneringen wilt.'),
   ('calcom','je alleen werkt en gratis wilt beginnen, of later met een team.'),
@@ -195,13 +195,13 @@ cat('/ai-afbeeldingen-en-ontwerp/','AI voor afbeeldingen, logo’s en presentati
  [('chatgpt','je af en toe een afbeelding wilt laten maken met een beschrijving; in de gratis versie kan dat beperkt.'),
   ('lechat','je een Europese assistent wilt die ook eenvoudige afbeeldingen maakt.'),
   ('pitch','je presentaties wilt maken en delen, ook met een team.'),
-  ('canva','je zelf ontwerpt voor social media, presentaties of drukwerk; de AI-functies zitten volgens Canva vooral in Pro.')],
+  ('canva','je zelf ontwerpt voor social media, presentaties of drukwerk. Pro geeft volgens Canva veel meer AI-gebruik dan de gratis versie (10x zoveel; gratis is tot 20 AI-toepassingen).')],
  ['<strong>Zakelijk gebruik.</strong> Lees in de voorwaarden van de tool of je het beeld commercieel mag gebruiken. Dat hebben we voor deze tools niet gecontroleerd.',
   f'<strong>Vermeld AI waar dat moet.</strong> Volgens de Autoriteit Persoonsgegevens moet je mensen vanaf augustus 2026 in bepaalde gevallen informeren dat ze met AI te maken hebben, bijvoorbeeld bij een chatbot of deepfake. Lees {L("/gids/ai-act-ondernemers/","wanneer je AI-beelden moet vermelden")}.',
   '<strong>Een logo is een merk.</strong> Gebruik AI voor ideeën, maar laat een definitief logo controleren op gelijkenis met bestaande merken.'],
  [('Mag ik een AI-afbeelding gebruiken voor mijn bedrijf?','Dat hangt af van de voorwaarden van de tool. Lees die na voordat je een beeld op je website of in een advertentie zet.'),
   ('Kan ik met AI een logo maken?','Je kunt er ideeën mee maken. Voor een definitief logo is het verstandig om te controleren of het niet lijkt op een bestaand merk.'),
-  ('Moet ik vermelden dat een beeld met AI is gemaakt?','De AI-verordening bevat transparantieregels voor AI die beeld maakt. Volgens de Autoriteit Persoonsgegevens gelden die vanaf augustus 2026, in bepaalde gevallen, bijvoorbeeld bij een chatbot of deepfake. Lees de details in onze gids over de AI Act.')],
+  ('Moet ik vermelden dat een beeld met AI is gemaakt?','De AI-verordening bevat transparantieregels voor AI die beeld maakt. Volgens de Autoriteit Persoonsgegevens gelden die vanaf augustus 2026 in bepaalde gevallen, bijvoorbeeld bij een deepfake of een AI-beeld dat echt lijkt. Lees de details in onze gids over de AI Act.')],
  extra_src=[('Autoriteit Persoonsgegevens: Risicogroepen AI-verordening','https://www.autoriteitpersoonsgegevens.nl/themas/algoritmes-ai/ai-verordening/risicogroepen-ai-verordening')])
 
 cat('/social-media-inplannen/','Social media inplannen: planners vergeleken | ToolMatch',
@@ -209,7 +209,7 @@ cat('/social-media-inplannen/','Social media inplannen: planners vergeleken | To
  'Social media inplannen','Social media inplannen: planners vergeleken',
  'Eén keer per week je posts klaarzetten in plaats van elke dag. Dit zijn de planners, met wat de gratis versie kan en wat je per maand betaalt.',
  f'''      <p>Met een social media planner zet je je posts voor LinkedIn, Instagram of Facebook vooruit klaar. Ze verschillen vooral in <strong>hoe ze rekenen</strong>: per kanaal, per gebruiker of per account. Met drie kanalen en twee mensen kan dat een groot verschil maken.</p>
-      <p>De tekst van je post schrijf je met een andere tool: zo {L('/ai-tekst-schrijven/','schrijf je met AI een betere posttekst')}. En hier vind je tools voor {L('/ai-afbeeldingen-en-ontwerp/','beelden voor je posts')}.</p>
+      <p>De tekst van je post schrijf je met een andere tool: zo {L('/ai-tekst-schrijven/','schrijf je met AI een betere posttekst')}. En hier vind je {L('/ai-afbeeldingen-en-ontwerp/','tools om beelden voor je posts te maken')}.</p>
 ''',
  [('buffer','je klein begint: de gratis versie is voor 3 kanalen, daarna betaal je per kanaal.'),
   ('hootsuite','je met een team veel kanalen beheert en rapportages wilt.'),
@@ -497,7 +497,7 @@ gids('/gids/ai-veilig-gebruiken/','ChatGPT en AI veilig gebruiken in je bedrijf 
       <ul>
         <li><strong>ChatGPT:</strong> opt-out beschikbaar bij Free, Go, Plus en Pro, via de instellingen voor gegevensbeheer.</li>
         <li><strong>Claude:</strong> opt-out bij Free, Pro en Max; bij de zakelijke plannen traint Anthropic volgens de prijspagina standaard niet op je inhoud.</li>
-        <li><strong>Microsoft 365 Copilot:</strong> prompts en antwoorden worden volgens Microsoft niet gebruikt om de modellen te trainen.</li>
+        <li><strong>Copilot Business:</strong> prompts en antwoorden worden volgens Microsoft niet gebruikt om de modellen te trainen.</li>
         <li><strong>DeepL:</strong> bij betaalde abonnementen wordt je tekst volgens DeepL niet gebruikt voor training.</li>
       </ul>
       <h2 id="verwerkersovereenkomst">Regel een verwerkersovereenkomst</h2>
@@ -576,7 +576,7 @@ gids('/gids/ai-beleid-opstellen/','AI-beleid opstellen, met voorbeeld | ToolMatc
   ('Mag ik dit voorbeeld gebruiken?','Ja, pas het aan op je eigen bedrijf. Het is een voorbeeld, geen juridisch advies.')],
  [AP_GESL,AP_VWO,AP_RISK])
 
-PRIJZEN=[('chatgpt','ChatGPT'),('claude','Claude'),('lechat','Le Chat'),('copilot','Microsoft 365 Copilot'),('gemini','Gemini in Google Workspace'),('deepl','DeepL')]
+PRIJZEN=[('chatgpt','ChatGPT'),('claude','Claude'),('lechat','Le Chat'),('copilot','Copilot Business'),('gemini','Gemini in Google Workspace'),('deepl','DeepL')]
 prijsrows=''.join(f'''          <tr><th scope="row">{E(n)}</th><td>{JN(T[i]['gratis'])}</td><td>{E(T[i]['prijs'])}</td><td>{', '.join(X(u,E(b)) for b,u in T[i]['bronnen'])}</td></tr>
 ''' for i,n in PRIJZEN)
 gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere AI-tools? | ToolMatch',
@@ -593,19 +593,19 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
         </table>
       </div>
       <h2 id="persoonlijk-zakelijk">Persoonlijk of zakelijk</h2>
-      <p>Persoonlijke abonnementen zoals ChatGPT Plus en Claude Pro reken je per persoon. Zakelijke abonnementen zoals Copilot Bedrijven en Google Workspace reken je ook per gebruiker, maar daar horen beheer en afspraken over je gegevens bij. Werk je met klantgegevens, dan is een zakelijk abonnement vaak de betere keuze. Twijfel je tussen de twee bekendste? Lees {L('/vergelijken/chatgpt-vs-copilot/','ChatGPT of Copilot zakelijk')}.</p>
+      <p>Persoonlijke abonnementen zoals ChatGPT Plus en Claude Pro reken je per persoon. Zakelijke abonnementen zoals Copilot Business en Google Workspace reken je ook per gebruiker, maar daar horen beheer en afspraken over je gegevens bij. Werk je met klantgegevens, dan is een zakelijk abonnement vaak de betere keuze. Twijfel je tussen de twee bekendste? Lees {L('/vergelijken/chatgpt-vs-copilot/','ChatGPT of Copilot zakelijk')}.</p>
       <h2 id="let-op">Waar je op let</h2>
       <ul>
         <li><strong>Dollar of euro.</strong> Veel aanbieders noemen hun prijs in dollars. Wat je in euro betaalt, hangt af van de koers en je betaalmethode.</li>
         <li><strong>Met of zonder btw.</strong> Microsoft noemt de prijs van Copilot exclusief btw, DeepL de prijs van Individual inclusief btw. Vergelijk dus niet zomaar.</li>
         <li><strong>Jaarbetaling.</strong> "Per maand bij jaarbetaling" betekent dat je een jaar vooruit betaalt. Bij maandbetaling is de prijs vaak hoger, zoals bij Claude Pro: $17 per maand bij jaarbetaling, $20 maandelijks.</li>
-        <li><strong>Actieprijzen.</strong> Copilot Bedrijven heeft tot en met 31 december 2026 een actieprijs voor het eerste jaar. Daarna betaal je de normale prijs.</li>
+        <li><strong>Actieprijzen.</strong> Copilot Business heeft tot en met 31 december 2026 een actieprijs voor het eerste jaar. Daarna betaal je de normale prijs.</li>
         <li><strong>Per gebruiker.</strong> Met vijf mensen betaal je vijf keer. Kijk of iedereen echt een eigen abonnement nodig heeft.</li>
       </ul>
       <p>Welke assistent het beste past, lees je bij {L('/ai-assistenten/','welke assistent bij je past')}.</p>
 ''',
  [('Wat kost ChatGPT per maand?','ChatGPT Plus kost $20 per maand, volgens de prijspagina van OpenAI. Er is ook een gratis versie met beperkingen.'),
-  ('Wat kost Copilot per maand?','Microsoft 365 Copilot Bedrijven kost €18,20 per gebruiker per maand bij jaarbetaling, exclusief btw. Bij aanschaf tot en met 31 december 2026 geldt een actieprijs van €15,60 voor het eerste jaar.'),
+  ('Wat kost Copilot per maand?','Copilot Business kost €18,20 per gebruiker per maand bij jaarbetaling, exclusief btw. Bij aanschaf tot en met 31 december 2026 geldt een actieprijs van €15,60 voor het eerste jaar.'),
   ('Wat is het verschil tussen ChatGPT Plus en Business?','Plus is een persoonlijk abonnement. Business is voor teams, met beheer en zakelijke afspraken. De prijs van Business konden we op de prijspagina niet aflezen.')],
  [tuple(b) for i,_ in PRIJZEN for b in T[i]['bronnen']])
 

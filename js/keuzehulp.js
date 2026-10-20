@@ -51,7 +51,7 @@ if (form && out) {
   const start = {};
   for (const k of Object.keys(VRAGEN)) if (p.get(k)) start[k] = p.get(k);
   const a0 = normaliseer(start);
-  for (const [k, v] of Object.entries(a0)) { const el = form.querySelector(`input[name="${k}"][value="${v}"]`); if (el) el.checked = true; }
+  if (p.get('doel')) for (const [k, v] of Object.entries(a0)) { const el = form.querySelector(`input[name="${k}"][value="${v}"]`); if (el) el.checked = true; }
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const a = normaliseer(lees());

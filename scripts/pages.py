@@ -53,7 +53,7 @@ KH=f'''    <div class="kh-wrap">
 {FORM}    </div>
     <div class="prose wide">
       <h2 id="zo-werkt-het">Zo werkt de keuzehulp</h2>
-      <p>Je antwoorden geven punten. Een tool die gemaakt is voor jouw doel krijgt de meeste punten, een tool die het als bijfunctie kan minder. Daarna tellen een gratis versie of een lage prijs mee als je budget klein is, een teamabonnement als je met meer mensen werkt, opslag in de EU als je dat belangrijk vindt, en hoe makkelijk je ermee start. Bij gelijke punten staat de tool op alfabet.</p>
+      <p>Je antwoorden geven punten. Een tool die gemaakt is voor jouw doel krijgt de meeste punten, een tool die het als bijfunctie kan minder. Daarna tellen een gratis versie of een lage prijs mee als je budget klein is, een teamabonnement als je met meer mensen werkt, opslag in de EU als je dat belangrijk vindt, en hoe makkelijk je ermee start. Bij gelijke punten staan de tools op alfabetische volgorde.</p>
       <ul>
         <li><strong>Geen invloed van vergoedingen.</strong> De berekening kent geen partnerlinks. Staat er onder een resultaat ooit een partnerlink, dan staat er "partnerlink" bij en verandert de volgorde niet. Lees meer over <a href="/partnerlinks/">partnerlinks</a>.</li>
         <li><strong>Alleen wat we konden controleren.</strong> Prijzen en privacygegevens komen van de site van de aanbieder. Konden we iets niet bevestigen, dan staat er "niet gecontroleerd" en telt het niet als pluspunt.</li>
@@ -89,7 +89,7 @@ write('contact/index.html',page('/contact/','Contact | ToolMatch','Een vraag, ee
       <p><a class="btn" href="mailto:info@toolmatch.nl">Mail info@toolmatch.nl</a></p>'''))
 
 # ---------- disclaimer ----------
-write('disclaimer/index.html',page('/disclaimer/','Disclaimer | ToolMatch','ToolMatch geeft een overzicht van (AI-)tools op basis van wat aanbieders zelf publiceren. Lees hoe je prijzen, de keuzehulp en partnerlinks moet lezen.',
+write('disclaimer/index.html',page('/disclaimer/','Disclaimer | ToolMatch','ToolMatch geeft een overzicht van (AI-)tools op basis van wat aanbieders zelf publiceren. Zo lees je prijzen, de keuzehulp en partnerlinks.',
  'Disclaimer','Disclaimer','ToolMatch geeft een overzicht van (AI-)tools op basis van wat de aanbieders zelf publiceren. We doen ons best om alles juist en actueel te houden, en zetten bij de gegevens de datum van de laatste controle.',f'''      <h2>Prijzen en functies</h2>
       <p>Alle bedragen en functies komen van de sites van de aanbieders, op de datum die erbij staat. Aanbieders kunnen hun prijzen, abonnementen en voorwaarden wijzigen. Wat de aanbieder je bij het afsluiten aanbiedt, gaat altijd voor.</p>
       <h2>De keuzehulp</h2>
@@ -99,7 +99,7 @@ write('disclaimer/index.html',page('/disclaimer/','Disclaimer | ToolMatch','Tool
       <h2>Partnerlinks</h2>
       <p>Bij sommige aanbieders kunnen we een vergoeding krijgen als je via ons een abonnement neemt. Zo'n link heeft altijd het label "partnerlink". Partnerlinks hebben geen invloed op de keuzehulp of de volgorde. Meer uitleg staat op <a href="/partnerlinks/">partnerlinks</a>.</p>
       <h2>Merken</h2>
-      <p>Merknamen zijn van de betreffende aanbieders. ToolMatch is niet verbonden aan een van deze aanbieders.</p>
+      <p>Merknamen zijn van de betreffende aanbieders. ToolMatch is onafhankelijk en geen onderdeel van deze aanbieders.</p>
       <h2>Fout gezien?</h2>
       <p>Mail naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>, dan passen we het aan.</p>
       <p class="note">Redactie ToolMatch · bijgewerkt op {GCN}</p>'''))

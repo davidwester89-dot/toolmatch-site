@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { match, beoordeel, normaliseer, VRAGEN, STANDAARD } from '../js/lib/match.js';
 import { TOOLS, DOELEN } from '../js/lib/tools.js';
-import { uitgaand } from '../js/lib/partnerlinks.js';
+import { uitgaand, PARTNERLINKS } from '../js/lib/partnerlinks.js';
 
 const alle = () => { const out = []; const ks = Object.keys(VRAGEN);
   (function rec(i, a) { if (i === ks.length) return out.push({ ...a }); for (const v of VRAGEN[ks[i]]) rec(i + 1, { ...a, [ks[i]]: v }); })(0, {}); return out; };
@@ -30,13 +30,16 @@ test('match leest geen partnerlinks en tools.js bevat geen partnerlinks', () => 
   assert.ok(!/sponsored|partnerlink[s]?\s*[:=]/i.test(readFileSync(new URL('../js/lib/tools.js', import.meta.url), 'utf8').replace(/\/\/.*$/gm, '')));
 });
 
-test('volgorde verandert niet door partnerlinks, en een partnerlink krijgt sponsored nofollow', () => {
-  const before = alle().map((a) => match(a).map((r) => r.tool.id).join());
-  const pl = Object.fromEntries(TOOLS.map((t) => [t.id, 'https://example.org/p/' + t.id]));
-  const after = alle().map((a) => match(a).map((r) => r.tool.id).join());
-  assert.deepEqual(before, after);
-  const o = uitgaand(TOOLS[0], pl); assert.equal(o.rel, 'sponsored nofollow noopener'); assert.equal(o.partner, true);
-  const g = uitgaand(TOOLS[0], {}); assert.equal(g.rel, 'noopener'); assert.equal(g.href, TOOLS[0].url);
+test('volgorde verandert niet door partnerlinks: match() met gevulde PARTNERLINKS geeft dezelfde volgorde', () => {
+  const before = alle().map((a) => match(a).map((r) => [r.tool.id, r.score].join(':')).join());
+  for (const t of TOOLS) PARTNERLINKS[t.id] = 'https://example.org/p/' + t.id;
+  try {
+    assert.equal(Object.keys(PARTNERLINKS).length, TOOLS.length);
+    const after = alle().map((a) => match(a).map((r) => [r.tool.id, r.score].join(':')).join());
+    assert.deepEqual(after, before);
+    const o = uitgaand(TOOLS[0]); assert.equal(o.rel, 'sponsored nofollow noopener'); assert.equal(o.partner, true);
+  } finally { for (const k of Object.keys(PARTNERLINKS)) delete PARTNERLINKS[k]; }
+  const g = uitgaand(TOOLS[0]); assert.equal(g.rel, 'noopener'); assert.equal(g.href, TOOLS[0].url); assert.equal(g.partner, false);
 });
 
 test('alle antwoordcombinaties geven een stabiele, gesorteerde lijst', () => {

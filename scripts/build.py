@@ -39,8 +39,8 @@ def head(path,title,desc,ogt,extra=''):
     <a class="logo" href="/" aria-label="ToolMatch, naar de homepage">{MARK}<span>Tool<b>Match</b></span></a>
     <nav class="main" aria-label="Hoofdmenu">
       <a href="/#categorieen">Categorieën</a>
-      <a href="/#zo-vergelijken-we">Zo vergelijken we</a>
-      <a href="/#vijf-vragen">5 vragen</a>
+      <a href="/#zo-vergelijken-we">Zo vergelijken wij</a>
+      <a href="/#vijf-vragen">Waar let je op</a>
       <a href="/#faq">Vragen</a>
       <a class="nav-cta" href="/keuzehulp/">Start&nbsp;<span class="nm">de&nbsp;</span>keuzehulp</a>
     </nav>
@@ -59,7 +59,7 @@ FOOT_T=f'''<footer class="site">
         <ul>
           <li><a href="/keuzehulp/">Keuzehulp</a></li>
           <li><a href="/over/">Over ToolMatch</a></li>
-          <li><a href="/#zo-vergelijken-we">Zo vergelijken we</a></li>
+          <li><a href="/#zo-vergelijken-we">Zo vergelijken wij</a></li>
           <li><a href="/partnerlinks/">Partnerlinks</a></li>
           <li><a href="/#faq">Veelgestelde vragen</a></li>
         </ul>
@@ -252,8 +252,8 @@ PRIV='''      <h2 id="cookies">Cookies en statistieken</h2>
       <p>Je keuze bewaren we in de opslag van je eigen browser (geen cookie). Na 12 maanden vragen we het opnieuw.</p>
       <p><strong>Van gedachten veranderd?</strong> Via <a href="/privacy/#cookies" data-consent-open>Cookie-instellingen</a> (ook onderaan elke pagina) pas je je keuze aan. Kies je Weigeren, dan stoppen de statistieken en wissen we de Analytics-cookies.</p>
 
-      <h2>Geen formulieren, geen nieuwsbrief</h2>
-      <p>Op ToolMatch staan geen formulieren en er is geen nieuwsbrief. Je hoeft niets in te vullen en geen account aan te maken.</p>
+      <h2>Geen account, geen nieuwsbrief</h2>
+      <p>Je hoeft geen account aan te maken en er is geen nieuwsbrief. Je antwoorden in de keuzehulp blijven in je browser en staan alleen in de adresbalk; die tekst sturen we nooit naar Google.</p>
 
       <h2>Als je ons mailt</h2>
       <p>Mail je naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>, dan gebruiken we je mailadres en je bericht alleen om je te antwoorden. We delen ze met niemand.</p>

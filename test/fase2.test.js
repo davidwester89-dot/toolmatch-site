@@ -114,3 +114,26 @@ test('vendor buttons use the vendor name (vendor field, else product name)', asy
   }
   assert.ok(n > 30);
 });
+
+test('external tool buttons carry an aria-label with vendor, product and new-tab notice', async () => {
+  const { TOOLS } = await import('../js/lib/tools.js');
+  const byId = Object.fromEntries(TOOLS.map(t => [t.id, t]));
+  const ent = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  let n = 0;
+  for (const f of readdirSync(ROOT, { recursive: true }).filter(f => f.endsWith('index.html') && !/^(node_modules|\.git)/.test(f))) {
+    const h = readFileSync(join(ROOT, f), 'utf8');
+    for (const m of h.matchAll(/<a [^>]*data-vendor="([^"]+)"[^>]*>/g)) {
+      const t = byId[m[1]]; if (!t) continue;
+      assert.match(m[0], /target="_blank"/, f + ' ' + m[1]);
+      const v = t.vendor || t.naam;
+      const prod = t.naam.replace(` (${v})`, '');
+      const want = `Naar de site van ${v}${t.vendor && prod !== v ? ` (${prod})` : ''} (opent in een nieuw tabblad)`;
+      assert.ok(!/\([^)]*\(/.test(want), 'nested parentheses: ' + want);
+      assert.ok(m[0].includes(`aria-label="${ent(want)}"`), f + ' ' + m[1] + ' ' + m[0]);
+      n++;
+    }
+  }
+  assert.ok(n > 30);
+  const kh = readFileSync(join(ROOT, 'js/keuzehulp.js'), 'utf8');
+  assert.match(kh, /aria-label="\$\{esc\(knopLabel\(t\)\)\}"/);
+});

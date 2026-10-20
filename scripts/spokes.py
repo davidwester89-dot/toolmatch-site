@@ -30,10 +30,17 @@ def dpa(t):
     if t.get('dpa'): return DPA[t['dpa']]
     if t.get('privacy') and re.search(r'verwerkersovereenkomst|DPA',t['privacy']): return 'Ja (volgens de aanbieder)'
     return 'Onbekend'
+def knoplabel(t):
+    v = t.get("vendor") or t["naam"]
+    zicht = f"Naar de site van {v}"
+    prod = t["naam"].replace(f" ({v})", "")
+    extra = f" ({prod})" if t.get("vendor") and prod != v else ""
+    return zicht, f"{zicht}{extra} (opent in een nieuw tabblad)"
+
 def uit(t):
     p=PL.get(t['id'])
-    if p: return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{t["id"]}" data-cta="partner">Naar de site van {E(t.get("vendor") or t["naam"])}</a> <span class="partner">partnerlink</span>'
-    return f'<a class="btn ghost" href="{E(t["url"])}" rel="noopener" target="_blank" data-vendor="{t["id"]}" data-cta="outbound">Naar de site van {E(t.get("vendor") or t["naam"])}</a>'
+    if p: return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{t["id"]}" data-cta="partner" aria-label="{E(knoplabel(t)[1])}">{E(knoplabel(t)[0])}</a> <span class="partner">partnerlink</span>'
+    return f'<a class="btn ghost" href="{E(t["url"])}" rel="noopener" target="_blank" data-vendor="{t["id"]}" data-cta="outbound" aria-label="{E(knoplabel(t)[1])}">{E(knoplabel(t)[0])}</a>'
 def kaart(t,past):
     pv=f'\n        <p class="priv">{E(t["privacy"])}</p>' if t.get('privacy') else ''
     return f'''      <article class="res tool" id="{t['id']}">
@@ -197,7 +204,7 @@ cat('/ai-afbeeldingen-en-ontwerp/','AI voor afbeeldingen, logo’s en presentati
   ('pitch','je presentaties wilt maken en delen, ook met een team.'),
   ('canva','je zelf ontwerpt voor social media, presentaties of drukwerk. Pro geeft volgens Canva tien keer zoveel AI-gebruik als de gratis versie, die tot 20 AI-toepassingen geeft.')],
  ['<strong>Zakelijk gebruik.</strong> Lees in de voorwaarden van de tool of je het beeld commercieel mag gebruiken. Dat hebben we voor deze tools niet gecontroleerd.',
-  f'<strong>Vermeld AI waar dat moet.</strong> Volgens de Autoriteit Persoonsgegevens moet je mensen vanaf augustus 2026 in bepaalde gevallen informeren dat ze met AI te maken hebben, bijvoorbeeld bij een chatbot of deepfake. Lees {L("/gids/ai-act-ondernemers/","wanneer je AI-beelden moet vermelden")}.',
+  f'<strong>Vermeld AI waar dat moet.</strong> Volgens de Autoriteit Persoonsgegevens moet je mensen vanaf augustus 2026 in bepaalde gevallen informeren dat ze met AI te maken hebben, bijvoorbeeld bij een deepfake of een AI-beeld dat echt lijkt. Lees {L("/gids/ai-act-ondernemers/","wanneer je AI-beelden moet vermelden")}.',
   '<strong>Een logo is een merk.</strong> Gebruik AI voor ideeën, maar laat een definitief logo controleren op gelijkenis met bestaande merken.'],
  [('Mag ik een AI-afbeelding gebruiken voor mijn bedrijf?','Dat hangt af van de voorwaarden van de tool. Lees die na voordat je een beeld op je website of in een advertentie zet.'),
   ('Kan ik met AI een logo maken?','Je kunt er ideeën mee maken. Voor een definitief logo is het verstandig om te controleren of het niet lijkt op een bestaand merk.'),

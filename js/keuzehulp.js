@@ -41,7 +41,7 @@ function kaart(r, n) {
   </dl>
   ${t.privacy ? `<p class="priv">${esc(t.privacy)}</p>` : ''}
   <p class="src">Bron: ${t.bronnen.map(([n2, u]) => `<a href="${esc(u)}" rel="noopener" target="_blank">${esc(n2)}</a>`).join(', ')} · gecontroleerd op ${datum}</p>
-  <p class="go"><a class="btn${n === 0 ? '' : ' ghost'}" href="${esc(o.href)}" rel="${o.rel}" target="_blank" data-vendor="${esc(t.id)}" data-pos="${n + 1}" data-cta="${o.partner ? 'partner' : 'outbound'}">Naar de site van ${esc(t.vendor || t.naam)}</a>${o.partner ? ' <span class="partner">partnerlink</span>' : ''}</p>
+  <p class="go"><a class="btn${n === 0 ? '' : ' ghost'}" href="${esc(o.href)}" rel="${o.rel}" target="_blank" data-vendor="${esc(t.id)}" data-pos="${n + 1}" data-cta="${o.partner ? 'partner' : 'outbound'}" aria-label="${esc(knopLabel(t))}">Naar de site van ${esc(t.vendor || t.naam)}</a>${o.partner ? ' <span class="partner">partnerlink</span>' : ''}</p>
 </article>`;
 }
 
@@ -69,4 +69,11 @@ if (form && out) {
     track('quiz_complete', { tool_name: 'keuzehulp', doel: a.doel });
   });
   if (p.get('doel')) toon(a0, false);
+}
+
+function knopLabel(t) {
+  const v = t.vendor || t.naam;
+  const prod = t.naam.replace(` (${v})`, '');
+  const extra = t.vendor && prod !== v ? ` (${prod})` : '';
+  return `Naar de site van ${v}${extra} (opent in een nieuw tabblad)`;
 }

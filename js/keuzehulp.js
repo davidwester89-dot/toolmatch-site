@@ -40,7 +40,7 @@ function kaart(r, n) {
     <div><dt>Instap</dt><dd>${esc(t.instap[0].toUpperCase() + t.instap.slice(1))} <small>(onze indeling)</small></dd></div>
   </dl>
   ${t.privacy ? `<p class="priv">${esc(t.privacy)}</p>` : ''}
-  <p class="src">Bron: ${t.bronnen.map(([n2, u]) => `<a href="${esc(u)}" rel="noopener" target="_blank">${esc(n2)}</a>`).join(', ')} · gecontroleerd op ${datum}</p>
+  <p class="src">Bron: ${t.bronnen.map(([n2, u]) => `<a href="${esc(u)}" rel="noopener" target="_blank" aria-label="${esc(n2)} (opent in een nieuw tabblad)">${esc(n2)}</a>`).join(', ')} · gecontroleerd op ${datum}</p>
   <p class="go"><a class="btn${n === 0 ? '' : ' ghost'}" href="${esc(o.href)}" rel="${o.rel}" target="_blank" data-vendor="${esc(t.id)}" data-pos="${n + 1}" data-cta="${o.partner ? 'partner' : 'outbound'}" aria-label="${esc(knopLabel(t))}">Naar de site van ${esc(t.vendor || t.naam)}</a>${o.partner ? ' <span class="partner">partnerlink</span>' : ''}</p>
 </article>`;
 }
@@ -74,6 +74,7 @@ if (form && out) {
 function knopLabel(t) {
   const v = t.vendor || t.naam;
   const prod = t.naam.replace(` (${v})`, '');
+  if (prod.startsWith(v + ' ')) return `Naar de site van ${prod} (opent in een nieuw tabblad)`;
   const extra = t.vendor && prod !== v ? ` (${prod})` : '';
   return `Naar de site van ${v}${extra} (opent in een nieuw tabblad)`;
 }

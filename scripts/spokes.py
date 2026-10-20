@@ -34,6 +34,7 @@ def knoplabel(t):
     v = t.get("vendor") or t["naam"]
     zicht = f"Naar de site van {v}"
     prod = t["naam"].replace(f" ({v})", "")
+    if prod.startswith(v + " "): return zicht, f"Naar de site van {prod} (opent in een nieuw tabblad)"
     extra = f" ({prod})" if t.get("vendor") and prod != v else ""
     return zicht, f"{zicht}{extra} (opent in een nieuw tabblad)"
 

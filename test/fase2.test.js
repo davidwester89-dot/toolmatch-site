@@ -127,7 +127,9 @@ test('external tool buttons carry an aria-label with vendor, product and new-tab
       assert.match(m[0], /target="_blank"/, f + ' ' + m[1]);
       const v = t.vendor || t.naam;
       const prod = t.naam.replace(` (${v})`, '');
-      const want = `Naar de site van ${v}${t.vendor && prod !== v ? ` (${prod})` : ''} (opent in een nieuw tabblad)`;
+      const want = prod.startsWith(v + ' ') ? `Naar de site van ${prod} (opent in een nieuw tabblad)` : `Naar de site van ${v}${t.vendor && prod !== v ? ` (${prod})` : ''} (opent in een nieuw tabblad)`;
+      const zicht = m[0] && h.slice(h.indexOf(m[0]) + m[0].length).split('<')[0];
+      assert.ok(want.startsWith(zicht), 'label-in-name: ' + zicht + ' / ' + want);
       assert.ok(!/\([^)]*\(/.test(want), 'nested parentheses: ' + want);
       assert.ok(m[0].includes(`aria-label="${ent(want)}"`), f + ' ' + m[1] + ' ' + m[0]);
       n++;
@@ -136,4 +138,8 @@ test('external tool buttons carry an aria-label with vendor, product and new-tab
   assert.ok(n > 30);
   const kh = readFileSync(join(ROOT, 'js/keuzehulp.js'), 'utf8');
   assert.match(kh, /aria-label="\$\{esc\(knopLabel\(t\)\)\}"/);
+  assert.match(kh, /target="_blank" aria-label="\$\{esc\(n2\)\} \(opent in een nieuw tabblad\)"/);
+  const lbl = { hubspot: 'Naar de site van HubSpot CRM (opent in een nieuw tabblad)', zoho: 'Naar de site van Zoho CRM (opent in een nieuw tabblad)', googlecloudtranslate: 'Naar de site van Google Cloud Translation (opent in een nieuw tabblad)', powerbi: 'Naar de site van Microsoft (Power BI) (opent in een nieuw tabblad)' };
+  const all = readdirSync(ROOT, { recursive: true }).filter(f => f.endsWith('index.html') && !/^(node_modules|\.git)/.test(f)).map(f => readFileSync(join(ROOT, f), 'utf8')).join('');
+  for (const [id, l] of Object.entries(lbl)) assert.ok(all.includes(`data-vendor="${id}"`) && all.includes(`aria-label="${l}"`), id);
 });

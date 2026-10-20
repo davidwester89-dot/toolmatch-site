@@ -31,7 +31,7 @@ export function beoordeel(tool, antwoorden) {
 
   // Budget
   if (a.budget === 'gratis') {
-    if (tool.gratis) { score += 2; plus.push('Er is een gratis versie'); } else { score -= 3; let_op.push('Geen gratis versie'); }
+    if (tool.gratis) { score += 2; plus.push('Er is een gratis versie'); } else { score -= 3; let_op.push(tool.gratis === false ? 'Geen gratis versie' : 'Gratis versie niet gecontroleerd'); }
   } else if (a.budget === 'klein') {
     if (tool.gratis) { score += 1; plus.push('Er is een gratis versie'); }
     if (tool.prijsMaand != null && tool.prijsMaand <= 30) score += 1;

@@ -1,0 +1,616 @@
+# Fase 2: categoriepagina's, vergelijkingen, gidsen en hubs. Wordt uitgevoerd door build.py (na pages.py).
+PL=json.loads(subprocess.check_output(['node','--input-type=module','-e',
+ "import {PARTNERLINKS} from './js/lib/partnerlinks.js'; console.log(JSON.stringify(PARTNERLINKS))"]))
+T={t['id']:t for t in TL}
+def L(href,txt): return f'<a href="{href}">{txt}</a>'
+def X(href,txt): return f'<a href="{E(href)}" rel="noopener">{txt}</a>'
+PUB='2026-10-20'
+ORG={"@id":D+"/#organization"}
+def ldscript(graph): return '<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":graph},ensure_ascii=False,indent=1)+'\n</script>\n'
+def crumbs_ld(items): return {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":D+u} for i,(n,u) in enumerate(items)]}
+def faq_ld(path,faq):
+    strip=lambda s: re.sub(r'<[^>]+>','',s)
+    return {"@type":"FAQPage","@id":D+path+"#faq","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":strip(a)}} for q,a in faq]}
+def faq_html(faq):
+    return '      <h2 id="faq">Veelgestelde vragen</h2>\n      <div class="faq">\n'+''.join(f'      <details>\n        <summary>{q}</summary>\n        <p>{a}</p>\n      </details>\n' for q,a in faq)+'      </div>\n'
+def bronnen_html(srcs):
+    seen=[]; 
+    for s in srcs:
+        if s not in seen: seen.append(s)
+    return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n))}, bekeken op {GCN}</li>\n' for n,u in seen)+'      </ul>\n'
+def byline(): return f'      <p class="note">Redactie ToolMatch · gecontroleerd op {GCN}. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
+JN=lambda v: 'Ja' if v is True else ('Nee' if v is False else 'Niet gecontroleerd')
+EUL={'ja':'In de EU (volgens de aanbieder)','deels':'Vooral in de EU (volgens de aanbieder)'}
+DPA={'ja':'Ja (volgens de aanbieder)'}
+def dpa(t):
+    if t.get('dpa'): return DPA[t['dpa']]
+    if t.get('privacy') and re.search(r'verwerkersovereenkomst|DPA',t['privacy']): return 'Ja (volgens de aanbieder)'
+    return 'Onbekend'
+def uit(t):
+    p=PL.get(t['id'])
+    if p: return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{t["id"]}" data-cta="partner">Naar de site van {E(t["naam"])}</a> <span class="partner">partnerlink</span>'
+    return f'<a class="btn ghost" href="{E(t["url"])}" rel="noopener" target="_blank" data-vendor="{t["id"]}" data-cta="outbound">Naar de site van {E(t["naam"])}</a>'
+def kaart(t,past):
+    pv=f'\n        <p class="priv">{E(t["privacy"])}</p>' if t.get('privacy') else ''
+    return f'''      <article class="res tool" id="{t['id']}">
+        <h3>{E(t['naam'])}</h3>
+        <p>{E(t['wat'])}</p>
+        <p><strong>Past als</strong> {past}</p>
+        <dl class="facts">
+          <div><dt>Gratis versie</dt><dd>{JN(t['gratis'])}</dd></div>
+          <div><dt>Betaald vanaf</dt><dd>{E(t['prijs']) if t['prijs'] else 'Niet gecontroleerd'}</dd></div>
+          <div><dt>Gegevens</dt><dd>{EUL.get(t['eu'],'Locatie niet gecontroleerd')}</dd></div>
+          <div><dt>Verwerkersovereenkomst</dt><dd>{dpa(t)}</dd></div>
+          <div><dt>Nederlands</dt><dd>{JN(t.get('nl'))}</dd></div>
+          <div><dt>Instap</dt><dd>{INSTAP[t['instap']]} <small>(onze indeling)</small></dd></div>
+        </dl>{pv}
+        <p class="src">Bron: {', '.join(X(u,E(n)) for n,u in t['bronnen'])} · gecontroleerd op {GCN}</p>
+        <p class="go">{uit(t)}</p>
+      </article>
+'''
+def kort_tabel(ids,cap):
+    rows=''.join(f'''          <tr><th scope="row"><a href="#{i}">{E(T[i]['naam'])}</a></th><td>{JN(T[i]['gratis'])}</td><td>{E(T[i]['prijs']) if T[i]['prijs'] else 'Niet gecontroleerd'}</td><td>{EUL.get(T[i]['eu'],'Niet gecontroleerd')}</td><td>{dpa(T[i])}</td></tr>
+''' for i in ids)
+    return f'''      <div class="tbl" role="region" aria-label="{cap}" tabindex="0">
+        <table>
+          <caption class="sr">{cap}</caption>
+          <thead><tr><th scope="col">Tool</th><th scope="col">Gratis versie</th><th scope="col">Betaald vanaf</th><th scope="col">Gegevens</th><th scope="col">Verwerkersovereenkomst</th></tr></thead>
+          <tbody>
+{rows}          </tbody>
+        </table>
+      </div>
+'''
+SPOKES=[]  # (path, title) voor sitemap
+def zet(path,title,desc,crumb,h1,lead,body,graph):
+    write(path.strip('/')+'/index.html',page(path,title,desc,crumb,h1,lead,body,wide=True,extra=ldscript(graph)))
+    SPOKES.append(path)
+
+# ======================= CATEGORIEËN =======================
+CAT=[]
+def cat(slug,title,desc,crumb,h1,lead,intro,tools,kies,faq,extra_src=(),na=''):
+    CAT.append(dict(slug=slug,title=title,desc=desc,crumb=crumb,h1=h1,lead=lead,intro=intro,tools=tools,kies=kies,faq=faq,src=list(extra_src),na=na))
+
+cat('/ai-assistenten/','ChatGPT-alternatief kiezen: AI-assistenten | ToolMatch',
+ 'De bekende AI-assistenten naast elkaar voor zakelijk gebruik: wat ze kosten, waar je gegevens staan en welke past bij Microsoft 365 of Google.',
+ 'AI-assistenten','AI-assistenten: ChatGPT en de alternatieven',
+ 'ChatGPT is de bekendste, maar niet de enige. Hier staan de algemene AI-assistenten naast elkaar: wat ze kosten, waar ze in je werk passen en wat er met je gegevens gebeurt.',
+ f'''      <p>Een AI-assistent is een chatbot voor algemeen werk: een tekst opzetten, een lang document samenvatten, een idee uitwerken of een vraag uitzoeken. De grote verschillen zitten zelden in wat ze kunnen, maar in <strong>waar ze in je werk zitten</strong> (in Microsoft 365, in Google Workspace of als losse app), <strong>wat het per gebruiker kost</strong> en <strong>wat er met je invoer gebeurt</strong>.</p>
+      <p>Werk je al in Microsoft 365, bekijk dan eerst {L('/vergelijken/chatgpt-vs-copilot/','ChatGPT en Copilot naast elkaar')}. Werk je in Gmail en Google Docs, lees dan {L('/vergelijken/chatgpt-vs-gemini/','het verschil tussen ChatGPT en Gemini')}. Schrijf je vooral lange stukken, dan helpt de vergelijking {L('/vergelijken/chatgpt-vs-claude/','ChatGPT of Claude voor lange teksten')}.</p>
+''',
+ [('chatgpt','je een losse assistent wilt die los staat van je kantoorsoftware, met een gratis versie om te proberen.'),
+  ('claude','je veel met lange documenten werkt en een gratis versie wilt testen; bij Pro zit ook een koppeling met Microsoft 365.'),
+  ('lechat','je een Europese aanbieder wilt: volgens Mistral staan je gegevens standaard in de EU.'),
+  ('copilot','je team al in Word, Outlook en Teams werkt en een geschikt Microsoft 365 Business-abonnement heeft.'),
+  ('gemini','je team in Gmail en Google Docs werkt; Gemini zit in de Workspace-abonnementen.')],
+ [f'<strong>Begin bij wat je al hebt.</strong> Heb je Microsoft 365 of Google Workspace, kijk dan eerst wat daar al in zit. Bij geschikte Microsoft 365-plannen is Copilot Chat zonder extra kosten beschikbaar, volgens Microsoft.',
+  '<strong>Reken per gebruiker.</strong> Zakelijke plannen tellen per persoon. Met vijf mensen is een verschil van een paar euro per maand al snel honderden euro per jaar.',
+  '<strong>Kijk naar training op je invoer.</strong> Bij ChatGPT en Claude kun je training op je gesprekken uitzetten. Volgens Microsoft worden prompts en antwoorden bij Copilot voor bedrijven niet gebruikt om de modellen te trainen.',
+  f'<strong>Test met echt werk.</strong> Geef twee assistenten dezelfde opdracht uit je eigen werk, in het Nederlands. Daarna weet je meer dan na tien reviews. Wat de abonnementen kosten, zie je in {L("/gids/wat-kosten-ai-abonnementen/","alle abonnementsprijzen op een rij")}.'],
+ [('Wat is het beste alternatief voor ChatGPT?','Dat hangt af van waar je werkt. In Microsoft 365 ligt Copilot voor de hand, in Google Workspace Gemini. Wil je een Europese aanbieder, dan is Le Chat van Mistral een optie. Claude is een losse assistent, net als ChatGPT. Wij zetten ze hier op alfabetische volgorde, niet op rangorde.'),
+  ('Is er een gratis AI-assistent?','ChatGPT, Claude en Le Chat hebben een gratis versie, met beperkingen. Bij Copilot en Gemini hangt het af van je Microsoft 365- of Google-abonnement.'),
+  ('Welke AI-assistent slaat gegevens op in Europa?','Van de assistenten op deze pagina zegt alleen Mistral (Le Chat) dat gegevens standaard in de EU staan. Bij de andere hebben we de opslaglocatie niet kunnen bevestigen op de pagina\'s die we bekeken.'),
+  ('Mag ik klantgegevens in een AI-assistent zetten?','Alleen als je weet wat de aanbieder ermee doet en je afspraken hebt gemaakt, zoals een verwerkersovereenkomst. Bij twijfel: laat namen en andere persoonsgegevens weg.')])
+
+cat('/ai-tekst-schrijven/','AI-tools om Nederlandse teksten te schrijven | ToolMatch',
+ 'Welke AI-tool schrijft goed Nederlands voor je website, blog of LinkedIn? Vergelijk schrijfassistenten op prijs, kwaliteit van het Nederlands en privacy.',
+ 'Tekst schrijven','AI-tools voor Nederlandse teksten',
+ 'Een eerste versie van een webtekst, blog of LinkedIn-post laten schrijven, of je eigen tekst laten verbeteren. Dit zijn de tools, met prijs en wat er met je tekst gebeurt.',
+ f'''      <p>Voor schrijfwerk heb je grofweg twee soorten tools. Een <strong>algemene AI-assistent</strong> schrijft een tekst vanaf een korte opdracht. Een <strong>schrijfhulp</strong> zoals DeepL Write verbetert een tekst die je zelf hebt geschreven. Vaak volstaat {L('/ai-assistenten/','een algemene AI-assistent')} die je al hebt.</p>
+      <p>Hoe goed een tool Nederlands schrijft, hebben we niet gemeten en dat beweren we dus ook niet. Test het zelf met een echte tekst, en lees altijd na: AI-tekst kan fouten en verzonnen feiten bevatten.</p>
+''',
+ [('chatgpt','je teksten vanaf nul wilt laten opzetten en ook andere taken met dezelfde tool wilt doen.'),
+  ('claude','je met lange teksten werkt, zoals een rapport of een uitgebreide webpagina.'),
+  ('deepl','je je eigen tekst wilt verbeteren of vertalen; bij betaalde abonnementen wordt je tekst volgens DeepL niet gebruikt voor training.'),
+  ('lechat','je liever een Europese aanbieder gebruikt.')],
+ ['<strong>Schrijven of verbeteren?</strong> Wil je dat de tool de tekst maakt, kies een assistent. Schrijf je liever zelf, dan is een schrijfhulp vaak genoeg.',
+  '<strong>Geef context mee.</strong> Vertel voor wie de tekst is, hoe lang hij moet zijn en welke toon je wilt. Hoe preciezer de opdracht, hoe minder je hoeft te herschrijven.',
+  f'<strong>Lees alles na.</strong> Controleer namen, cijfers en beloftes. Een tekst publiceer je onder je eigen naam. Klaar met schrijven? Dan kun je {L("/social-media-inplannen/","je LinkedIn-posts inplannen")}.'],
+ [('Welke AI schrijft het beste Nederlands?','Dat hebben we niet gemeten, dus daar doen we geen uitspraak over. Probeer twee tools met dezelfde opdracht uit je eigen werk en vergelijk het resultaat.'),
+  ('Kan ik een AI-tekst zomaar op mijn website zetten?','Je bent zelf verantwoordelijk voor wat je publiceert. Lees de tekst na op fouten en verzonnen feiten, en pas hem aan zodat hij klinkt als jouw bedrijf.'),
+  ('Wat is het verschil tussen DeepL en ChatGPT?','DeepL is gemaakt voor vertalen en het verbeteren van bestaande tekst. ChatGPT is een algemene assistent die ook nieuwe teksten schrijft en andere taken doet.')])
+
+cat('/ai-mail-en-offertes/','AI voor offertes en zakelijke mail: welke tool? | ToolMatch',
+ 'Sneller een offerte, voorstel of zakelijke mail opstellen met AI. Zie welke tools in Outlook of Gmail werken, wat ze kosten en wat je zelf moet checken.',
+ 'Mail en offertes','AI voor offertes en zakelijke mail',
+ 'Een offertetekst, een voorstel of een lastige mail sneller op papier. Hier zie je welke AI-tools in je mailprogramma zitten en welke los werken.',
+ f'''      <p>Het meeste schrijfwerk voor offertes en mail gebeurt in je mailprogramma. Daarom maakt het veel uit of de AI daar al in zit: <strong>Copilot in Outlook</strong> bij Microsoft 365, <strong>Gemini in Gmail</strong> bij Google Workspace, of een losse assistent waar je tekst in en uit kopieert. Twijfel je tussen de eerste en de laatste, lees dan {L('/vergelijken/chatgpt-vs-copilot/','Copilot in Outlook of ChatGPT')}.</p>
+      <p>Deze pagina gaat over het schrijven van de tekst. De prijzen, voorwaarden en afspraken in je offerte blijven jouw werk: controleer ze altijd zelf.</p>
+''',
+ [('copilot','je mail in Outlook staat: volgens Microsoft helpt Copilot daar mails op te stellen en vat het lange e-mailthreads samen.'),
+  ('gemini','je mail in Gmail staat: Gemini in Gmail zit in Google Workspace Business Starter.'),
+  ('chatgpt','je een losse assistent wilt die met elk mailprogramma werkt, via kopiëren en plakken.'),
+  ('claude','je een losse assistent wilt; bij Pro hoort volgens de prijspagina ook Claude for Microsoft Outlook.')],
+ ['<strong>Werk vanuit een eigen voorbeeld.</strong> Geef de tool een eerdere offerte of mail die goed werkte, zonder klantgegevens, en vraag om dezelfde opbouw.',
+  '<strong>Laat bedragen en afspraken staan.</strong> Laat AI de tekst schrijven, maar zet prijzen, data en voorwaarden er zelf in. Zo voorkom je dat er een verkeerd bedrag in je offerte belandt.',
+  f'<strong>Volg op.</strong> Een offerte die je verstuurt, wil je ook terugzien. Lees hoe je {L("/crm-klein-bedrijf/","offertes opvolgen in een CRM")} kunt regelen.'],
+ [('Kan AI een offerte voor mij maken?','AI kan de tekst opzetten: de inleiding, de omschrijving van het werk en de afsluiting. De bedragen en afspraken moet je zelf invullen en controleren.'),
+  ('Werkt Copilot ook in de gratis Outlook?','Copilot voor bedrijven is een betaalde invoegtoepassing bij een geschikt Microsoft 365 Business-abonnement. Wat er in andere versies van Outlook zit, hebben we niet gecontroleerd.'),
+  ('Is het veilig om klantmails in een AI-tool te plakken?','Daar staan namen en andere persoonsgegevens in. Doe dat alleen met een zakelijk abonnement waarvan je weet wat er met je gegevens gebeurt, of haal die gegevens eerst weg.')])
+
+cat('/ai-notuleren/','AI-notulist kiezen: notuleren en transcriptie | ToolMatch',
+ 'Meetings laten notuleren met AI, in Teams of aan tafel. Vergelijk AI-notulisten op Nederlands, waar je opnames staan, verwerkersovereenkomst en prijs.',
+ 'Notuleren','AI-notulist kiezen: notuleren en transcriptie',
+ 'Een meeting laten uitschrijven en samenvatten, online of aan tafel. Zo vergelijk je AI-notulisten op prijs, opslag van je opnames en afspraken over je gegevens.',
+ f'''      <p>Een AI-notulist neemt een gesprek op, schrijft het uit en maakt er een samenvatting met actiepunten van. Sommige tools schuiven aan bij je online meeting, andere werken met een opname die je uploadt. Werk je in Teams met Microsoft 365, dan kan ook {L('/vergelijken/chatgpt-vs-copilot/','Copilot in Teams')} vergaderingen samenvatten, volgens Microsoft.</p>
+      <p>Een opname bevat stemmen, namen en vaak vertrouwelijke informatie. Lees daarom ook wat er geldt voor {L('/gids/ai-veilig-gebruiken/','opnames en de AVG')} voordat je begint.</p>
+''',
+ [('amberscript','opslag in de EU en een verwerkersovereenkomst belangrijk zijn; ook nagekeken door mensen mogelijk.'),
+  ('notta','je een gratis versie wilt proberen en ook opnames wilt laten vertalen.'),
+  ('otter','je vooral online meetings live wilt laten uitschrijven.'),
+  ('tldv','je online meetings wilt opnemen en er notities en samenvattingen van wilt.')],
+ ['<strong>Vraag toestemming.</strong> Vertel deelnemers vooraf dat je opneemt en waarom.',
+  '<strong>Check het Nederlands.</strong> Of een tool Nederlands goed verstaat, verschilt. Test met een echte opname met dialect of vaktermen.',
+  '<strong>Kijk waar de opnames staan.</strong> En hoe lang ze bewaard blijven. Bij Amberscript staan ze volgens de aanbieder op servers in de EU; bij de andere tools konden we dat niet bevestigen.'],
+ [('Wat is het verschil tussen transcriptie en notuleren?','Transcriptie is het letterlijk uitschrijven van wat er gezegd is. Notuleren is samenvatten: besluiten en actiepunten. De meeste tools op deze pagina doen allebei.'),
+  ('Mag ik een meeting opnemen met AI?','Vertel deelnemers vooraf dat je opneemt en waarvoor. In een opname staan persoonsgegevens, dus dan geldt ook de AVG.'),
+  ('Is er een gratis AI-notulist?','Notta, Otter en tl;dv hebben een gratis versie met beperkingen. Bij Amberscript zagen we geen gratis versie op de prijspagina.')])
+
+cat('/crm-klein-bedrijf/','CRM voor een klein bedrijf: gratis en betaald | ToolMatch',
+ 'Een eenvoudig CRM voor je klantgegevens, contactmomenten en offertes. Vergelijk gratis en betaalde CRM-systemen voor kleine bedrijven op prijs en limieten.',
+ 'CRM','CRM voor een klein bedrijf',
+ 'Klantgegevens, contactmomenten en lopende offertes op één plek. Voor een klein bedrijf of zzp\'er is een eenvoudig CRM vaak genoeg. Dit zijn de opties.',
+ f'''      <p>Een CRM is een adresboek met geheugen: wie je klanten zijn, wanneer je ze sprak en welke offertes nog openstaan. Voor een klein bedrijf is de belangrijkste vraag vaak niet welk systeem het meeste kan, maar <strong>hoeveel mensen het gebruiken</strong> en <strong>of je met een gratis versie begint</strong>.</p>
+      <p>Een CRM wordt pas echt handig als het met de rest praat. Lees hoe je {L('/automatiseren-zonder-code/','je CRM koppelen aan je andere apps')} kunt, en hoe klanten {L('/online-afspraken-plannen/','afspraken direct in je agenda')} zetten.</p>
+''',
+ [('hubspot','je gratis wilt beginnen en later misschien wilt uitbreiden.'),
+  ('pipedrive','je vooral verkoopkansen wilt volgen in een pipeline.'),
+  ('zoho','je met maximaal drie mensen gratis wilt werken in een uitgebreid systeem.')],
+ ['<strong>Tel de gebruikers.</strong> De meeste CRM\'s rekenen per gebruiker. Bij Zoho is de gratis versie voor maximaal 3 gebruikers.',
+  '<strong>Begin klein.</strong> Zet eerst je klanten en lopende offertes erin. Extra functies kun je later nog aanzetten.',
+  '<strong>Check de export.</strong> Kijk of je je gegevens kunt exporteren als je wilt overstappen.'],
+ [('Heb ik als zzp\'er een CRM nodig?','Niet altijd. Heb je weinig klanten, dan kan een spreadsheet genoeg zijn. Een CRM helpt als je veel contactmomenten en offertes tegelijk bijhoudt.'),
+  ('Is er een gratis CRM?','HubSpot heeft een gratis basis en Zoho CRM is gratis voor maximaal 3 gebruikers, volgens de aanbieders. Bij Pipedrive zagen we een proefperiode van 14 dagen.'),
+  ('Waar staan mijn klantgegevens in een CRM?','Dat verschilt per aanbieder. Op de pagina\'s die we bekeken, hebben we de opslaglocatie niet kunnen bevestigen. Vraag het na bij de aanbieder, en vraag om een verwerkersovereenkomst.')])
+
+cat('/online-afspraken-plannen/','Online afspraken laten plannen door klanten | ToolMatch',
+ 'Laat klanten zelf een afspraak kiezen in je agenda. Vergelijk tools voor online afspraken plannen op koppelingen, herinneringen, betalen vooraf en prijs.',
+ 'Afspraken plannen','Online afspraken laten plannen door klanten',
+ 'Geen heen-en-weer gemail meer over een tijd: klanten kiezen zelf een moment in je agenda. Dit zijn de tools, met prijs en wat de gratis versie kan.',
+ f'''      <p>Een afsprakenplanner geeft je een boekingspagina met de tijden waarop je beschikbaar bent. De klant kiest een moment, de afspraak staat in je agenda en beide krijgen een bevestiging. Voor een kapper, coach of adviseur werkt dat anders dan voor een salesgesprek, dus kijk goed wat je nodig hebt.</p>
+      <p>Na de afspraak wil je de klant vaak vastleggen: lees hoe je {L('/crm-klein-bedrijf/','klantgegevens bijhouden')} kunt in een CRM. En wil je extra mails na de afspraak, dan kun je {L('/automatiseren-zonder-code/','herinneringen automatisch versturen')} met een koppeling.</p>
+''',
+ [('acuity','je als dienstverlener afspraken plant en intakeformulieren en herinneringen wilt.'),
+  ('calcom','je alleen werkt en gratis wilt beginnen, of later met een team.'),
+  ('calendly','je een bekende planner wilt met een gratis versie.'),
+  ('simplybook','je een eigen boekingssite wilt en klanten misschien vooraf wilt laten betalen: betalingen en aanbetalingen zitten volgens de aanbieder vanaf Standard.')],
+ ['<strong>Koppelt hij met je agenda?</strong> Kijk of de planner werkt met de agenda die je al gebruikt, zodat je niet dubbel geboekt wordt.',
+  '<strong>Betalen vooraf?</strong> Wil je dat klanten bij het boeken betalen, kijk dan of dat in het abonnement zit. Op deze pagina hebben we dat alleen bij SimplyBook.me bevestigd.',
+  '<strong>Prijs per persoon of per bedrijf.</strong> Sommige planners rekenen per gebruiker, andere per account.'],
+ [('Wat is de beste gratis afsprakenplanner?','Calendly, Cal.com en SimplyBook.me hebben een gratis versie. Welke past, hangt af van wat je nodig hebt; wij zetten ze op alfabetische volgorde.'),
+  ('Kunnen klanten vooraf betalen?','Bij SimplyBook.me kan dat volgens de aanbieder vanaf het Standard-abonnement. Bij de andere tools hebben we dat niet gecontroleerd.'),
+  ('Krijgen klanten een herinnering?','De meeste planners sturen een bevestiging. Of herinneringen in jouw abonnement zitten, verschilt per tool en plan; check dat op de prijspagina.')])
+
+cat('/ai-afbeeldingen-en-ontwerp/','AI voor afbeeldingen, logo’s en presentaties | ToolMatch',
+ 'Beelden, een logo of een presentatie maken met AI. Vergelijk ontwerptools op wat de gratis versie kan, de prijs en of je het beeld zakelijk mag gebruiken.',
+ 'Afbeeldingen en ontwerp','AI voor afbeeldingen, logo’s en presentaties',
+ 'Een beeld voor je website, een eerste logo-idee of een presentatie voor een klant. Dit zijn de tools waarvan we de prijs konden controleren.',
+ f'''      <p>Voor beeld heb je twee soorten tools: een <strong>AI-assistent die een afbeelding maakt</strong> op basis van een beschrijving, en een <strong>ontwerptool</strong> waarin je zelf bouwt, met AI als hulp. Voor presentaties is de tweede soort vaak handiger.</p>
+      <p>Canva staat hier (nog) niet tussen: we konden de prijs op de site van Canva niet controleren. Een gemaakt beeld kun je daarna gebruiken als je {L('/social-media-inplannen/','je visuals inplannen als post')}.</p>
+''',
+ [('chatgpt','je af en toe een afbeelding wilt laten maken met een beschrijving; in de gratis versie kan dat beperkt.'),
+  ('lechat','je een Europese assistent wilt die ook eenvoudige afbeeldingen maakt.'),
+  ('pitch','je presentaties wilt maken en delen, ook met een team.')],
+ ['<strong>Zakelijk gebruik.</strong> Lees in de voorwaarden van de tool of je het beeld commercieel mag gebruiken. Dat hebben we voor deze tools niet gecontroleerd.',
+  f'<strong>Vermeld AI waar dat moet.</strong> Volgens de Autoriteit Persoonsgegevens moet je mensen vanaf augustus 2026 informeren als beeld met AI is gemaakt. Lees {L("/gids/ai-act-ondernemers/","wanneer je AI-beelden moet vermelden")}.',
+  '<strong>Een logo is een merk.</strong> Gebruik AI voor ideeën, maar laat een definitief logo controleren op gelijkenis met bestaande merken.'],
+ [('Mag ik een AI-afbeelding gebruiken voor mijn bedrijf?','Dat hangt af van de voorwaarden van de tool. Lees die na voordat je een beeld op je website of in een advertentie zet.'),
+  ('Kan ik met AI een logo maken?','Je kunt er ideeën mee maken. Voor een definitief logo is het verstandig om te controleren of het niet lijkt op een bestaand merk.'),
+  ('Moet ik vermelden dat een beeld met AI is gemaakt?','De AI-verordening bevat transparantieregels voor AI die beeld maakt. Volgens de Autoriteit Persoonsgegevens gelden die vanaf augustus 2026. Lees de details in onze gids over de AI Act.')],
+ extra_src=[('Autoriteit Persoonsgegevens: Risicogroepen AI-verordening','https://www.autoriteitpersoonsgegevens.nl/themas/algoritmes-ai/ai-verordening/risicogroepen-ai-verordening')])
+
+cat('/social-media-inplannen/','Social media inplannen: planners vergeleken | ToolMatch',
+ 'Je posts voor LinkedIn, Instagram en Facebook vooruit inplannen. Vergelijk social media planners op kanalen, gratis versie, AI-hulp en prijs per maand.',
+ 'Social media inplannen','Social media inplannen: planners vergeleken',
+ 'Eén keer per week je posts klaarzetten in plaats van elke dag. Dit zijn de planners, met wat de gratis versie kan en wat je per maand betaalt.',
+ f'''      <p>Met een social media planner zet je je posts voor LinkedIn, Instagram of Facebook vooruit klaar. Ze verschillen vooral in <strong>hoe ze rekenen</strong>: per kanaal, per gebruiker of per account. Met drie kanalen en twee mensen kan dat een groot verschil maken.</p>
+      <p>De tekst van je post schrijf je met een andere tool: zie {L('/ai-tekst-schrijven/','betere posttekst met AI')}. Voor het beeld kijk je bij {L('/ai-afbeeldingen-en-ontwerp/','beelden voor je posts')}.</p>
+''',
+ [('buffer','je klein begint: de gratis versie is voor 3 kanalen, daarna betaal je per kanaal.'),
+  ('hootsuite','je met een team veel kanalen beheert en rapportages wilt.'),
+  ('metricool','je plannen en analyseren wilt combineren; de gratis versie is zonder LinkedIn.')],
+ ['<strong>Tel je kanalen.</strong> Buffer rekent per kanaal; andere planners per account. Reken uit wat het voor jouw aantal kanalen kost.',
+  '<strong>Kijk wat gratis kan.</strong> Voor één persoon met een paar kanalen is een gratis versie vaak genoeg.',
+  '<strong>Plan, maar blijf reageren.</strong> Inplannen bespaart tijd, maar reacties op je posts moet je zelf blijven beantwoorden.'],
+ [('Wat is de beste gratis social media planner?','Buffer en Metricool hebben een gratis versie. Let op: de gratis versie van Metricool is volgens de prijspagina zonder LinkedIn. Hootsuite heeft een gratis proefperiode; de betaalde plannen beginnen bij Standard.'),
+  ('Kan ik LinkedIn-posts inplannen?','Buffer en Metricool noemen LinkedIn als kanaal; bij Metricool zit LinkedIn volgens de prijspagina niet in de gratis versie. Welke soorten posts precies kunnen, verschilt per tool.'),
+  ('Wat kost een social media planner?','Buffer Essentials kost $5 per kanaal per maand bij jaarbetaling, Metricool Starter vanaf €16 per maand, Hootsuite Standard vanaf $99 per maand. Zie de bronnen voor de details.')])
+
+cat('/automatiseren-zonder-code/','Automatiseren zonder code: Zapier, Make en meer | ToolMatch',
+ 'Terugkerend werk vanzelf laten gaan door je apps te koppelen, zonder code. Zie welke automatiseringstool past en hoe de kosten meegroeien met je taken.',
+ 'Automatiseren','Automatiseren zonder code',
+ 'Een formulier dat vanzelf in je CRM belandt, een mail die automatisch vertrekt. Zo koppel je apps zonder te programmeren, en dit kost het.',
+ f'''      <p>Met een automatiseringstool zeg je: <em>als</em> dit gebeurt, doe <em>dan</em> dat. Een nieuw formulier op je site wordt een contact in je CRM. Een nieuwe afspraak levert een herinnering op. Zo hoef je niet steeds hetzelfde over te typen.</p>
+      <p>De kosten groeien mee met hoe vaak je automatiseringen draaien: Zapier telt taken, Make credits en n8n uitvoeringen. Welk merk het best past, lees je in {L('/vergelijken/zapier-vs-make-vs-n8n/','Zapier, Make en n8n vergeleken')}. En denk aan de {L('/gids/ai-veilig-gebruiken/','gegevens die door je koppelingen gaan')}: die gaan via een extra partij.</p>
+''',
+ [('make','je veel controle wilt over elke stap en een lage instapprijs.'),
+  ('n8n','je gegevens in de EU wilt of zelf wilt hosten, en het niet erg vindt om iets technischer te werken.'),
+  ('zapier','je snel wilt beginnen en veel verschillende apps wilt koppelen.')],
+ ['<strong>Begin met één taak.</strong> Kies het klusje dat je het vaakst handmatig doet en automatiseer alleen dat.',
+  '<strong>Reken met je volume.</strong> Schat hoe vaak de automatisering per maand draait. Dat bepaalt welk abonnement je nodig hebt.',
+  '<strong>Kijk waar je gegevens langs gaan.</strong> Bij n8n staan ze volgens de aanbieder in de EU (Frankfurt) als n8n host; bij Zapier en Make hebben we de locatie niet gecontroleerd.'],
+ [('Wat is no-code automatiseren?','Apps aan elkaar koppelen met een visuele bouwer, zonder te programmeren. Je kiest een trigger (als dit gebeurt) en een actie (doe dan dat).'),
+  ('Is er een gratis automatiseringstool?','Zapier en Make hebben een gratis versie met beperkingen. n8n kun je volgens de aanbieder zelf hosten met de Community Edition; de door n8n gehoste versie is betaald.'),
+  ('Wat kost automatiseren?','Zapier Professional kost $19,99 per maand bij jaarbetaling (750 taken), Make Core $9 per maand bij jaarbetaling (10.000 credits) en n8n Starter €20 per maand bij jaarbetaling, volgens de aanbieders.')])
+
+cat('/ai-chatbot-website/','Chatbot voor je website: AI-tools vergeleken | ToolMatch',
+ 'Een AI-chatbot op je website die klantvragen beantwoordt. Vergelijk tools op prijs per gesprek of maand, Nederlands, overdracht naar een mens en AVG.',
+ 'Chatbot op je website','Een AI-chatbot voor je website',
+ 'Een chatbot die veelgestelde vragen beantwoordt, ook buiten kantoortijd. Dit zijn de tools, en zo rekenen ze: per maand, per gebruiker of per opgeloste vraag.',
+ f'''      <p>Een AI-chatbot op je website beantwoordt vragen op basis van je eigen informatie, zoals je veelgestelde vragen of je helpcenter. Kan de bot iets niet, dan moet de vraag bij een mens terechtkomen. Dat kan via een gedeelde inbox, of je kunt {L('/automatiseren-zonder-code/','vragen doorzetten naar je mail of CRM')}.</p>
+      <p>Volgens de Autoriteit Persoonsgegevens moet je mensen vanaf augustus 2026 informeren dat ze met AI te maken hebben, bijvoorbeeld bij een chatbot. Lees meer over {L('/gids/ai-act-ondernemers/','melden dat klanten met een bot praten')}.</p>
+''',
+ [('intercom','je een uitgebreid klantenservice-platform wilt en betalen per opgeloste vraag past bij je volume.'),
+  ('tidio','je een webshop of kleine site hebt en met een gratis versie wilt beginnen.'),
+  ('trengo','je mail, WhatsApp, chat en social in één inbox wilt, met een team.')],
+ ['<strong>Kijk hoe er gerekend wordt.</strong> Intercom rekent naast een prijs per gebruiker $0,99 per opgeloste vraag van de AI-agent Fin, volgens de prijspagina. Trengo heeft een maandprijs met 10 gebruikers inbegrepen.',
+  '<strong>Regel de overdracht.</strong> Zorg dat een klant altijd een mens kan bereiken.',
+  '<strong>Vertel dat het een bot is.</strong> Zet in het chatvenster dat de klant met AI praat.'],
+ [('Wat kost een AI-chatbot voor je website?','Tidio Starter kost $24,17 per maand bij jaarbetaling, Intercom Essential $29 per gebruiker per maand plus $0,99 per opgeloste Fin-vraag, en Trengo Boost €299 per maand bij jaarbetaling met 10 gebruikers. Zie de bronnen.'),
+  ('Moet ik melden dat het een chatbot is?','Volgens de Autoriteit Persoonsgegevens moeten mensen vanaf augustus 2026 weten dat ze met AI te maken hebben, bijvoorbeeld bij een chatbot.'),
+  ('Kan een chatbot Nederlands?','Dat verschilt per tool en hebben we niet gecontroleerd. Test het met echte vragen van je klanten.')],
+ extra_src=[('Autoriteit Persoonsgegevens: Risicogroepen AI-verordening','https://www.autoriteitpersoonsgegevens.nl/themas/algoritmes-ai/ai-verordening/risicogroepen-ai-verordening')])
+
+cat('/ai-data-analyse/','AI voor data-analyse en dashboards: welke tool? | ToolMatch',
+ 'Je cijfers laten analyseren met AI of in een dashboard zetten. Vergelijk ChatGPT, Looker Studio en Power BI op prijs, koppelingen en benodigde kennis.',
+ 'Data-analyse','AI voor data-analyse en dashboards',
+ 'Je verkoopcijfers, websitebezoek of klantenlijst begrijpen zonder dat je data-analist bent. Dit zijn de tools: van een AI-assistent tot een dashboard.',
+ f'''      <p>Er zijn twee manieren om met je cijfers aan de slag te gaan. Je kunt een <strong>AI-assistent</strong> een bestand laten analyseren en er vragen over stellen. Of je zet je cijfers in een <strong>dashboard</strong> dat steeds bijgewerkt wordt. Werk je in Excel, lees dan ook {L('/vergelijken/chatgpt-vs-copilot/','Copilot in Excel of ChatGPT')}.</p>
+      <p>Een dashboard is pas handig als de cijfers vanzelf binnenkomen. Lees hoe je {L('/automatiseren-zonder-code/','cijfers automatisch laten bijwerken')} kunt. Zet je klantgegevens in een AI-tool, lees dan eerst wat er geldt voor {L('/gids/ai-veilig-gebruiken/','klantdata in een AI-tool')}.</p>
+''',
+ [('chatgpt','je af en toe een bestand wilt laten analyseren en er vragen over wilt stellen.'),
+  ('copilot','je in Excel werkt: volgens Microsoft analyseert Copilot daar gegevens en maakt het grafieken.'),
+  ('lookerstudio','je gratis dashboards wilt op basis van Google Sheets of Analytics.'),
+  ('powerbi','je in de Microsoft-omgeving werkt en rapporten wilt delen; Power BI Desktop is gratis.')],
+ ['<strong>Eenmalig of steeds?</strong> Een losse vraag over een bestand: een AI-assistent. Cijfers die je elke week bekijkt: een dashboard.',
+  '<strong>Laat persoonsgegevens weg.</strong> Voor een analyse heb je zelden namen of adressen nodig. Haal ze eruit voordat je een bestand uploadt.',
+  '<strong>Controleer de uitkomst.</strong> Een AI kan een berekening verkeerd doen. Reken belangrijke cijfers na.'],
+ [('Kan ChatGPT een Excel-bestand analyseren?','ChatGPT noemt op de prijspagina ook extensies voor Excel en Google Sheets. Controleer de uitkomsten altijd zelf.'),
+  ('Is Looker Studio gratis?','Ja, Looker Studio is gratis. Looker Studio Pro kost $9 per gebruiker per project per maand, volgens Google.'),
+  ('Wat is het verschil tussen Power BI en Looker Studio?','Power BI is van Microsoft en past bij Excel en Microsoft 365. Looker Studio is van Google en past bij Sheets en Analytics. Allebei hebben ze een gratis instap.')])
+
+for c in CAT:
+    ids=[i for i,_ in c['tools']]
+    ok=[i for i in ids if T[i]['prijs'] and T[i]['bronnen']]
+    assert len(ok)>=3, c['slug']+' heeft minder dan 3 tools met gecontroleerde prijs'
+    assert ok==ids, c['slug']+': alleen tools met gecontroleerde prijs op een categoriepagina'
+    srcs=[tuple(b) for i in ids for b in T[i]['bronnen']]+[tuple(s) for s in c['src']]
+    body=c['intro']+'      <h2 id="overzicht">In het kort</h2>\n      <p>De tools staan op alfabetische volgorde, niet op rangorde. Welke past, hangt af van je situatie.</p>\n'+kort_tabel(ids,'Overzicht van de tools')
+    body+='      <h2 id="tools">De tools</h2>\n      <div class="results">\n'+''.join(kaart(T[i],p) for i,p in c['tools'])+'      </div>\n'
+    body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
+    body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
+    body+=faq_html(c['faq'])+bronnen_html(srcs)+byline()
+    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":GC},
+      {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
+      crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
+    zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)
+
+# ======================= VERGELIJKINGEN =======================
+AP_RISK=('Autoriteit Persoonsgegevens: Risicogroepen AI-verordening','https://www.autoriteitpersoonsgegevens.nl/themas/algoritmes-ai/ai-verordening/risicogroepen-ai-verordening')
+AP_GESL=('Autoriteit Persoonsgegevens: AI-geletterdheid','https://www.autoriteitpersoonsgegevens.nl/themas/algoritmes-ai/ai-verordening/ai-geletterdheid')
+AP_AIV=('Autoriteit Persoonsgegevens: AI-verordening','https://www.autoriteitpersoonsgegevens.nl/themas/algoritmes-ai/ai-verordening')
+AP_VWO=('Autoriteit Persoonsgegevens: Verwerkersovereenkomst','https://www.autoriteitpersoonsgegevens.nl/themas/basis-avg/avg-algemeen/verwerkersovereenkomst')
+AP_HULP=('Autoriteit Persoonsgegevens: Hulpmiddel generatieve AI en de AVG + VR Microsoft Copilot','https://www.autoriteitpersoonsgegevens.nl/documenten/hulpmiddel-generatieve-ai-en-de-avg-vr-microsoft-copilot')
+AP_GENAI=('Autoriteit Persoonsgegevens: Handreiking generatieve AI en de AVG','https://www.autoriteitpersoonsgegevens.nl/documenten/handreiking-generatieve-ai-en-de-avg')
+EURLEX=('EUR-Lex: Verordening (EU) 2024/1689 (AI-verordening)','https://eur-lex.europa.eu/eli/reg/2024/1689/oj?locale=nl')
+CHATGPT_SRC=('ChatGPT: Prijzen','https://chatgpt.com/nl-NL/pricing')
+VS=[]
+def vs(slug,title,desc,crumb,h1,lead,cols,rows,intro,secties,faq,srcs):
+    VS.append(dict(slug=slug,title=title,desc=desc,crumb=crumb,h1=h1,lead=lead,cols=cols,rows=rows,intro=intro,secties=secties,faq=faq,src=srcs))
+
+vs('/vergelijken/chatgpt-vs-copilot/','ChatGPT vs Copilot: verschil, prijs en keuze | ToolMatch',
+ 'ChatGPT of Microsoft Copilot voor je bedrijf? We zetten prijs, koppeling met Word, Outlook en Teams, en wat er met je gegevens gebeurt naast elkaar.',
+ 'ChatGPT vs Copilot','ChatGPT vs Copilot voor je bedrijf',
+ 'De ene is een losse assistent, de andere zit in Word, Outlook en Teams. Zo verschillen ChatGPT en Microsoft 365 Copilot in prijs, koppelingen en omgang met je gegevens.',
+ ['ChatGPT','Microsoft 365 Copilot'],
+ [('Wat het is','Losse AI-assistent van OpenAI, op web, desktop en mobiel.','AI-assistent in de Microsoft 365-apps, voor bedrijven die daar al in werken.'),
+  ('Gratis instap','Ja, ChatGPT Free (met beperkingen).','Copilot Chat is volgens Microsoft zonder extra kosten beschikbaar bij geschikte Microsoft 365-plannen.'),
+  ('Betaald','Plus: $20 per maand.','Copilot Bedrijven: €18,20 per gebruiker per maand bij jaarbetaling (excl. btw); bij aanschaf tot en met 31-12-2026 actieprijs €15,60 voor het eerste jaar. Alleen als invoegtoepassing bij een geschikt Microsoft 365 Business-abonnement.'),
+  ('Word, Excel en PowerPoint','Extensies voor Excel, Word, PowerPoint en Google Sheets: beperkt in Free, ja in Plus.','Ingebouwd in Word, Excel en PowerPoint.'),
+  ('Outlook en Teams','Niet gecontroleerd.','Ingebouwd: mails opstellen en threads samenvatten in Outlook, samenvattingen van vergaderingen in Teams.'),
+  ('Training op je invoer','Opt-out beschikbaar (Free, Go, Plus en Pro).','Prompts en antwoorden worden volgens Microsoft niet gebruikt om de modellen te trainen.'),
+  ('Verwerkersovereenkomst','Niet gecontroleerd.','Het Microsoft-addendum voor gegevensbescherming (DPA) is van toepassing, volgens Microsoft.')],
+ '''      <p>De vraag is meestal niet welke van de twee slimmer is, maar <strong>waar je werkt</strong>. ChatGPT is een losse app waar je tekst in en uit haalt. Copilot zit in de Microsoft 365-apps die je team al gebruikt en werkt met je mails, documenten en vergaderingen.</p>
+''',
+ [('Copilot Business vs ChatGPT Business',f'''      <p>Voor teams heeft OpenAI ChatGPT Business. De prijs daarvan konden we op de prijspagina niet aflezen, dus die noemen we niet. Copilot Bedrijven is een invoegtoepassing: je hebt er een geschikt Microsoft 365 Business-abonnement bij nodig, en je betaalt per gebruiker per jaar. Volgens Microsoft geldt voor sommige geavanceerde functies daarnaast een prijs naar gebruik. Wil je {L('/vergelijken/chatgpt-vs-gemini/','ook Gemini bekijken')}, dan staat die vergelijking apart.</p>
+'''),
+  ('Wat er met je gegevens gebeurt',f'''      <p>Bij ChatGPT kun je volgens de prijspagina uitzetten dat je inhoud wordt gebruikt om modellen te trainen. Bij Copilot voor bedrijven blijven prompts en antwoorden volgens Microsoft binnen de Microsoft 365-servicegrenzen en worden ze niet gebruikt om de modellen te trainen.</p>
+      <p>Let op: de Autoriteit Persoonsgegevens publiceerde in juli 2026 een advies over een voorgenomen inzet van Microsoft 365 Copilot bij een gemeente en concludeerde dat die verwerking inbreuk zou maken op de AVG. Dat ging over één specifieke situatie, maar het laat zien dat je de instellingen en de toegang tot je bestanden goed moet regelen. De AP heeft daar ook een hulpmiddel voor gepubliceerd.</p>
+'''),
+  ('Zo kies je',f'''      <ul>
+        <li><strong>Kies Copilot</strong> als je team in Word, Outlook en Teams werkt en je al een geschikt Microsoft 365 Business-abonnement hebt.</li>
+        <li><strong>Kies ChatGPT</strong> als je een losse assistent wilt, alleen werkt of geen Microsoft 365 gebruikt.</li>
+        <li><strong>Twijfel je over de kosten?</strong> Bekijk {L('/gids/wat-kosten-ai-abonnementen/','alle prijzen per maand')}, of zie {L('/ai-assistenten/','alle AI-assistenten op een rij')}.</li>
+      </ul>
+''')],
+ [('Wat is het verschil tussen ChatGPT en Copilot?','ChatGPT is een losse AI-assistent. Microsoft 365 Copilot zit in Word, Excel, PowerPoint, Outlook en Teams en werkt met je werkgegevens in Microsoft 365.'),
+  ('Is Copilot gratis?','Copilot Chat is volgens Microsoft zonder extra kosten beschikbaar bij geschikte Microsoft 365-plannen. Copilot in de apps zelf is een betaalde invoegtoepassing (Copilot Bedrijven).'),
+  ('Wat kost Copilot voor een klein bedrijf?','Copilot Bedrijven kost €18,20 per gebruiker per maand bij jaarbetaling, exclusief btw. Bij aanschaf tot en met 31 december 2026 geldt volgens Microsoft een actieprijs van €15,60 voor het eerste jaar.'),
+  ('Wordt mijn invoer gebruikt om de AI te trainen?','Bij ChatGPT kun je dat uitzetten. Bij Copilot voor bedrijven worden prompts en antwoorden volgens Microsoft niet gebruikt voor training.')],
+ [CHATGPT_SRC,('Microsoft: Copilot voor kleine bedrijven','https://www.microsoft.com/nl-nl/microsoft-365/copilot/business'),AP_HULP])
+
+vs('/vergelijken/chatgpt-vs-gemini/','ChatGPT vs Gemini: welke past bij je bedrijf? | ToolMatch',
+ 'ChatGPT of Google Gemini? Vergelijk prijs, wat de gratis versie kan, koppeling met Gmail, Docs en Drive, en hoe goed beide Nederlands schrijven.',
+ 'ChatGPT vs Gemini','ChatGPT vs Gemini voor je bedrijf',
+ 'Werk je in Gmail en Google Docs, dan zit Gemini er misschien al in. Zo verschillen ChatGPT en Gemini in prijs, koppelingen en wat je per gebruiker betaalt.',
+ ['ChatGPT','Gemini in Google Workspace'],
+ [('Wat het is','Losse AI-assistent van OpenAI.','Gemini als onderdeel van Google Workspace (zakelijk).'),
+  ('Gratis instap','Ja, ChatGPT Free (met beperkingen).','De gratis Gemini-app voor particulieren hebben we niet gecontroleerd. Workspace heeft een proefperiode van 14 dagen.'),
+  ('Betaald','Plus: $20 per maand.','Business Starter: $7 per gebruiker per maand (excl. belastingen), met Gemini in Gmail en chat met Gemini. Business Standard: $14 per gebruiker per maand, ook met Gemini in Documenten en Meet.'),
+  ('Gmail, Docs en Drive','Extensie voor Google Sheets; verder niet gecontroleerd.','Gemini in Gmail vanaf Starter; in Documenten en Meet vanaf Standard.'),
+  ('Training op je invoer','Opt-out beschikbaar (Free, Go, Plus en Pro).','Niet gecontroleerd op de pagina\'s die we bekeken.'),
+  ('Nederlands','Niet gemeten.','Niet gemeten.')],
+ '''      <p>Voor een bedrijf is Gemini vooral interessant als je al met Google Workspace werkt: dan krijg je de AI in je mail en documenten, en betaal je per gebruiker voor het hele pakket. ChatGPT is een losse app, los van je mail en documenten.</p>
+      <p>Hoe goed beide Nederlands schrijven, hebben we niet gemeten. Test ze met dezelfde opdracht uit je eigen werk.</p>
+''',
+ [('Zo kies je',f'''      <ul>
+        <li><strong>Kies Gemini</strong> als je bedrijf in Gmail en Google Docs werkt; bekijk welk Workspace-abonnement de functies heeft die je nodig hebt.</li>
+        <li><strong>Kies ChatGPT</strong> als je een losse assistent wilt, los van je mailprogramma.</li>
+        <li><strong>Nog een optie:</strong> vergelijk ook {L('/vergelijken/chatgpt-vs-claude/','ChatGPT tegen Claude')}, of bekijk {L('/ai-assistenten/','andere assistenten, ook Europese')}.</li>
+      </ul>
+''')],
+ [('Wat is het verschil tussen ChatGPT en Gemini?','ChatGPT is een losse AI-assistent. Gemini zit voor bedrijven in Google Workspace, onder meer in Gmail en, vanaf Business Standard, in Documenten en Meet.'),
+  ('Wat kost Gemini voor een bedrijf?','Gemini zit in Google Workspace. Business Starter kost $7 per gebruiker per maand, Business Standard $14, exclusief belastingen. Google geeft tijdelijk 30% korting in de eerste 3 maanden.'),
+  ('Schrijft Gemini goed Nederlands?','Dat hebben we niet gemeten. Probeer het met een echte tekst uit je werk, bijvoorbeeld in de proefperiode van Workspace.')],
+ [CHATGPT_SRC,('Google Workspace: prijzen','https://workspace.google.com/intl/nl/pricing')])
+
+vs('/vergelijken/chatgpt-vs-claude/','ChatGPT vs Claude: verschil voor ondernemers | ToolMatch',
+ 'ChatGPT of Claude? We vergelijken de prijs per maand, schrijven in het Nederlands, werken met lange documenten en de zakelijke abonnementen.',
+ 'ChatGPT vs Claude','ChatGPT vs Claude voor ondernemers',
+ 'Twee losse AI-assistenten met een gratis versie en een abonnement van rond de 20 dollar. Zo verschillen ze in prijs, zakelijke plannen en wat er met je gesprekken gebeurt.',
+ ['ChatGPT','Claude'],
+ [('Wat het is','AI-assistent van OpenAI.','AI-assistent van Anthropic.'),
+  ('Gratis versie','Ja (met beperkingen).','Ja, $0 (met beperkingen).'),
+  ('Persoonlijk abonnement','Plus: $20 per maand.','Pro: $17 per maand bij jaarbetaling, $20 maandelijks. Max: vanaf $100 per maand.'),
+  ('Voor teams','ChatGPT Business; prijs niet gecontroleerd.','Team: voor 2 tot 150 gebruikers; prijs niet gecontroleerd.'),
+  ('Kantoorsoftware','Extensies voor Excel, Word, PowerPoint en Google Sheets (beperkt in Free).','Claude for Microsoft 365 en Claude for Microsoft Outlook vanaf Pro, volgens de prijspagina.'),
+  ('Training op je invoer','Opt-out beschikbaar.','Opt-out bij Free, Pro en Max; bij de zakelijke plannen volgens Anthropic standaard geen training op je inhoud.'),
+  ('Nederlands','Niet gemeten.','Niet gemeten.')],
+ '''      <p>ChatGPT en Claude lijken veel op elkaar: allebei losse assistenten met een gratis versie en een betaald abonnement. De verschillen zitten in de details: de prijs bij jaarbetaling, de koppelingen met kantoorsoftware en de standaardinstellingen voor training op je gesprekken.</p>
+      <p>Werk je met lange documenten, probeer dan allebei met hetzelfde document. Hoe goed ze lange teksten verwerken of Nederlands schrijven, hebben we niet gemeten.</p>
+''',
+ [('Zo kies je',f'''      <ul>
+        <li><strong>Kies Claude</strong> als je bij jaarbetaling iets minder wilt betalen voor een persoonlijk abonnement, of als je de koppeling met Microsoft 365 en Outlook wilt.</li>
+        <li><strong>Kies ChatGPT</strong> als je ook de extensies voor Excel en Google Sheets wilt gebruiken.</li>
+        <li><strong>Vooral schrijfwerk?</strong> Bekijk ook {L('/ai-tekst-schrijven/','tools speciaal voor teksten')}, en {L('/gids/wat-kosten-ai-abonnementen/','wat de abonnementen kosten')}.</li>
+      </ul>
+''')],
+ [('Wat is het verschil tussen ChatGPT en Claude?','Allebei zijn het losse AI-assistenten. Ze verschillen vooral in prijs bij jaarbetaling, koppelingen met kantoorsoftware en de standaardinstellingen voor training.'),
+  ('Wat kost Claude per maand?','Claude Pro kost $17 per maand bij jaarbetaling of $20 per maand bij maandelijkse betaling, volgens Anthropic.'),
+  ('Gebruikt Claude mijn gesprekken voor training?','Bij Free, Pro en Max kun je dat uitzetten. Bij de zakelijke plannen traint Anthropic volgens de prijspagina standaard niet op je inhoud.')],
+ [CHATGPT_SRC,('Claude Pricing','https://claude.com/pricing')])
+
+vs('/vergelijken/zapier-vs-make-vs-n8n/','Zapier vs Make vs n8n: welke past bij jou? | ToolMatch',
+ 'Zapier, Make of n8n? Vergelijk gemak, prijs per taak of operatie, waar je gegevens staan en wat je zelf moet beheren als je n8n zelf host.',
+ 'Zapier vs Make vs n8n','Zapier vs Make vs n8n',
+ 'Drie tools om apps te koppelen zonder te programmeren. Ze rekenen elk op een andere manier: per taak, per credit of per uitvoering. Zo kies je.',
+ ['Zapier','Make','n8n'],
+ [('Wat het is','Koppelt duizenden apps; snel te beginnen.','Visuele bouwer met veel controle over elke stap.','Automatiseren met AI-agents en code-stappen; ook zelf te hosten.'),
+  ('Gratis versie','Ja (met beperkingen).','Ja (met beperkingen).','Zelf hosten met de Community Edition; de door n8n gehoste versie is betaald.'),
+  ('Betaald vanaf','Professional: $19,99 per maand bij jaarbetaling (750 taken).','Core: $9 per maand bij jaarbetaling (10.000 credits).','Starter: €20 per maand bij jaarbetaling.'),
+  ('Hoe het telt','Per taak.','Per credit.','Per uitvoering.'),
+  ('Gegevens','Niet gecontroleerd.','Niet gecontroleerd.','In de EU (Frankfurt) als n8n host; zelf hosten kan ook.'),
+  ('Instap (onze indeling)','Eenvoudig.','Gemiddeld.','Technisch.')],
+ '''      <p>Alle drie koppelen ze apps: als er in de ene app iets gebeurt, doet de andere iets. Het verschil zit in <strong>gemak</strong>, <strong>hoe de prijs meegroeit</strong> en <strong>waar je gegevens langs gaan</strong>.</p>
+''',
+ [('Zelf hosten met n8n','''      <p>n8n kun je zelf hosten. Dan staan je gegevens op je eigen server, maar ben je zelf verantwoordelijk voor updates, beveiliging en back-ups. Kun je dat niet zelf, dan is de door n8n gehoste versie of een van de andere twee eenvoudiger.</p>
+'''),
+  ('Zo kies je',f'''      <ul>
+        <li><strong>Kies Zapier</strong> als je snel wilt beginnen en gemak belangrijker vindt dan de laagste prijs.</li>
+        <li><strong>Kies Make</strong> als je meer controle wilt over elke stap en veel automatiseringen draait voor een lage instapprijs.</li>
+        <li><strong>Kies n8n</strong> als je gegevens in de EU wilt houden of zelf wilt hosten, en technisch werk niet erg vindt.</li>
+        <li>Lees ook {L('/automatiseren-zonder-code/','wat je allemaal kunt automatiseren')}, en meer over {L('/gids/ai-veilig-gebruiken/','EU-hosting en je gegevens')}.</li>
+      </ul>
+''')],
+ [('Wat is goedkoper: Zapier of Make?','Make Core begint bij $9 per maand bij jaarbetaling met 10.000 credits; Zapier Professional bij $19,99 per maand bij jaarbetaling met 750 taken. Een taak en een credit zijn niet hetzelfde, dus reken met je eigen automatiseringen.'),
+  ('Is n8n gratis?','De Community Edition kun je volgens n8n zelf hosten. De versie die n8n voor je host, begint bij Starter: €20 per maand bij jaarbetaling.'),
+  ('Waar staan mijn gegevens?','Bij n8n Cloud volgens de aanbieder in de EU (Frankfurt). Bij Zapier en Make hebben we de locatie niet gecontroleerd.')],
+ [tuple(b) for i in ('zapier','make','n8n') for b in T[i]['bronnen']])
+
+for v in VS:
+    nc=len(v['cols'])
+    th=''.join(f'<th scope="col">{E(c)}</th>' for c in v['cols'])
+    tr=''.join('          <tr><th scope="row">'+r[0]+'</th>'+''.join(f'<td>{E(x)}</td>' for x in r[1:])+'</tr>\n' for r in v['rows'])
+    tbl=f'''      <h2 id="naast-elkaar">Naast elkaar</h2>
+      <div class="tbl" role="region" aria-label="{E(v['crumb'])} naast elkaar" tabindex="0">
+        <table class="vs">
+          <thead><tr><th scope="col">Gecontroleerd op {GCN}</th>{th}</tr></thead>
+          <tbody>
+{tr}          </tbody>
+        </table>
+      </div>
+'''
+    body=v['intro']+tbl+''.join(f'      <h2>{h}</h2>\n{b}' for h,b in v['secties'])+faq_html(v['faq'])+bronnen_html(v['src'])+byline()
+    crumb=f'<a href="/vergelijken/">Vergelijken</a> › {v["crumb"]}'
+    graph=[{"@type":"Article","@id":D+v['slug']+"#artikel","headline":v['h1'],"description":v['desc'],"inLanguage":"nl-NL","url":D+v['slug'],"mainEntityOfPage":D+v['slug'],"datePublished":PUB,"dateModified":GC,"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+      crumbs_ld([('Home','/'),('Vergelijken','/vergelijken/'),(v['crumb'],v['slug'])]),faq_ld(v['slug'],v['faq'])]
+    zet(v['slug'],v['title'],v['desc'],crumb,v['h1'],v['lead'],body,graph)
+
+KIES={'/vergelijken/chatgpt-vs-copilot/':'Werk je in Word, Outlook en Teams? Dan zit Copilot in je eigen apps. ChatGPT is de losse assistent, ook zonder Microsoft 365.',
+ '/vergelijken/chatgpt-vs-gemini/':'Werk je in Gmail en Google Docs? Dan krijg je Gemini via Google Workspace. ChatGPT werkt los van je mail en documenten.',
+ '/vergelijken/chatgpt-vs-claude/':'Twee losse assistenten met een gratis versie. Ze verschillen in prijs bij jaarbetaling, koppelingen en instellingen voor training.',
+ '/vergelijken/zapier-vs-make-vs-n8n/':'Zapier voor gemak, Make voor controle tegen een lage instapprijs, n8n als je gegevens in de EU wilt of zelf wilt hosten.'}
+def hub(path,title,desc,crumb,h1,lead,intro,items,outro=''):
+    li=''.join(f'''      <article class="res">
+        <h3><a href="{p}">{E(n)}</a></h3>
+        <p>{E(t)}</p>
+      </article>
+''' for p,n,t in items)
+    body=intro+f'      <h2 id="overzicht">{"Kies een vergelijking" if path=="/vergelijken/" else "Alle gidsen"}</h2>\n      <div class="results">\n'+li+'      </div>\n'+outro+f'      <p class="note">Redactie ToolMatch · bijgewerkt op {GCN}</p>\n'
+    graph=[{"@type":"CollectionPage","@id":D+path,"url":D+path,"name":h1,"description":desc,"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG},
+      {"@type":"ItemList","name":h1,"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":nm,"url":D+p} for n,(p,nm,_) in enumerate(items)]},
+      crumbs_ld([('Home','/'),(crumb,path)])]
+    zet(path,title,desc,crumb,h1,lead,body,graph)
+hub('/vergelijken/','AI-tools vergelijken: alle vergelijkingen | ToolMatch',
+ 'Alle vergelijkingen van ToolMatch op een rij: ChatGPT tegen Copilot, Gemini en Claude, en Zapier tegen Make en n8n. Met prijzen, bronnen en datum.',
+ 'Vergelijken','Alle vergelijkingen',
+ 'Twee of drie bekende tools naast elkaar: wat ze kosten, waar ze in je werk passen en wat er met je gegevens gebeurt. Met de bron en de datum bij elk gegeven.',
+ '''      <p>In een vergelijking zetten we alleen naast elkaar wat we op de sites van de aanbieders konden controleren. Konden we iets niet bevestigen, dan staat er "niet gecontroleerd". We geven geen cijfers of sterren: welke tool past, hangt af van je situatie. Zoek je liever per soort werk? Bekijk dan <a href="/#categorieen">de categorieën</a>.</p>
+''',[(v['slug'],v['h1'],KIES[v['slug']]) for v in VS])
+
+# ======================= GIDSEN =======================
+GIDS=[]
+def gids(slug,title,desc,crumb,h1,lead,body,faq,srcs):
+    GIDS.append(dict(slug=slug,title=title,desc=desc,crumb=crumb,h1=h1,lead=lead,body=body,faq=faq,src=srcs))
+
+gids('/gids/ai-gebruiken-in-je-bedrijf/','AI gebruiken in je bedrijf: een stappenplan | ToolMatch',
+ 'Zo begin je met AI in je bedrijf: kies de taken die tijd kosten, test met echt werk, regel privacy en houd de abonnementen klein. Met praktijkvoorbeelden.',
+ 'AI gebruiken in je bedrijf','AI gebruiken in je bedrijf: een stappenplan',
+ 'Niet beginnen bij de tool, maar bij het werk. In zes stappen van "we moeten iets met AI" naar een paar tools die echt tijd schelen.',
+ f'''      <h2 id="stap-1">1. Kies de taken die tijd kosten</h2>
+      <p>Schrijf een week lang op welk werk steeds terugkomt en weinig plezier geeft. Denk aan: mails beantwoorden met steeds dezelfde uitleg, notulen uitwerken na een overleg, een eerste versie van een offertetekst of een LinkedIn-post. Dat zijn taken waar AI vaak goed bij helpt. Werk waarbij één fout grote gevolgen heeft, zoals juridische teksten of berekeningen, laat je beter (nog) niet aan AI over.</p>
+      <h2 id="stap-2">2. Kijk wat je al hebt</h2>
+      <p>Misschien zit de functie al in software die je betaalt. Bij geschikte Microsoft 365-plannen is Copilot Chat volgens Microsoft zonder extra kosten beschikbaar, en in Google Workspace zit Gemini in Gmail vanaf Business Starter. Kijk daar eerst, voordat je een nieuw abonnement neemt.</p>
+      <h2 id="stap-3">3. Test met echt werk</h2>
+      <p>Neem één taak en probeer twee tools met dezelfde opdracht, liefst in een gratis versie of proefperiode. Kijk naar wat je echt bespaart: hoeveel moet je nog herschrijven of controleren? Weet je niet waar je moet beginnen, dan helpt {L('/keuzehulp/','de keuzehulp')} met een eerste selectie.</p>
+      <h2 id="stap-4">4. Regel privacy en afspraken</h2>
+      <p>Bepaal vooraf welke gegevens wel en niet in een AI-tool mogen. Gaat het om persoonsgegevens van klanten, dan geldt de AVG en heb je afspraken met de aanbieder nodig. Werk je met meer mensen, {L('/gids/ai-beleid-opstellen/','spreek een kort AI-beleid af')}, zodat iedereen weet wat mag.</p>
+      <h2 id="stap-5">5. Zorg dat je team weet wat het doet</h2>
+      <p>Organisaties die AI-systemen gebruiken, moeten volgens de Autoriteit Persoonsgegevens sinds 2 februari 2025 zorgen dat hun medewerkers AI-geletterd zijn: genoeg weten en kunnen om AI verantwoord in te zetten. Welke maatregelen dat precies zijn, staat niet in de wet. Een korte uitleg aan je team over wat AI goed en slecht doet, is een begin.</p>
+      <h2 id="stap-6">6. Houd de abonnementen klein</h2>
+      <p>Neem één abonnement per taak en zeg op wat je na een maand niet gebruikt. Reken met de prijs per gebruiker en let op jaarbetalingen die automatisch verlengen. Zo {L('/gids/wat-kosten-ai-abonnementen/','houd de kosten klein')}.</p>
+''',
+ [('Waar begin ik met AI in mijn bedrijf?','Bij het werk, niet bij de tool. Kies één taak die vaak terugkomt en tijd kost, en test daar twee tools mee.'),
+  ('Heb ik een betaald abonnement nodig?','Niet altijd. Veel tools hebben een gratis versie, en misschien zit de functie al in software die je betaalt, zoals Microsoft 365 of Google Workspace.'),
+  ('Moet mijn team een AI-training volgen?','Organisaties die AI gebruiken, moeten volgens de Autoriteit Persoonsgegevens zorgen dat medewerkers AI-geletterd zijn. Welke maatregelen dat zijn, staat niet in de wet; dat hangt af van hoe je AI gebruikt.')],
+ [AP_GESL,('Microsoft: Copilot voor kleine bedrijven','https://www.microsoft.com/nl-nl/microsoft-365/copilot/business'),('Google Workspace: prijzen','https://workspace.google.com/intl/nl/pricing')])
+
+gids('/gids/ai-veilig-gebruiken/','ChatGPT en AI veilig gebruiken in je bedrijf | ToolMatch',
+ 'Wat mag je wel en niet in ChatGPT of Copilot typen? Zo zet je training uit, kies je een zakelijk abonnement en regel je een verwerkersovereenkomst.',
+ 'AI veilig gebruiken','ChatGPT en AI veilig gebruiken in je bedrijf',
+ 'Wat je in een AI-tool typt, verlaat je computer. Zo houd je gegevens van klanten veilig: wat je niet invoert, welke instellingen je aanzet en welke afspraken je maakt.',
+ f'''      <h2 id="niet-invoeren">Wat je niet in een AI-tool zet</h2>
+      <ul>
+        <li><strong>Persoonsgegevens van klanten</strong>, zoals namen, adressen, telefoonnummers of klantnummers, tenzij je afspraken hebt met de aanbieder (zie hieronder).</li>
+        <li><strong>Gevoelige gegevens</strong>, zoals gegevens over gezondheid, en wachtwoorden of inloggegevens.</li>
+        <li><strong>Vertrouwelijke informatie</strong> van klanten of partners waarover je geheimhouding hebt afgesproken.</li>
+      </ul>
+      <p>Heb je ze niet nodig voor de taak, haal ze er dan uit. Voor een samenvatting of een analyse zijn namen bijna nooit nodig. Dat geldt ook voor {L('/ai-notuleren/','opnames van meetings')}: daarin staan stemmen en namen.</p>
+      <h2 id="training">Zet training op je invoer uit</h2>
+      <p>Sommige aanbieders gebruiken wat je invoert om hun AI te verbeteren. Bij veel tools kun je dat uitzetten:</p>
+      <ul>
+        <li><strong>ChatGPT:</strong> opt-out beschikbaar bij Free, Go, Plus en Pro, via de instellingen voor gegevensbeheer.</li>
+        <li><strong>Claude:</strong> opt-out bij Free, Pro en Max; bij de zakelijke plannen traint Anthropic volgens de prijspagina standaard niet op je inhoud.</li>
+        <li><strong>Microsoft 365 Copilot:</strong> prompts en antwoorden worden volgens Microsoft niet gebruikt om de modellen te trainen.</li>
+        <li><strong>DeepL:</strong> bij betaalde abonnementen wordt je tekst volgens DeepL niet gebruikt voor training.</li>
+      </ul>
+      <h2 id="verwerkersovereenkomst">Regel een verwerkersovereenkomst</h2>
+      <p>Verwerkt een aanbieder persoonsgegevens voor jou, dan is die aanbieder een verwerker. De AVG eist dan een verwerkersovereenkomst: schriftelijke afspraken over onder meer beveiliging, subverwerkers en het verwijderen van gegevens. Volgens de Autoriteit Persoonsgegevens ben je in overtreding als je met een verwerker werkt zonder zo'n overeenkomst. Kijk daarom vóór je klantgegevens invoert of de aanbieder een verwerkersovereenkomst biedt bij jouw abonnement. Wil je je gegevens in Europa houden, bekijk dan {L('/ai-assistenten/','assistenten met EU-opslag')}.</p>
+      <h2 id="koppelingen">Let op koppelingen</h2>
+      <p>Koppel je apps met een tool als Zapier, Make of n8n, dan gaan je gegevens via die tool. Ook daarvoor heb je dan afspraken nodig. n8n biedt hosting in de EU (Frankfurt) of zelf hosten; bij de andere twee hebben we de locatie niet gecontroleerd.</p>
+      <h2 id="vastleggen">Leg het vast</h2>
+      <p>Spreek met je team af welke tools mogen en welke gegevens nooit in een AI-tool gaan, en {L('/gids/ai-beleid-opstellen/','leg het vast in een AI-beleid')}. De Autoriteit Persoonsgegevens heeft ook een hulpmiddel gepubliceerd om in te schatten of je generatieve AI kunt en mag inzetten.</p>
+''',
+ [('Mag ik klantgegevens in ChatGPT zetten?','Alleen als je weet wat er met die gegevens gebeurt en je afspraken hebt gemaakt met de aanbieder, zoals een verwerkersovereenkomst. Is dat niet geregeld, haal persoonsgegevens dan weg.'),
+  ('Hoe zet ik training uit in ChatGPT?','ChatGPT noemt op de prijspagina een opt-out voor training op je inhoud bij Free, Go, Plus en Pro. Je vindt die in de instellingen voor gegevensbeheer (Data Controls).'),
+  ('Wat is een verwerkersovereenkomst?','Een schriftelijke overeenkomst met een partij die persoonsgegevens voor jou verwerkt. De AVG verplicht die in artikel 28. Er staat in wat de verwerker met de gegevens mag doen, hoe ze beveiligd worden en wat er gebeurt na afloop.')],
+ [CHATGPT_SRC,('Claude Pricing','https://claude.com/pricing'),('Microsoft: Copilot voor kleine bedrijven','https://www.microsoft.com/nl-nl/microsoft-365/copilot/business'),('DeepL Pro','https://www.deepl.com/en/pro'),('n8n Pricing','https://n8n.io/pricing/'),AP_VWO,AP_HULP])
+
+gids('/gids/ai-act-ondernemers/','AI Act voor ondernemers: wat moet je regelen? | ToolMatch',
+ 'Wat vraagt de AI-verordening van jou als je AI-tools gebruikt? Over AI-geletterdheid, de data uit de wet en wat een klein bedrijf echt moet doen.',
+ 'AI Act voor ondernemers','AI Act voor ondernemers: wat moet je regelen?',
+ 'De Europese AI-verordening (AI Act) geldt ook voor bedrijven die AI alleen gebruiken. Wat betekent dat voor een klein bedrijf? Op basis van officiële bronnen.',
+ f'''      <p class="pledge-n">Dit is algemene uitleg op basis van de Autoriteit Persoonsgegevens en de wettekst, geen juridisch advies. Twijfel je over jouw situatie, vraag dan advies aan een jurist.</p>
+      <h2 id="wat">Wat is de AI-verordening?</h2>
+      <p>De AI-verordening (Verordening (EU) 2024/1689) is de Europese wet over kunstmatige intelligentie. Ze deelt AI-systemen in naar risico: hoe hoger het risico voor mensen, hoe strenger de regels. De wet geldt voor organisaties die AI aanbieden én voor organisaties die AI gebruiken, ook voor het mkb.</p>
+      <h2 id="data">De data</h2>
+      <ul>
+        <li><strong>Sinds 2 februari 2025:</strong> een aantal AI-systemen is verboden, en organisaties die AI ontwikkelen of gebruiken, moeten zorgen dat hun medewerkers AI-geletterd zijn.</li>
+        <li><strong>Vanaf augustus 2026:</strong> transparantieregels voor AI-systemen met een beperkt risico, zoals chatbots en AI die teksten en beeld maakt. Andere AI-systemen moeten vanaf 2 augustus 2026 aan extra eisen voldoen.</li>
+        <li><strong>2 augustus 2027:</strong> de verordening is helemaal van kracht.</li>
+      </ul>
+      <p>Bron: Autoriteit Persoonsgegevens, bekeken op {GCN}.</p>
+      <h2 id="geletterdheid">AI-geletterdheid</h2>
+      <p>Iedereen die binnen of namens je bedrijf met AI-systemen werkt, moet genoeg weten en kunnen om AI verantwoord te gebruiken. Welke maatregelen je precies neemt, staat niet in de wet: dat hangt af van hoe en waarvoor je AI inzet. Leg vast welke tools je gebruikt en wat je team daarover weet. {L('/gids/ai-beleid-opstellen/','Een AI-beleid als bewijs van AI-geletterdheid')} is een praktische manier om dat te doen.</p>
+      <h2 id="transparantie">Vertellen dat het AI is</h2>
+      <p>Gebruik je een chatbot op je website, of maak je teksten of beelden met AI? Dan moet je mensen volgens de Autoriteit Persoonsgegevens informeren dat ze met AI te maken hebben. Bij een chatbot zet je dat bijvoorbeeld in het chatvenster.</p>
+      <h2 id="hoog-risico">Hoog risico</h2>
+      <p>Voor AI met een hoog risico gelden strengere regels, bijvoorbeeld voor AI die bedoeld is voor werving en selectie. Gebruik je zoiets, dan moet je onder meer zorgen voor menselijk toezicht en het systeem gebruiken volgens de gebruiksaanwijzing van de aanbieder. Het is je eigen verantwoordelijkheid om te beoordelen in welke risicogroep een systeem valt.</p>
+      <h2 id="avg">En de AVG?</h2>
+      <p>De AI-verordening komt bovenop de AVG. Gaat er persoonsgegevens in een AI-tool, dan gelden ook de regels uit de AVG. Lees daarover {L('/gids/ai-veilig-gebruiken/','AVG en AI-tools')}.</p>
+''',
+ [('Geldt de AI Act ook voor mijn kleine bedrijf?','Ja, de AI-verordening geldt ook voor organisaties die AI gebruiken, van overheid tot mkb. Voor de meeste kleine bedrijven gaat het vooral om AI-geletterdheid en transparantie.'),
+  ('Wat is AI-geletterdheid?','Dat medewerkers genoeg weten en kunnen om AI verantwoord in te zetten. Organisaties die AI gebruiken, moeten daar volgens de Autoriteit Persoonsgegevens sinds 2 februari 2025 voor zorgen.'),
+  ('Moet ik melden dat mijn chatbot AI is?','Volgens de Autoriteit Persoonsgegevens moet je mensen vanaf augustus 2026 informeren als ze met een AI-systeem zoals een chatbot te maken hebben.'),
+  ('Wanneer is de AI Act helemaal van kracht?','Op 2 augustus 2027, volgens de Autoriteit Persoonsgegevens. Delen gelden al eerder.')],
+ [AP_AIV,AP_GESL,AP_RISK,EURLEX])
+
+gids('/gids/ai-beleid-opstellen/','AI-beleid opstellen, met voorbeeld | ToolMatch',
+ 'Een kort AI-beleid voor je team: welke tools mogen, welke gegevens nooit in een AI-tool gaan en wie controleert. Met een voorbeeld dat je kunt aanpassen.',
+ 'AI-beleid opstellen','AI-beleid opstellen, met voorbeeld',
+ 'Eén pagina is genoeg. Een kort AI-beleid zegt welke tools je team mag gebruiken, welke gegevens nooit in een AI-tool gaan en wie het resultaat controleert.',
+ f'''      <h2 id="waarom">Waarom een AI-beleid?</h2>
+      <p>Zonder afspraken gebruikt iedereen zijn eigen tool, met zijn eigen instellingen. Een kort beleid voorkomt dat er klantgegevens in een gratis tool belanden. Het helpt ook om te laten zien hoe je werkt aan AI-geletterdheid. Welke maatregelen je voor AI-geletterdheid neemt, staat volgens de Autoriteit Persoonsgegevens niet in de wet: een beleid is een manier, geen vaste eis. Lees {L('/gids/ai-act-ondernemers/','wat de AI Act verplicht')}.</p>
+      <h2 id="wat-erin">Wat erin staat</h2>
+      <ol>
+        <li><strong>Welke tools mogen.</strong> Een korte lijst, met het abonnement dat je gebruikt (persoonlijk of zakelijk).</li>
+        <li><strong>Welke gegevens nooit in een AI-tool gaan.</strong> Zie {L('/gids/ai-veilig-gebruiken/','welke gegevens nooit in een AI-tool')} horen.</li>
+        <li><strong>Instellingen.</strong> Bijvoorbeeld: training op je invoer staat uit.</li>
+        <li><strong>Controle.</strong> Wie leest na voordat iets naar een klant gaat of online komt.</li>
+        <li><strong>Vertellen dat het AI is.</strong> Wanneer je meldt dat een tekst, beeld of chatbot met AI werkt.</li>
+        <li><strong>Vragen en fouten.</strong> Bij wie je terechtkunt, en wat je doet als er toch iets misgaat.</li>
+      </ol>
+      <h2 id="voorbeeld">Voorbeeld dat je kunt aanpassen</h2>
+      <div class="pledge-n">
+        <p><strong>AI-beleid van [bedrijfsnaam]</strong> · versie [datum]</p>
+        <ol>
+          <li>We gebruiken voor werk alleen deze AI-tools: [tool en abonnement]. Een nieuwe tool overleg je eerst met [naam of rol].</li>
+          <li>We zetten nooit persoonsgegevens van klanten, wachtwoorden of vertrouwelijke informatie in een AI-tool, tenzij die tool op de lijst staat met een verwerkersovereenkomst.</li>
+          <li>Training op onze invoer staat uit, als de tool die keuze biedt.</li>
+          <li>Wat AI maakt, lezen we na voordat het naar een klant gaat of online komt. De maker blijft verantwoordelijk.</li>
+          <li>Praat een klant met een chatbot, of is een beeld of tekst met AI gemaakt waar dat vermeld moet worden, dan zeggen we dat.</li>
+          <li>Twijfel, een vraag of een fout? Meld het bij [naam of rol]. Bij een mogelijk datalek: direct.</li>
+          <li>We kijken elk half jaar of dit beleid nog klopt.</li>
+        </ol>
+      </div>
+      <p>Pas het voorbeeld aan op je eigen bedrijf. Bespreek het met je team, zodat iedereen weet waarom de afspraken er zijn.</p>
+''',
+ [('Is een AI-beleid verplicht?','Een apart AI-beleid wordt in de bronnen die we bekeken niet als verplichting genoemd. Wel moeten organisaties die AI gebruiken volgens de Autoriteit Persoonsgegevens zorgen voor AI-geletterdheid, en een beleid helpt daarbij.'),
+  ('Hoe lang moet een AI-beleid zijn?','Voor een klein bedrijf is één pagina genoeg: welke tools mogen, welke gegevens niet, wie controleert en bij wie je terechtkunt.'),
+  ('Mag ik dit voorbeeld gebruiken?','Ja, pas het aan op je eigen bedrijf. Het is een voorbeeld, geen juridisch advies.')],
+ [AP_GESL,AP_VWO,AP_RISK])
+
+PRIJZEN=[('chatgpt','ChatGPT'),('claude','Claude'),('lechat','Le Chat'),('copilot','Microsoft 365 Copilot'),('gemini','Gemini in Google Workspace'),('deepl','DeepL')]
+prijsrows=''.join(f'''          <tr><th scope="row">{E(n)}</th><td>{JN(T[i]['gratis'])}</td><td>{E(T[i]['prijs'])}</td><td>{', '.join(X(u,E(b)) for b,u in T[i]['bronnen'])}</td></tr>
+''' for i,n in PRIJZEN)
+gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere AI-tools? | ToolMatch',
+ 'Wat betaal je per maand voor ChatGPT, Copilot, Gemini en Claude? Persoonlijk en zakelijk naast elkaar, met de bron en de datum bij elke prijs.',
+ 'Wat kosten AI-abonnementen','Wat kosten ChatGPT, Copilot en andere AI-tools?',
+ 'De prijzen van de bekende AI-assistenten op een rij, zoals de aanbieders ze vermelden. Met waar je op moet letten: valuta, btw, jaarbetaling en prijs per gebruiker.',
+ f'''      <h2 id="prijzen">De prijzen op een rij</h2>
+      <p>Gecontroleerd op {GCN}, in de valuta van de aanbieder en met of zonder btw zoals daar staat.</p>
+      <div class="tbl" role="region" aria-label="Prijzen van AI-abonnementen" tabindex="0">
+        <table>
+          <thead><tr><th scope="col">Tool</th><th scope="col">Gratis versie</th><th scope="col">Betaald vanaf</th><th scope="col">Bron</th></tr></thead>
+          <tbody>
+{prijsrows}          </tbody>
+        </table>
+      </div>
+      <h2 id="persoonlijk-zakelijk">Persoonlijk of zakelijk</h2>
+      <p>Persoonlijke abonnementen zoals ChatGPT Plus en Claude Pro reken je per persoon. Zakelijke abonnementen zoals Copilot Bedrijven en Google Workspace reken je ook per gebruiker, maar daar horen beheer en afspraken over je gegevens bij. Werk je met klantgegevens, dan is een zakelijk abonnement vaak de betere keuze. Twijfel je tussen de twee bekendste? Lees {L('/vergelijken/chatgpt-vs-copilot/','ChatGPT of Copilot zakelijk')}.</p>
+      <h2 id="let-op">Waar je op let</h2>
+      <ul>
+        <li><strong>Dollar of euro.</strong> Veel aanbieders noemen hun prijs in dollars. Wat je in euro betaalt, hangt af van de koers en je betaalmethode.</li>
+        <li><strong>Met of zonder btw.</strong> Microsoft noemt de prijs van Copilot exclusief btw, DeepL de prijs van Individual inclusief btw. Vergelijk dus niet zomaar.</li>
+        <li><strong>Jaarbetaling.</strong> "Per maand bij jaarbetaling" betekent dat je een jaar vooruit betaalt. Bij maandbetaling is de prijs vaak hoger, zoals bij Claude Pro: $17 per maand bij jaarbetaling, $20 maandelijks.</li>
+        <li><strong>Actieprijzen.</strong> Copilot Bedrijven heeft tot en met 31 december 2026 een actieprijs voor het eerste jaar; Google Workspace geeft tijdelijk 30% korting in de eerste 3 maanden. Daarna betaal je de normale prijs.</li>
+        <li><strong>Per gebruiker.</strong> Met vijf mensen betaal je vijf keer. Kijk of iedereen echt een eigen abonnement nodig heeft.</li>
+      </ul>
+      <p>Welke assistent het beste past, lees je bij {L('/ai-assistenten/','welke assistent bij je past')}.</p>
+''',
+ [('Wat kost ChatGPT per maand?','ChatGPT Plus kost $20 per maand, volgens de prijspagina van OpenAI. Er is ook een gratis versie met beperkingen.'),
+  ('Wat kost Copilot per maand?','Microsoft 365 Copilot Bedrijven kost €18,20 per gebruiker per maand bij jaarbetaling, exclusief btw. Bij aanschaf tot en met 31 december 2026 geldt een actieprijs van €15,60 voor het eerste jaar.'),
+  ('Wat is het verschil tussen ChatGPT Plus en Business?','Plus is een persoonlijk abonnement. Business is voor teams, met beheer en zakelijke afspraken. De prijs van Business konden we op de prijspagina niet aflezen.')],
+ [tuple(b) for i,_ in PRIJZEN for b in T[i]['bronnen']])
+
+for g in GIDS:
+    body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}</p>\n'
+    crumb=f'<a href="/gids/">Gidsen</a> › {g["crumb"]}'
+    graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":GC,"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+      crumbs_ld([('Home','/'),('Gidsen','/gids/'),(g['crumb'],g['slug'])]),faq_ld(g['slug'],g['faq'])]
+    zet(g['slug'],g['title'],g['desc'],crumb,g['h1'],g['lead'],body,graph)
+hub('/gids/','Gidsen: AI veilig en slim gebruiken | ToolMatch',
+ 'Praktische gidsen voor ondernemers: AI veilig gebruiken, wat de AI Act van je vraagt, een AI-beleid opstellen en wat AI-abonnementen echt kosten.',
+ 'Gidsen','Gidsen: AI veilig en slim gebruiken',
+ 'Praktische uitleg voor ondernemers: hoe je begint met AI, hoe je gegevens veilig houdt, wat de wet vraagt en wat het kost.',
+ '''      <p>Onze gidsen zijn geschreven door Redactie ToolMatch, op basis van officiële bronnen en de sites van aanbieders. Bij elke gids staan de bronnen en de datum waarop we ze bekeken.</p>
+''',[(g['slug'],g['h1'],g['lead']) for g in GIDS])

@@ -40,15 +40,20 @@ def radios(name,legend,opts,hint=''):
 '''
 FORM=f'''      <form id="form" class="kh" aria-describedby="kh-uitleg">
         <p id="kh-uitleg" class="sr">Vijf vragen. Na het versturen verschijnt je match onder het formulier.</p>
-{radios('doel','1. Waar wil je vooral hulp bij?',list(DL.items()))}{radios('budget','2. Wat mag het kosten?',[('gratis','Alleen gratis'),('klein','Tot ongeveer 30 per maand'),('ruim','Maakt niet zoveel uit')])}{radios('team','3. Voor hoeveel mensen?',[('alleen','Alleen ik'),('klein','2 tot 10 mensen'),('groot','Meer dan 10 mensen')])}{radios('privacy','4. Is opslag in de EU belangrijk?',[('eu','Belangrijk: liefst in de EU'),('normaal','Geen harde eis')],'Werk je met gegevens van klanten, dan helpt opslag in de EU bij de AVG.')}{radios('techniek','5. Hoe technisch ben je?',[('beginner','Ik wil het simpel'),('handig','Ik ben redelijk handig'),('technisch','Ik ben technisch')])}        <button type="submit" class="btn">Toon mijn match</button>
+{radios('doel','1. Waar wil je vooral hulp bij?',list(DL.items()))}{radios('budget','2. Wat mag het kosten?',[('gratis','Alleen gratis'),('klein','Tot ongeveer 30 per maand'),('ruim','Maakt niet zoveel uit')])}{radios('team','3. Voor hoeveel mensen?',[('alleen','Alleen ik'),('klein','2 tot 10 mensen'),('groot','Meer dan 10 mensen')])}{radios('privacy','4. Is opslag in de EU belangrijk?',[('eu','Belangrijk: liefst in de EU'),('normaal','Geen harde eis')],'Werk je met gegevens van klanten, dan helpt opslag in de EU bij de AVG. Lees ook hoe je <a href="/gids/ai-veilig-gebruiken/">gegevens van klanten veilig houden</a> kunt.')}{radios('techniek','5. Hoe technisch ben je?',[('beginner','Ik wil het simpel'),('handig','Ik ben redelijk handig'),('technisch','Ik ben technisch')])}        <button type="submit" class="btn">Toon mijn match</button>
       </form>
       <noscript><p class="pledge-n">De keuzehulp werkt met JavaScript. Hieronder staan alle tools met hun gegevens en bronnen.</p></noscript>
       <section id="resultaat" class="kh-res" aria-live="polite" hidden></section>
 '''
 INSTAP={'eenvoudig':'Eenvoudig','gemiddeld':'Gemiddeld','technisch':'Technisch'}
 EUT={'ja':'In de EU','deels':'Vooral in de EU'}
-rows=''.join(f'''          <tr><th scope="row">{E(t['naam'])}</th><td>{', '.join(E(DL[x]) for x in t['doelen'])}</td><td>{'Ja' if t['gratis'] else 'Nee'}</td><td>{E(t['prijs']) if t['prijs'] else 'Niet gecontroleerd'}</td><td>{EUT.get(t['eu'],'Niet gecontroleerd')}</td><td>{INSTAP[t['instap']]}</td><td>{', '.join(f'<a href="{E(u)}" rel="noopener">{E(n)}</a>' for n,u in t['bronnen'])}</td></tr>
-''' for t in sorted(TL,key=lambda t:t['naam'].lower()))
+rows=''.join(f'''          <tr><th scope="row">{E(t['naam'])}</th><td>{', '.join(E(DL[x]) for x in t['doelen'])}</td><td>{'Ja' if t['gratis'] is True else ('Nee' if t['gratis'] is False else 'Niet gecontroleerd')}</td><td>{E(t['prijs']) if t['prijs'] else 'Niet gecontroleerd'}</td><td>{EUT.get(t['eu'],'Niet gecontroleerd')}</td><td>{INSTAP[t['instap']]}</td><td>{', '.join(f'<a href="{E(u)}" rel="noopener">{E(n)}</a>' for n,u in t['bronnen'])}</td></tr>
+''' for t in sorted(TL,key=lambda t:t['naam'].lower()) if t['doelen'])
+KH_FAQ=[('Hoe komt de volgorde tot stand?','Je antwoorden geven punten volgens vaste regels: je doel telt het zwaarst, daarna budget, team, privacy en techniek. Bij gelijke punten staan de tools op alfabetische volgorde.'),
+ ('Hebben partnerlinks invloed op de uitkomst?','Nee. De berekening gebruikt geen partnerlinks. Staat er ooit een partnerlink bij een resultaat, dan staat er "partnerlink" bij en verandert de volgorde niet.'),
+ ('Bewaren jullie mijn antwoorden?','Nee. Je antwoorden blijven in je browser en staan alleen in de adresbalk. We sturen ze nooit naar Google.'),
+ ('Waar komen de prijzen vandaan?','Van de sites van de aanbieders, met de bron en de datum erbij. Konden we iets niet controleren, dan staat er "niet gecontroleerd".')]
+KH_FAQ_HTML='      <h2 id="faq">Vragen over de keuzehulp</h2>\n      <div class="faq">\n'+''.join(f'      <details>\n        <summary>{q}</summary>\n        <p>{a}</p>\n      </details>\n' for q,a in KH_FAQ)+'      </div>\n'
 KH=f'''    <div class="kh-wrap">
 {FORM}    </div>
     <div class="prose wide">
@@ -69,11 +74,13 @@ KH=f'''    <div class="kh-wrap">
 {rows}          </tbody>
         </table>
       </div>
-      <p class="note">Redactie ToolMatch · gecontroleerd op {GCN}. De keuzehulp is een hulpmiddel, geen persoonlijk advies.</p>
+{KH_FAQ_HTML}      <p class="note">Redactie ToolMatch · gecontroleerd op {GCN}. De keuzehulp is een hulpmiddel, geen persoonlijk advies.</p>
     </div>'''
 KH_LD='<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":[
  {"@type":"WebApplication","name":"Keuzehulp (AI-)tools voor ondernemers","url":D+"/keuzehulp/","applicationCategory":"BusinessApplication","operatingSystem":"Web","inLanguage":"nl-NL","isAccessibleForFree":True,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"publisher":{"@id":D+"/#organization"}},
- {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":D+"/"},{"@type":"ListItem","position":2,"name":"Keuzehulp","item":D+"/keuzehulp/"}]}]},ensure_ascii=False,indent=1)+'\n</script>\n'
+ {"@type":"WebPage","@id":D+"/keuzehulp/","url":D+"/keuzehulp/","name":"Keuzehulp: welke (AI-)tool past bij jou?","inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":{"@id":D+"/#organization"}},
+ {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":D+"/"},{"@type":"ListItem","position":2,"name":"Keuzehulp","item":D+"/keuzehulp/"}]},
+ {"@type":"FAQPage","@id":D+"/keuzehulp/#faq","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in KH_FAQ]}]},ensure_ascii=False,indent=1)+'\n</script>\n'
 write('keuzehulp/index.html',page('/keuzehulp/','Keuzehulp: welke (AI-)tool past bij jou? | ToolMatch',
  'Beantwoord 5 vragen en zie welke (AI-)tools passen bij je doel, budget, team en privacy-eisen. Gratis, zonder account, met bronnen.',
  'Keuzehulp','Welke (AI-)tool past bij jou?','Vijf korte vragen over je doel, budget, team, privacy en techniek. Je ziet direct welke tools het best passen, met prijs en bron.',KH,js='/js/keuzehulp.js',wide=True,extra=KH_LD))
@@ -128,5 +135,5 @@ write('404.html',page('/404.html','Pagina niet gevonden | ToolMatch','Deze pagin
 
 # ---------- sitemap + robots ----------
 URLS=['/','/keuzehulp/','/over/','/partnerlinks/','/contact/','/disclaimer/','/privacy/']
-write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{GC}</lastmod></url>\n' for u in URLS)+'</urlset>\n')
+_sm=('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{GC}</lastmod></url>\n' for u in URLS)+'</urlset>\n')
 write('robots.txt',f'User-agent: *\nAllow: /\n\nSitemap: {D}/sitemap.xml\n')

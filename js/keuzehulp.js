@@ -8,6 +8,14 @@ const form = document.getElementById('form');
 const out = document.getElementById('resultaat');
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const datum = new Date(GECONTROLEERD + 'T12:00:00').toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+const CATEGORIE = {
+  schrijven: ['/ai-tekst-schrijven/', 'Alle tools voor teksten schrijven vergeleken'],
+  notuleren: ['/ai-notuleren/', 'Alle tools voor notuleren vergeleken'],
+  klantcontact: ['/ai-chatbot-website/', 'Alle chatbots voor je website vergeleken'],
+  automatiseren: ['/automatiseren-zonder-code/', 'Alle tools om zonder code te automatiseren'],
+  beeld: ['/ai-afbeeldingen-en-ontwerp/', 'Alle tools voor beeld en ontwerp vergeleken'],
+  data: ['/ai-data-analyse/', 'Alle tools voor data en dashboards vergeleken'],
+};
 const EU = { ja: 'In de EU (volgens de aanbieder)', deels: 'Vooral in de EU (volgens de aanbieder)' };
 
 function lees() {
@@ -26,7 +34,7 @@ function kaart(r, n) {
   <p>${esc(t.wat)}</p>
   ${li(r.plus, 'pros')}${li(r.let_op, 'cons')}
   <dl class="facts">
-    <div><dt>Gratis versie</dt><dd>${t.gratis ? 'Ja' : 'Nee'}</dd></div>
+    <div><dt>Gratis versie</dt><dd>${t.gratis === true ? 'Ja' : t.gratis === false ? 'Nee' : 'Niet gecontroleerd'}</dd></div>
     <div><dt>Betaald vanaf</dt><dd>${t.prijs ? esc(t.prijs) : 'Niet gecontroleerd, zie de site'}</dd></div>
     <div><dt>Gegevens</dt><dd>${EU[t.eu] || 'Locatie niet gecontroleerd'}</dd></div>
     <div><dt>Instap</dt><dd>${esc(t.instap[0].toUpperCase() + t.instap.slice(1))} <small>(onze indeling)</small></dd></div>
@@ -41,7 +49,8 @@ function toon(a, scroll) {
   const res = match(a);
   out.innerHTML = `<h2 id="h-res" tabindex="-1">Jouw match voor: ${esc(DOELEN[a.doel].toLowerCase())}</h2>
 <p class="lead">${res.length} tools gerangschikt op hoe goed ze bij je antwoorden passen. De volgorde hangt nooit af van een vergoeding.</p>
-<div class="results">${res.map(kaart).join('')}</div>`;
+<div class="results">${res.map(kaart).join('')}</div>
+${CATEGORIE[a.doel] ? `<p class="cat-l"><a href="${CATEGORIE[a.doel][0]}">${esc(CATEGORIE[a.doel][1])}</a></p>` : ''}`;
   out.hidden = false;
   if (scroll) out.querySelector('#h-res').focus();
 }

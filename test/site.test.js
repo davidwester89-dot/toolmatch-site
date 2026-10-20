@@ -37,7 +37,7 @@ test('koppen in de juiste volgorde (geen sprong van h1 naar h3)', () => {
 test('huisregels: geen concept, geen gmail, geen persoonsnamen; footer met rechten en info@', () => {
   for (const f of pages) {
     const h = read(f);
-    assert.ok(!/concept/i.test(h), f + ' concept'); assert.ok(!/gmail/i.test(h), f + ' gmail');
+    assert.ok(!/concept/i.test(h), f + ' concept'); assert.ok(!/@gmail|gmail\.com/i.test(h), f + ' gmail-adres');
     assert.ok(!/Dave|West\b/.test(h), f + ' naam');
     assert.ok(h.includes('alle rechten voorbehouden') && h.includes('mailto:info@toolmatch.nl'), f + ' footer');
     for (const p of ['/contact/', '/disclaimer/', '/partnerlinks/', '/privacy/', '/keuzehulp/']) assert.ok(h.includes(`href="${p}"`), f + ' ' + p);

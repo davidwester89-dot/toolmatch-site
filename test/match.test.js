@@ -21,7 +21,8 @@ test('tooldata: unieke ids, https-bronnen, prijs alleen met getal, geldige waard
     assert.ok(t.bronnen.length >= 1); for (const [n, u] of t.bronnen) { assert.ok(n); assert.match(u, /^https:\/\//); }
     assert.equal(t.prijs == null, t.prijsMaand == null, t.id);
     assert.ok([null, 'ja', 'deels'].includes(t.eu)); assert.ok(['eenvoudig', 'gemiddeld', 'technisch'].includes(t.instap));
-    assert.ok(['gebruiker', 'team'].includes(t.prijsPer)); assert.equal(typeof t.gratis, 'boolean');
+    assert.ok(['gebruiker', 'team'].includes(t.prijsPer)); assert.ok(t.gratis === null || typeof t.gratis === 'boolean', t.id);
+    assert.ok(Array.isArray(t.doelen)); assert.ok([undefined, null, 'ja'].includes(t.dpa), t.id);
   }
 });
 
@@ -65,4 +66,11 @@ test('regels: gratis, EU, techniek en team werken zoals uitgelegd', () => {
 
 test('onbekende antwoorden vallen terug op de standaard', () => {
   assert.deepEqual(normaliseer({ doel: 'x', budget: '<script>' }), STANDAARD);
+});
+
+test('onbekende gratis versie telt niet als pluspunt en wordt niet als "geen" gemeld', () => {
+  const t = TOOLS.find((x) => x.gratis === null && x.doelen.length);
+  const r = match({ doel: t.doelen[0], budget: 'gratis', team: 'alleen', privacy: 'normaal', techniek: 'handig' }).find((x) => x.tool.id === t.id);
+  assert.ok(r.let_op.includes('Gratis versie niet gecontroleerd'));
+  assert.ok(!r.plus.includes('Er is een gratis versie'));
 });

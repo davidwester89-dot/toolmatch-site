@@ -1,4 +1,4 @@
-import json, html, os, subprocess
+import json, html, os, re, subprocess
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 D='https://toolmatch.nl'
@@ -39,9 +39,9 @@ def head(path,title,desc,ogt,extra=''):
     <a class="logo" href="/" aria-label="ToolMatch, naar de homepage">{MARK}<span>Tool<b>Match</b></span></a>
     <nav class="main" aria-label="Hoofdmenu">
       <a href="/#categorieen">Categorieën</a>
-      <a href="/#zo-vergelijken-we">Zo vergelijken wij</a>
-      <a href="/#vijf-vragen">Waar let je op</a>
-      <a href="/#faq">Vragen</a>
+      <a href="/vergelijken/">Vergelijken</a>
+      <a href="/gids/">Gidsen</a>
+      <a href="/over/">Over</a>
       <a class="nav-cta" href="/keuzehulp/">Start&nbsp;<span class="nm">de&nbsp;</span>keuzehulp</a>
     </nav>
   </div>
@@ -86,14 +86,17 @@ def foot(js='/js/consent.js'): return FOOT_T.replace('@@SCRIPTS@@',f'<script typ
 FOOT=foot()
 def ico(p): return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{p}</svg>'
 CATS=[
-('AI-schrijf- en tekstassistenten','<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>','Hulp bij het schrijven en herschrijven van teksten voor je website, blog of LinkedIn. Handig als eerste opzet, maar je eigen controle blijft nodig.',''),
-('AI voor offertes en mail','<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>','Tools die je helpen sneller een offerte, voorstel of zakelijke mail op te stellen. Vaak zitten ze in je mailprogramma of in je offertesoftware.',''),
-('Facturatie &amp; boekhouding','<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h5"/>','Facturen maken, bonnetjes verwerken en je btw-aangifte voorbereiden. Sommige pakketten gebruiken AI om bonnetjes en banktransacties te herkennen.','<span class="xlink">Ben je zzp\'er en zoek je een boekhoudprogramma? Op <a href="https://boekhoudmatch.nl/boekhoudprogramma-kiezen/" rel="noopener">BoekhoudMatch</a> vergelijk je ze op prijs en functies.</span>'),
-('Planning &amp; agenda','<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>','Afspraken laten inplannen door klanten, je week indelen en uren bijhouden. Let op koppelingen met de agenda die je nu al gebruikt.',''),
-('CRM &amp; klantbeheer','<circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="M17 11h5M19.5 8.5v5"/>','Klantgegevens, contactmomenten en lopende offertes op één plek. Voor een klein bedrijf is een eenvoudig systeem vaak genoeg.',''),
-('Transcriptie &amp; notuleren','<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/>','Gesprekken en online meetings laten uitschrijven en samenvatten. Check hoe goed een tool Nederlands verstaat en waar de opnames worden bewaard.',''),
-('Ontwerp &amp; social media','<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>','Visuals, presentaties en posts maken en inplannen. Vaak is er een gratis versie, met extra\'s alleen in het betaalde abonnement.',''),
-('Automatisering (no-code)','<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>','Losse apps aan elkaar koppelen zodat terugkerend werk vanzelf gaat, zonder te programmeren. Kijk goed hoe de kosten meegroeien met het aantal taken.',''),
+('AI-assistenten','<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/>','Een algemene AI-assistent voor schrijven, samenvatten en uitzoeken. Kijk eerst wat er al in je Microsoft 365 of Google Workspace zit.',[('/ai-assistenten/','AI-assistenten zoals ChatGPT en Copilot')],''),
+('AI-schrijf- en tekstassistenten','<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>','Hulp bij het schrijven en herschrijven van teksten voor je website, blog of LinkedIn. Handig als eerste opzet, maar je eigen controle blijft nodig.',[('/ai-tekst-schrijven/','AI-schrijf- en tekstassistenten')],''),
+('AI voor offertes en mail','<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>','Tools die je helpen sneller een offerte, voorstel of zakelijke mail op te stellen. Vaak zitten ze al in je mailprogramma.',[('/ai-mail-en-offertes/','AI voor offertes en mail')],''),
+('Facturatie &amp; boekhouding','<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h5"/>','Facturen maken, bonnetjes verwerken en je btw-aangifte voorbereiden. Sommige pakketten gebruiken AI om bonnetjes en banktransacties te herkennen.',[],'<span class="xlink">Ben je zzp\'er en zoek je een boekhoudprogramma? Op <a href="https://boekhoudmatch.nl/boekhoudprogramma-kiezen/" rel="noopener">BoekhoudMatch</a> vergelijk je ze op prijs en functies.</span>'),
+('Planning &amp; agenda','<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>','Klanten zelf een moment laten kiezen in je agenda. Let op koppelingen met de agenda die je nu al gebruikt.',[('/online-afspraken-plannen/','afspraken laten inplannen')],''),
+('CRM &amp; klantbeheer','<circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="M17 11h5M19.5 8.5v5"/>','Klantgegevens, contactmomenten en lopende offertes op één plek. Voor een klein bedrijf is een eenvoudig systeem vaak genoeg.',[('/crm-klein-bedrijf/','CRM voor een klein bedrijf')],''),
+('Transcriptie &amp; notuleren','<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/>','Gesprekken en online meetings laten uitschrijven en samenvatten. Check hoe goed een tool Nederlands verstaat en waar de opnames worden bewaard.',[('/ai-notuleren/','meetings laten notuleren')],''),
+('Ontwerp &amp; social media','<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>','Visuals, presentaties en posts maken en inplannen. Vaak is er een gratis versie, met extra\'s alleen in het betaalde abonnement.',[('/ai-afbeeldingen-en-ontwerp/','visuals en presentaties maken'),('/social-media-inplannen/','posts vooruit inplannen')],''),
+('Automatisering (no-code)','<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>','Losse apps aan elkaar koppelen zodat terugkerend werk vanzelf gaat, zonder te programmeren. Kijk goed hoe de kosten meegroeien met het aantal taken.',[('/automatiseren-zonder-code/','apps koppelen zonder code')],''),
+('Chatbot op je website','<circle cx="12" cy="12" r="9"/><path d="M8 10h.01M12 10h.01M16 10h.01"/><path d="M8 15c1.2 1 2.5 1.5 4 1.5s2.8-.5 4-1.5"/>','Een chatbot die vragen van klanten beantwoordt, ook buiten kantoortijd. Regel wel dat een klant altijd een mens kan bereiken.',[('/ai-chatbot-website/','een chatbot op je website')],''),
+('Data &amp; analyse','<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>','Je cijfers laten analyseren met AI of in een dashboard zetten, zonder dat je data-analist bent.',[('/ai-data-analyse/','je cijfers in een dashboard')],''),
 ]
 METH=[
 ('Onafhankelijk','<path d="M12 3v18M5 7h14"/><path d="M5 7l-3 7a3.5 3.5 0 0 0 6 0zM19 7l-3 7a3.5 3.5 0 0 0 6 0z"/>','De volgorde volgt uit wat bij jouw situatie past. Een vergoeding van een aanbieder verandert daar niets aan. Komen er partnerlinks, dan staat er altijd duidelijk bij dat het een partnerlink is.'),
@@ -101,8 +104,8 @@ METH=[
 ('Echte kosten per maand','<rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20M6 15h4"/>','We rekenen met wat je echt betaalt: per maand, inclusief of exclusief btw zoals de aanbieder het vermeldt, en met de beperkingen van een gratis versie. Bij elke prijs staat de bron en de datum waarop we keken.'),
 ]
 QS=[
-('Wat gebeurt er met je gegevens?','Lees waar de gegevens worden opgeslagen, of de aanbieder je invoer gebruikt om zijn AI-model te trainen en of je dat kunt uitzetten. Werk je met gegevens van klanten, vraag dan naar een verwerkersovereenkomst.'),
-('Wat kost het echt?','Kijk verder dan de prijs op de homepage. Gaat het om een maand- of jaarprijs, is het met of zonder btw, en wat zit er niet in de gratis versie? Tel ook mee wat je al betaalt: misschien zit de functie al in een tool die je hebt.'),
+('Wat gebeurt er met je gegevens?','Lees waar de gegevens worden opgeslagen, of de aanbieder je invoer gebruikt om zijn AI-model te trainen en of je dat kunt uitzetten. Werk je met gegevens van klanten, vraag dan naar een verwerkersovereenkomst. Lees <a href="/gids/ai-veilig-gebruiken/">wat er met je gegevens gebeurt</a> en wat je kunt instellen.'),
+('Wat kost het echt?','Kijk verder dan de prijs op de homepage. Gaat het om een maand- of jaarprijs, is het met of zonder btw, en wat zit er niet in de gratis versie? Tel ook mee wat je al betaalt: misschien zit de functie al in een tool die je hebt. Zie <a href="/gids/wat-kosten-ai-abonnementen/">wat AI-abonnementen echt kosten</a>.'),
 ('Hoe kom je er weer vanaf?','Check de opzegtermijn, of een jaarabonnement automatisch verlengt en of je je eigen gegevens kunt exporteren voordat je stopt.'),
 ('Werkt het goed in het Nederlands?','Niet elke tool schrijft, verstaat of vat Nederlands even goed samen. Probeer het met een echte opdracht uit je eigen werk, liefst in een gratis proefperiode.'),
 ('Past het bij wat je al gebruikt?','Een tool die niet koppelt met je mail, agenda of boekhouding levert vaak extra werk op. Kijk welke koppelingen er zijn, en of die in jouw abonnement zitten.'),
@@ -121,12 +124,13 @@ ld={"@context":"https://schema.org","@graph":[
 LD='<script type="application/ld+json">\n'+json.dumps(ld,ensure_ascii=False,indent=1)+'\n</script>\n'
 CHECK='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#0f6e6e"/><path d="m7.5 12.5 3 3 6-6.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 ART=open('scripts/hero.svg').read()
+def catlinks(ls): return ('\n          <ul class="go-l">'+''.join(f'<li><a href="{h}">{a}</a></li>' for h,a in ls)+'</ul>') if ls else ''
 cats=''.join(f'''        <article class="cat">
           <div class="ico">{ico(p)}</div>
           <h3>{t}</h3>
-          <p>{d}</p>{x}
+          <p>{d}</p>{catlinks(ls)}{x}
         </article>
-''' for t,p,d,x in CATS)
+''' for t,p,d,ls,x in CATS)
 meth=''.join(f'''        <div class="m">
           <span class="num" data-n="0{i+1}" aria-hidden="true"></span>
           <div class="mi">{ico(p)}</div>
@@ -166,11 +170,12 @@ idx=head('/',TITLE,DESC,"ToolMatch: de juiste (AI-)tools voor ondernemers",LD)+f
     <div class="wrap">
       <div class="sec-head">
         <span class="eyebrow">Categorieën</span>
-        <h2 id="h-cat">Wat je hier straks vindt</h2>
-        <p>We beginnen met deze categorieën. Per categorie zetten we straks de tools naast elkaar, met wat ze kosten en wat ze wel en niet kunnen. Wil je nu al weten wat bij je past? <a href="/keuzehulp/">Doe de keuzehulp</a>.</p>
+        <h2 id="h-cat">Kies een categorie</h2>
+        <p>Per categorie zetten we de tools naast elkaar, met wat ze kosten, waar je gegevens staan en de bron bij elke prijs. Weet je nog niet waar je moet beginnen? <a href="/keuzehulp/">Doe de keuzehulp in 5 vragen</a>.</p>
       </div>
       <div class="cats">
 {cats}      </div>
+      <p class="hub-l">Twee bekende tools naast elkaar? Bekijk <a href="/vergelijken/">alle vergelijkingen</a>.</p>
     </div>
   </section>
 
@@ -192,7 +197,7 @@ idx=head('/',TITLE,DESC,"ToolMatch: de juiste (AI-)tools voor ondernemers",LD)+f
       <div class="sec-head">
         <span class="eyebrow">Checklist</span>
         <h2 id="h-vragen">5 vragen voordat je een AI-tool kiest</h2>
-        <p>Een proefperiode is snel gestart, een abonnement nog sneller vergeten. Loop deze vragen even langs voordat je ergens je gegevens of je creditcard invult.</p>
+        <p>Een proefperiode is snel gestart, een abonnement nog sneller vergeten. Loop deze vragen even langs voordat je ergens je gegevens of je creditcard invult. Meer uitleg staat in onze <a href="/gids/">gidsen over veilig en slim AI gebruiken</a>.</p>
       </div>
       <ol class="qs">
 {qs}      </ol>
@@ -281,3 +286,6 @@ OVER='''      <h2>Wie we zijn</h2>
 open('privacy/index.html','w').write(sub('/privacy/','Privacy en cookies | ToolMatch','Hoe ToolMatch met je gegevens omgaat: geen cookies zonder toestemming, en Google Analytics alleen als je op Accepteren klikt.','Privacy en cookies','Privacy en cookies','ToolMatch verzamelt zo min mogelijk. Zonder jouw toestemming plaatsen we geen cookies en meten we niets.',PRIV))
 open('over/index.html','w').write(sub('/over/','Over ToolMatch: wie we zijn en hoe we werken','ToolMatch helpt ondernemers de juiste (AI-)tools kiezen. Lees hoe Redactie ToolMatch werkt: onafhankelijk, met echte prijzen en privacy als criterium.','Over ToolMatch','Over ToolMatch','ToolMatch helpt ondernemers de juiste (AI-)tools te kiezen, zonder geld en tijd te verspillen aan abonnementen die niet bij hun werk passen.',OVER))
 exec(open('scripts/pages.py').read())
+exec(open('scripts/spokes.py').read())
+URLS+=SPOKES
+write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{GC}</lastmod></url>\n' for u in URLS)+'</urlset>\n')

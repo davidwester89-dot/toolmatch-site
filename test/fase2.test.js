@@ -60,6 +60,20 @@ test('categoriepagina: minstens 3 tools, elk met prijs, bron en datum', () => {
   }
 });
 
+test('categoriepagina: tools op alfabetische volgorde (Nederlandse sortering), ook in de tabel en ItemList', () => {
+  const col = new Intl.Collator('nl', { sensitivity: 'base' });
+  for (const p of CATS) {
+    const h = read(p);
+    const h3 = [...h.matchAll(/<article class="res tool" id="[^"]+">\s*<h3>([^<]+)<\/h3>/g)].map((m) => m[1].replace(/&amp;/g, '&'));
+    assert.ok(h3.length >= 3, p);
+    assert.deepEqual(h3, [...h3].sort(col.compare), p + ': ' + h3.join(', '));
+    const rij = [...h.split('id="overzicht"')[1].split('</table>')[0].matchAll(/<th scope="row"><a href="#[^"]+">([^<]+)<\/a>/g)].map((m) => m[1].replace(/&amp;/g, '&'));
+    assert.deepEqual(rij, h3, p + ' tabel');
+    const il = ld(h).find((n) => n['@type'] === 'ItemList').itemListElement.map((x) => x.name);
+    assert.deepEqual(il, h3, p + ' ItemList');
+  }
+});
+
 test('schema: juiste types per paginatype, geen reviews of ratings, FAQ zichtbaar', () => {
   const types = (p) => ld(read(p)).map((n) => n['@type']);
   for (const p of CATS) for (const t of ['CollectionPage', 'ItemList', 'BreadcrumbList', 'FAQPage']) assert.ok(types(p).includes(t), p + ' ' + t);

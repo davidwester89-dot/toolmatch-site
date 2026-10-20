@@ -99,3 +99,18 @@ test('interne notities staan in .gitignore', () => {
   const gi = readFileSync(join(ROOT, '.gitignore'), 'utf8');
   assert.ok(/^PLAN-\*\.md$/m.test(gi));
 });
+
+test('vendor buttons use the vendor name (vendor field, else product name)', async () => {
+  const { TOOLS } = await import('../js/lib/tools.js');
+  const byId = Object.fromEntries(TOOLS.map(t => [t.id, t]));
+  let n = 0;
+  for (const f of readdirSync(ROOT, { recursive: true }).filter(f => f.endsWith('index.html') && !/^(node_modules|\.git)/.test(f))) {
+    const h = readFileSync(join(ROOT, f), 'utf8');
+    for (const m of h.matchAll(/data-vendor="([^"]+)"[^>]*>Naar de site van ([^<]+)</g)) {
+      const t = byId[m[1]]; if (!t) continue;
+      const want = (t.vendor || t.naam).replace(/&/g, '&amp;');
+      assert.equal(m[2], want, f + ' ' + m[1]); n++;
+    }
+  }
+  assert.ok(n > 30);
+});

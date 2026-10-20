@@ -32,8 +32,8 @@ def dpa(t):
     return 'Onbekend'
 def uit(t):
     p=PL.get(t['id'])
-    if p: return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{t["id"]}" data-cta="partner">Naar de site van {E(t["naam"])}</a> <span class="partner">partnerlink</span>'
-    return f'<a class="btn ghost" href="{E(t["url"])}" rel="noopener" target="_blank" data-vendor="{t["id"]}" data-cta="outbound">Naar de site van {E(t["naam"])}</a>'
+    if p: return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{t["id"]}" data-cta="partner">Naar de site van {E(t.get("vendor") or t["naam"])}</a> <span class="partner">partnerlink</span>'
+    return f'<a class="btn ghost" href="{E(t["url"])}" rel="noopener" target="_blank" data-vendor="{t["id"]}" data-cta="outbound">Naar de site van {E(t.get("vendor") or t["naam"])}</a>'
 def kaart(t,past):
     pv=f'\n        <p class="priv">{E(t["privacy"])}</p>' if t.get('privacy') else ''
     return f'''      <article class="res tool" id="{t['id']}">
@@ -195,7 +195,7 @@ cat('/ai-afbeeldingen-en-ontwerp/','AI voor afbeeldingen, logo’s en presentati
  [('chatgpt','je af en toe een afbeelding wilt laten maken met een beschrijving; in de gratis versie kan dat beperkt.'),
   ('lechat','je een Europese assistent wilt die ook eenvoudige afbeeldingen maakt.'),
   ('pitch','je presentaties wilt maken en delen, ook met een team.'),
-  ('canva','je zelf ontwerpt voor social media, presentaties of drukwerk. Pro geeft volgens Canva veel meer AI-gebruik dan de gratis versie (10x zoveel; gratis is tot 20 AI-toepassingen).')],
+  ('canva','je zelf ontwerpt voor social media, presentaties of drukwerk. Pro geeft volgens Canva tien keer zoveel AI-gebruik als de gratis versie, die tot 20 AI-toepassingen geeft.')],
  ['<strong>Zakelijk gebruik.</strong> Lees in de voorwaarden van de tool of je het beeld commercieel mag gebruiken. Dat hebben we voor deze tools niet gecontroleerd.',
   f'<strong>Vermeld AI waar dat moet.</strong> Volgens de Autoriteit Persoonsgegevens moet je mensen vanaf augustus 2026 in bepaalde gevallen informeren dat ze met AI te maken hebben, bijvoorbeeld bij een chatbot of deepfake. Lees {L("/gids/ai-act-ondernemers/","wanneer je AI-beelden moet vermelden")}.',
   '<strong>Een logo is een merk.</strong> Gebruik AI voor ideeën, maar laat een definitief logo controleren op gelijkenis met bestaande merken.'],

@@ -1,7 +1,7 @@
 // Keuzehulp op /keuzehulp/. Logica in ./lib/match.js (getest); partnerlinks alleen voor de knop onder een resultaat.
 import { match, normaliseer, VRAGEN } from './lib/match.js';
 import { DOELEN, GECONTROLEERD } from './lib/tools.js';
-import { uitgaand } from './lib/partnerlinks.js';
+import { uitgaand, metNoot } from './lib/partnerlinks.js';
 import { track } from './consent.js';
 
 const form = document.getElementById('form');
@@ -49,7 +49,7 @@ function toon(a, scroll) {
   const res = match(a);
   out.innerHTML = `<h2 id="h-res" tabindex="-1">Jouw match voor: ${esc(DOELEN[a.doel].toLowerCase())}</h2>
 <p class="lead">${res.length} tools gerangschikt op hoe goed ze bij je antwoorden passen. De volgorde hangt nooit af van een vergoeding.</p>
-<div class="results">${res.map(kaart).join('')}</div>
+${metNoot(`<div class="results">${res.map(kaart).join('')}</div>`)}
 ${CATEGORIE[a.doel] ? `<p class="cat-l"><a href="${CATEGORIE[a.doel][0]}">${esc(CATEGORIE[a.doel][1])}</a></p>` : ''}`;
   out.hidden = false;
   if (scroll) out.querySelector('#h-res').focus();

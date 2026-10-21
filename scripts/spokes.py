@@ -42,6 +42,10 @@ def uit(t):
     p=PL.get(t['id'])
     if p: return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{t["id"]}" data-cta="partner" aria-label="{E(knoplabel(t)[1])}">{E(knoplabel(t)[0])}</a>'
     return f'<a class="btn ghost" href="{E(t["url"])}" rel="noopener" target="_blank" data-vendor="{t["id"]}" data-cta="outbound" aria-label="{E(knoplabel(t)[1])}">{E(knoplabel(t)[0])}</a>'
+PNOOT='      <p class="pnoot">Sommige links zijn partnerlinks; dat verandert de volgorde nooit.</p>\n'
+def met_noot(blok):
+    """Precies één partnerzin direct na een blok waarin een partnerlink (rel sponsored) staat; anders niets."""
+    return blok+PNOOT if re.search(r'<a\s[^>]*rel="[^"]*\bsponsored\b',blok) else blok
 def kaart(t,past):
     pv=f'\n        <p class="priv">{E(t["privacy"])}</p>' if t.get('privacy') else ''
     return f'''      <article class="res tool" id="{t['id']}">
@@ -290,7 +294,7 @@ for c in CAT:
     assert ok==ids, c['slug']+': alleen tools met gecontroleerde prijs op een categoriepagina'
     srcs=[tuple(b) for i in ids for b in T[i]['bronnen']]+[tuple(s) for s in c['src']]
     body=c['intro']+'      <h2 id="overzicht">In het kort</h2>\n      <p>De tools staan op alfabetische volgorde, niet op rangorde. Welke past, hangt af van je situatie.</p>\n'+kort_tabel(ids,'Overzicht van de tools')
-    body+='      <h2 id="tools">De tools</h2>\n      <div class="results">\n'+''.join(kaart(T[i],p) for i,p in c['tools'])+'      </div>\n'
+    body+='      <h2 id="tools">De tools</h2>\n'+met_noot('      <div class="results">\n'+''.join(kaart(T[i],p) for i,p in c['tools'])+'      </div>\n')
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
     body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
     body+=faq_html(c['faq'])+bronnen_html(srcs)+byline()
@@ -649,7 +653,7 @@ c=vt; c['tools']=alfa(c['tools']); ids=[i for i,_ in c['tools']]
 assert all(T[i]['prijs'] for i in ids) and len(ids)>=3
 srcs=[tuple(b) for i in ids for b in T[i]['bronnen']]+c['src']
 body=c['intro']+'      <h2 id="overzicht">In het kort</h2>\n      <p>De tools staan op alfabetische volgorde, niet op rangorde.</p>\n'+kort_tabel(ids,'Overzicht van de vertaaltools')
-body+='      <h2 id="tools">De tools</h2>\n      <div class="results">\n'+''.join(kaart(T[i],p) for i,p in c['tools'])+'      </div>\n'
+body+='      <h2 id="tools">De tools</h2>\n'+met_noot('      <div class="results">\n'+''.join(kaart(T[i],p) for i,p in c['tools'])+'      </div>\n')
 body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
 body+=f'      <p>Schrijf je de tekst eerst zelf? Bekijk dan de {L("/ai-tekst-schrijven/","AI-tools voor Nederlandse teksten")}.</p>\n'
 body+=faq_html(c['faq'])+bronnen_html(srcs)+byline()

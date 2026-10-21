@@ -50,7 +50,7 @@ EUT={'ja':'In de EU','deels':'Vooral in de EU'}
 rows=''.join(f'''          <tr><th scope="row">{E(t['naam'])}</th><td>{', '.join(E(DL[x]) for x in t['doelen'])}</td><td>{'Ja' if t['gratis'] is True else ('Nee' if t['gratis'] is False else 'Niet gecontroleerd')}</td><td>{E(t['prijs']) if t['prijs'] else 'Niet gecontroleerd'}</td><td>{EUT.get(t['eu'],'Niet gecontroleerd')}</td><td>{INSTAP[t['instap']]}</td><td>{', '.join(f'<a href="{E(u)}" rel="noopener">{E(n)}</a>' for n,u in t['bronnen'])}</td></tr>
 ''' for t in sorted(TL,key=lambda t:t['naam'].lower()) if t['doelen'])
 KH_FAQ=[('Hoe komt de volgorde tot stand?','Je antwoorden geven punten volgens vaste regels: je doel telt het zwaarst, daarna budget, team, privacy en techniek. Bij gelijke punten staan de tools op alfabetische volgorde.'),
- ('Hebben partnerlinks invloed op de uitkomst?','Nee. De berekening gebruikt geen partnerlinks. Staat er ooit een partnerlink bij een resultaat, dan staat er "partnerlink" bij en verandert de volgorde niet.'),
+ ('Hebben partnerlinks invloed op de uitkomst?','Nee. De berekening gebruikt geen partnerlinks. Staat er ooit een partnerlink bij een resultaat, dan wordt dat bij de knoppen vermeld en verandert de volgorde niet.'),
  ('Bewaren jullie mijn antwoorden?','Nee. Je antwoorden blijven in je browser en staan alleen in de adresbalk. We sturen ze nooit naar Google.'),
  ('Waar komen de prijzen vandaan?','Van de sites van de aanbieders, met de bron en de datum erbij. Konden we iets niet controleren, dan staat er "niet gecontroleerd".')]
 KH_FAQ_HTML='      <h2 id="faq">Vragen over de keuzehulp</h2>\n      <div class="faq">\n'+''.join(f'      <details>\n        <summary>{q}</summary>\n        <p>{a}</p>\n      </details>\n' for q,a in KH_FAQ)+'      </div>\n'
@@ -60,7 +60,7 @@ KH=f'''    <div class="kh-wrap">
       <h2 id="zo-werkt-het">Zo werkt de keuzehulp</h2>
       <p>Je antwoorden geven punten. Een tool die gemaakt is voor jouw doel krijgt de meeste punten, een tool die het als bijfunctie kan minder. Daarna tellen een gratis versie of een lage prijs mee als je budget klein is, een teamabonnement als je met meer mensen werkt, opslag in de EU als je dat belangrijk vindt, en hoe makkelijk je ermee start. Bij gelijke punten staan de tools op alfabetische volgorde.</p>
       <ul>
-        <li><strong>Geen invloed van vergoedingen.</strong> De berekening kent geen partnerlinks. Staat er onder een resultaat ooit een partnerlink, dan staat er "partnerlink" bij en verandert de volgorde niet. Lees meer over <a href="/partnerlinks/">partnerlinks</a>.</li>
+        <li><strong>Geen invloed van vergoedingen.</strong> De berekening kent geen partnerlinks. Staat er onder een resultaat ooit een partnerlink, dan wordt dat bij de knoppen vermeld en verandert de volgorde niet. Lees meer over <a href="/partnerlinks/">partnerlinks</a>.</li>
         <li><strong>Alleen wat we konden controleren.</strong> Prijzen en privacygegevens komen van de site van de aanbieder. Konden we iets niet bevestigen, dan staat er "niet gecontroleerd" en telt het niet als pluspunt.</li>
         <li><strong>Instap is onze eigen indeling.</strong> Eenvoudig: je kunt direct beginnen. Gemiddeld: je moet het even inrichten. Technisch: je hebt er meer aan als je met code of zelf hosten overweg kunt.</li>
         <li><strong>Prijzen zoals vermeld.</strong> In de valuta van de aanbieder, met of zonder btw zoals daar staat. Bij "per maand bij jaarbetaling" betaal je per jaar vooruit.</li>
@@ -104,7 +104,7 @@ write('disclaimer/index.html',page('/disclaimer/','Disclaimer | ToolMatch','Tool
       <h2>Privacy en AVG</h2>
       <p>Wat we schrijven over opslag in de EU en het gebruik van je gegevens komt uit de informatie van de aanbieder. Het vervangt geen eigen controle. Werk je met persoonsgegevens van klanten, kijk dan zelf naar de verwerkersovereenkomst en de voorwaarden van de tool.</p>
       <h2>Partnerlinks</h2>
-      <p>Bij sommige aanbieders kunnen we een vergoeding krijgen als je via ons een abonnement neemt. Zo'n link heeft altijd het label "partnerlink". Partnerlinks hebben geen invloed op de keuzehulp of de volgorde. Meer uitleg staat op <a href="/partnerlinks/">partnerlinks</a>.</p>
+      <p>Bij sommige aanbieders kunnen we een vergoeding krijgen als je via ons een abonnement neemt. Partnerlinks worden bij de knoppen vermeld. Partnerlinks hebben geen invloed op de keuzehulp of de volgorde. Meer uitleg staat op <a href="/partnerlinks/">partnerlinks</a>.</p>
       <h2>Merken</h2>
       <p>Merknamen zijn van de betreffende aanbieders. ToolMatch is onafhankelijk en geen onderdeel van deze aanbieders.</p>
       <h2>Fout gezien?</h2>
@@ -117,7 +117,7 @@ write('partnerlinks/index.html',page('/partnerlinks/','Partnerlinks: zo verdient
       <p>Een partnerlink is een link naar een aanbieder waarbij ToolMatch een vergoeding kan krijgen als je via die link een abonnement neemt. Voor jou verandert de prijs daardoor niet.</p>
       <h2>Zo herken je ze</h2>
       <ul>
-        <li>Naast een partnerlink staat altijd het woord <strong>partnerlink</strong>.</li>
+        <li>Partnerlinks worden bij de knoppen vermeld.</li>
         <li>Zo'n link heeft in de code <code>rel="sponsored nofollow"</code>, zoals zoekmachines vragen.</li>
         <li>Alle andere links naar aanbieders zijn gewone links naar hun eigen site.</li>
       </ul>

@@ -100,7 +100,7 @@ CATS=[
 ('Data &amp; analyse','<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>','Je cijfers laten analyseren met AI of in een dashboard zetten, zonder dat je data-analist bent.',[('/ai-data-analyse/','je cijfers in een dashboard')],''),
 ]
 METH=[
-('Onafhankelijk','<path d="M12 3v18M5 7h14"/><path d="M5 7l-3 7a3.5 3.5 0 0 0 6 0zM19 7l-3 7a3.5 3.5 0 0 0 6 0z"/>','De volgorde volgt uit wat bij jouw situatie past. Een vergoeding van een aanbieder verandert daar niets aan. Komen er partnerlinks, dan staat er altijd duidelijk bij dat het een partnerlink is.'),
+('Onafhankelijk','<path d="M12 3v18M5 7h14"/><path d="M5 7l-3 7a3.5 3.5 0 0 0 6 0zM19 7l-3 7a3.5 3.5 0 0 0 6 0z"/>','De volgorde volgt uit wat bij jouw situatie past. Een vergoeding van een aanbieder verandert daar niets aan. Komen er partnerlinks, dan worden die bij de knoppen vermeld.'),
 ('Privacy en AVG','<path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="m9 12 2 2 4-4"/>','We kijken waar een tool je gegevens opslaat (in de EU of daarbuiten), of er een verwerkersovereenkomst is en of je invoer wordt gebruikt om AI te trainen. Dat kan net zo zwaar wegen als de prijs.'),
 ('Echte kosten per maand','<rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20M6 15h4"/>','We rekenen met wat je echt betaalt: per maand, inclusief of exclusief btw zoals de aanbieder het vermeldt, en met de beperkingen van een gratis versie. Bij elke prijs staat de bron en de datum waarop we keken.'),
 ]
@@ -115,7 +115,7 @@ FAQ=[
 ('Wat is ToolMatch?','ToolMatch is een Nederlandse site die ondernemers helpt om de juiste (AI-)tools te kiezen: voor tekst, offertes, facturatie, planning, klantbeheer, notuleren, ontwerp en automatisering. We kijken naar wat je werk vraagt, wat een tool echt per maand kost en hoe er met je gegevens wordt omgegaan.'),
 ('Voor wie is ToolMatch bedoeld?','Voor ondernemers die zelf hun tools kiezen: van zzp\'ers en freelancers tot kleine bedrijven met een paar mensen. Je hebt geen technische kennis nodig.'),
 ('Kost ToolMatch iets?','Nee. ToolMatch is gratis te gebruiken en je hebt geen account nodig.'),
-('Verdient ToolMatch aan de tools die jullie noemen?','Er kunnen partnerlinks op de site komen. Klik je daarop en neem je een abonnement, dan kan ToolMatch een vergoeding krijgen. Zo\'n link is altijd herkenbaar als partnerlink, en een vergoeding bepaalt nooit de volgorde of de uitkomst van een vergelijking.'),
+('Verdient ToolMatch aan de tools die jullie noemen?','Er kunnen partnerlinks op de site komen. Klik je daarop en neem je een abonnement, dan kan ToolMatch een vergoeding krijgen. Zo\'n link wordt bij de knoppen vermeld, en een vergoeding bepaalt nooit de volgorde of de uitkomst van een vergelijking.'),
 ('Mag ik gegevens van klanten in een AI-tool zetten?','Dat hangt af van de tool en van wat je erin zet. Gaat het om persoonsgegevens, dan geldt de AVG en ben jij verantwoordelijk voor wat ermee gebeurt. Kijk daarom of de aanbieder een verwerkersovereenkomst biedt, waar de gegevens worden opgeslagen en of je invoer wordt gebruikt om het AI-model te trainen. Twijfel je, laat persoonsgegevens dan weg.'),
 ]
 ld={"@context":"https://schema.org","@graph":[
@@ -277,7 +277,7 @@ OVER='''      <h2>Wie we zijn</h2>
       <h2>Zo werken we</h2>
       <ul>
         <li><strong>Onafhankelijk.</strong> De volgorde in een vergelijking volgt uit wat bij jouw situatie past, nooit uit een vergoeding.</li>
-        <li><strong>Partnerlinks herkenbaar.</strong> Komen er partnerlinks, dan staat er altijd bij dat het een partnerlink is.</li>
+        <li><strong>Partnerlinks herkenbaar.</strong> Komen er partnerlinks, dan worden die bij de knoppen vermeld.</li>
         <li><strong>Alleen echte gegevens.</strong> Prijzen en functies halen we bij de aanbieder zelf, met de bron en de datum erbij. We verzinnen geen cijfers, beoordelingen of reviews.</li>
         <li><strong>Privacy telt mee.</strong> Waar je gegevens staan en wat een tool ermee doet, weegt mee in onze vergelijkingen.</li>
       </ul>

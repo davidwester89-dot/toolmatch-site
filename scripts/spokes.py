@@ -40,7 +40,7 @@ def knoplabel(t):
 
 def uit(t):
     p=PL.get(t['id'])
-    if p: return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{t["id"]}" data-cta="partner" aria-label="{E(knoplabel(t)[1])}">{E(knoplabel(t)[0])}</a> <span class="partner">partnerlink</span>'
+    if p: return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{t["id"]}" data-cta="partner" aria-label="{E(knoplabel(t)[1])}">{E(knoplabel(t)[0])}</a>'
     return f'<a class="btn ghost" href="{E(t["url"])}" rel="noopener" target="_blank" data-vendor="{t["id"]}" data-cta="outbound" aria-label="{E(knoplabel(t)[1])}">{E(knoplabel(t)[0])}</a>'
 def kaart(t,past):
     pv=f'\n        <p class="priv">{E(t["privacy"])}</p>' if t.get('privacy') else ''

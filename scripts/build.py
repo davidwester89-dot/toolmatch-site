@@ -12,6 +12,7 @@ def head(path,title,desc,ogt,extra=''):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 {CSP}
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="impact-site-verification" value="4cedf3a1-b7d3-4bae-8898-6a31939e1d08">
 <title>{title}</title>
 <meta name="description" content="{desc}">
 <link rel="canonical" href="{D}{path}">

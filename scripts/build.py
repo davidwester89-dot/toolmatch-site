@@ -13,6 +13,7 @@ def head(path,title,desc,ogt,extra=''):
 {CSP}
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="impact-site-verification" value="4cedf3a1-b7d3-4bae-8898-6a31939e1d08">
+<meta name="e08923fead07e26" content="c805cc3c2262098e1a99fce841da04b0" />
 <title>{title}</title>
 <meta name="description" content="{desc}">
 <link rel="canonical" href="{D}{path}">

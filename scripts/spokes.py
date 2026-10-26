@@ -12,7 +12,7 @@ PUB='2026-10-20'
 # Schema-update 26-10 (image in Article = de og:image van de pagina): dateModified en sitemap-lastmod van de gewijzigde pagina's.
 SCHEMA_UPD='2026-10-26'
 # Valuta-fix (alleen euro's): inhoudelijk gewijzigd, dateModified en lastmod = pushdatum.
-VALUTA_UPD={u:'2026-10-27' for u in ('/gids/wat-kosten-ai-abonnementen/','/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/')}
+VALUTA_UPD={u:'2026-10-27' for u in ('/gids/wat-kosten-ai-abonnementen/','/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/vergelijken/chatgpt-vs-claude/','/vergelijken/chatgpt-vs-copilot/','/vergelijken/chatgpt-vs-gemini/','/vergelijken/zapier-vs-make-vs-n8n/')}
 ORG={"@id":D+"/#organization"}
 def ldscript(graph): return '<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":graph},ensure_ascii=False,indent=1)+'\n</script>\n'
 def crumbs_ld(items): return {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":D+u} for i,(n,u) in enumerate(items)]}
@@ -27,7 +27,7 @@ def bronnen_html(srcs):
     seen=[]; 
     for s in srcs:
         if s not in seen: seen.append(s)
-    return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n))}, bekeken op {BRON_DATUM.get(u,GCN)}</li>\n' for n,u in seen)+'      </ul>\n'
+    return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n.replace(' (NL-pagina van de aanbieder)','')))}, {('NL-pagina van de aanbieder, bekeken op '+BRON_DATUM[u]) if u in BRON_DATUM else 'bekeken op '+GCN}</li>\n' for n,u in seen)+'      </ul>\n'
 def byline(): return f'      <p class="note">Redactie ToolMatch · gecontroleerd op {GCN}. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
 JN=lambda v: 'Ja' if v is True else ('Nee' if v is False else 'Niet gecontroleerd')
 EUL={'ja':'In de EU (volgens de aanbieder)','deels':'Vooral in de EU (volgens de aanbieder)'}
@@ -237,7 +237,7 @@ cat('/social-media-inplannen/','Social media inplannen: planners vergeleken | To
   '<strong>Plan, maar blijf reageren.</strong> Inplannen bespaart tijd, maar reacties op je posts moet je zelf blijven beantwoorden.'],
  [('Wat is de beste gratis social media planner?','Buffer en Metricool hebben een gratis versie. Let op: de gratis versie van Metricool is volgens de prijspagina zonder LinkedIn. Hootsuite heeft een gratis proefperiode; de betaalde plannen beginnen bij Standard.'),
   ('Kan ik LinkedIn-posts inplannen?','Buffer en Metricool noemen LinkedIn als kanaal; bij Metricool zit LinkedIn volgens de prijspagina niet in de gratis versie. Welke soorten posts precies kunnen, verschilt per tool.'),
-  ('Wat kost een social media planner?','Buffer Essentials kost $5 per kanaal per maand bij jaarbetaling, Metricool Starter vanaf €16 per maand, Hootsuite Standard vanaf $99 per maand. Zie de bronnen voor de details.')])
+  ('Wat kost een social media planner?','Metricool Starter kost vanaf €16 per maand. Buffer Essentials reken je per kanaal per maand; dat bedrag en de prijs van Hootsuite Standard zie je op de prijspagina van de aanbieder. Zie de bronnen voor de details.')])
 
 cat('/automatiseren-zonder-code/','Automatiseren zonder code: Zapier, Make en meer | ToolMatch',
  'Terugkerend werk vanzelf laten gaan door je apps te koppelen, zonder code. Zie welke automatiseringstool past en hoe de kosten meegroeien met je taken.',
@@ -254,7 +254,7 @@ cat('/automatiseren-zonder-code/','Automatiseren zonder code: Zapier, Make en me
   '<strong>Kijk waar je gegevens langs gaan.</strong> Bij n8n staan ze volgens de aanbieder in de EU (Frankfurt) als n8n host; bij Zapier en Power Automate hebben we de locatie niet gecontroleerd.'],
  [('Wat is no-code automatiseren?','Apps aan elkaar koppelen met een visuele bouwer, zonder te programmeren. Je kiest een trigger (als dit gebeurt) en een actie (doe dan dat).'),
   ('Is er een gratis automatiseringstool?','Zapier en Make hebben een gratis versie met beperkingen; Power Automate heeft een gratis proefversie van 30 dagen. n8n kun je volgens de aanbieder zelf hosten met de Community Edition; de door n8n gehoste versie is betaald.'),
-  ('Wat kost automatiseren?','Zapier Professional kost $19,99 per maand bij jaarbetaling (750 taken), Power Automate Premium €13,00 per gebruiker per maand bij jaarbetaling (excl. btw) en n8n Starter €20 per maand bij jaarbetaling, volgens de aanbieders. De prijs van Make konden we niet controleren.')])
+  ('Wat kost automatiseren?','Power Automate Premium kost €13,00 per gebruiker per maand bij jaarbetaling (excl. btw) en n8n Starter €20 per maand bij jaarbetaling, volgens de aanbieders. Het bedrag van Zapier Professional (750 taken) zie je op de prijspagina van Zapier. De prijs van Make konden we niet controleren.')])
 
 cat('/ai-chatbot-website/','Chatbot voor je website: AI-tools vergeleken | ToolMatch',
  'Een AI-chatbot op je website die klantvragen beantwoordt. Vergelijk tools op prijs per gesprek of maand, Nederlands, overdracht naar een mens en AVG.',
@@ -266,10 +266,10 @@ cat('/ai-chatbot-website/','Chatbot voor je website: AI-tools vergeleken | ToolM
  [('intercom','je een uitgebreid klantenservice-platform wilt en betalen per opgeloste vraag past bij je volume.'),
   ('tidio','je een webshop of kleine site hebt en met een gratis versie wilt beginnen.'),
   ('trengo','je mail, WhatsApp, chat en social in één inbox wilt, met een team.')],
- ['<strong>Kijk hoe er gerekend wordt.</strong> Intercom rekent naast een prijs per gebruiker ($29 per maand bij jaarbetaling; op 20-10-2026 een actieprijs van $19 voor nieuwe klanten) $0,99 per opgeloste vraag van de AI-agent Fin, volgens de prijspagina. Trengo heeft een maandprijs met 10 gebruikers inbegrepen.',
+ ['<strong>Kijk hoe er gerekend wordt.</strong> Intercom rekent naast een prijs per gebruiker ook een bedrag per opgeloste vraag van de AI-agent Fin, volgens de prijspagina. Trengo heeft een maandprijs met 10 gebruikers inbegrepen.',
   '<strong>Regel de overdracht.</strong> Zorg dat een klant altijd een mens kan bereiken.',
   '<strong>Vertel dat het een bot is.</strong> Zet in het chatvenster dat de klant met AI praat.'],
- [('Wat kost een AI-chatbot voor je website?','Tidio Starter kost $24,17 per maand bij jaarbetaling, Intercom Essential $29 per gebruiker per maand bij jaarbetaling (op 20-10-2026 actie voor nieuwe klanten: $19) plus $0,99 per opgeloste Fin-vraag, en Trengo Boost €299 per maand bij jaarbetaling met 10 gebruikers. Zie de bronnen.'),
+ [('Wat kost een AI-chatbot voor je website?','Trengo Boost kost €299 per maand bij jaarbetaling, met 10 gebruikers. Bij Tidio Starter en Intercom Essential (per gebruiker, plus een bedrag per opgeloste Fin-vraag) zie je het bedrag op de prijspagina van de aanbieder. Zie de bronnen.'),
   ('Moet ik melden dat het een chatbot is?','Volgens de Autoriteit Persoonsgegevens moet je mensen vanaf augustus 2026 in bepaalde gevallen informeren dat ze met AI te maken hebben, bijvoorbeeld bij een chatbot of deepfake.'),
   ('Kan een chatbot Nederlands?','Dat verschilt per tool en hebben we niet gecontroleerd. Test het met echte vragen van je klanten.')],
  extra_src=[('Autoriteit Persoonsgegevens: Risicogroepen AI-verordening','https://www.autoriteitpersoonsgegevens.nl/themas/algoritmes-ai/ai-verordening/risicogroepen-ai-verordening')])
@@ -289,7 +289,7 @@ cat('/ai-data-analyse/','AI voor data-analyse en dashboards: welke tool? | ToolM
   '<strong>Laat persoonsgegevens weg.</strong> Voor een analyse heb je zelden namen of adressen nodig. Haal ze eruit voordat je een bestand uploadt.',
   '<strong>Controleer de uitkomst.</strong> Een AI kan een berekening verkeerd doen. Reken belangrijke cijfers na.'],
  [('Kan ChatGPT een Excel-bestand analyseren?','ChatGPT noemt op de prijspagina ook extensies voor Excel en Google Sheets. Controleer de uitkomsten altijd zelf.'),
-  ('Is Looker Studio gratis?','Ja, Looker Studio is gratis. Looker Studio Pro kost $9 per gebruiker per project per maand, volgens Google.'),
+  ('Is Looker Studio gratis?','Ja, Looker Studio is gratis. Voor Looker Studio Pro betaal je per gebruiker per project per maand; het bedrag zie je op de pagina van Google.'),
   ('Wat is het verschil tussen Power BI en Looker Studio?','Power BI is van Microsoft en past bij Excel en Microsoft 365. Looker Studio is van Google en past bij Sheets en Analytics. Allebei hebben ze een gratis instap.')])
 
 for c in CAT:
@@ -329,7 +329,7 @@ vs('/vergelijken/chatgpt-vs-copilot/','ChatGPT vs Copilot: verschil, prijs en ke
  ['ChatGPT','Copilot Business'],
  [('Wat het is','Losse AI-assistent van OpenAI, op web, desktop en mobiel.','AI-assistent in de Microsoft 365-apps, voor bedrijven die daar al in werken.'),
   ('Gratis instap','Ja, ChatGPT Free (met beperkingen).','Copilot Chat is volgens Microsoft zonder extra kosten beschikbaar bij geschikte Microsoft 365-plannen.'),
-  ('Betaald','Plus: $20 per maand.','€18,20 per gebruiker per maand bij jaarbetaling (excl. btw); bij aanschaf tot en met 31-12-2026 actieprijs €15,60 voor het eerste jaar. Alleen als invoegtoepassing bij een geschikt Microsoft 365 Business-abonnement.'),
+  ('Betaald','Plus; het bedrag zie je op de prijspagina van OpenAI.','€18,20 per gebruiker per maand bij jaarbetaling (excl. btw); bij aanschaf tot en met 31-12-2026 actieprijs €15,60 voor het eerste jaar. Alleen als invoegtoepassing bij een geschikt Microsoft 365 Business-abonnement.'),
   ('Word, Excel en PowerPoint','Extensies voor Excel, Word, PowerPoint en Google Sheets: beperkt in Free, ja in Plus.','Ingebouwd in Word, Excel en PowerPoint.'),
   ('Outlook en Teams','Niet gecontroleerd.','Ingebouwd: mails opstellen en threads samenvatten in Outlook, samenvattingen van vergaderingen in Teams.'),
   ('Training op je invoer','Opt-out beschikbaar (Free, Go, Plus en Pro).','Prompts en antwoorden worden volgens Microsoft niet gebruikt om de modellen te trainen.'),
@@ -360,7 +360,7 @@ vs('/vergelijken/chatgpt-vs-gemini/','ChatGPT vs Gemini: welke past bij je bedri
  ['ChatGPT','Gemini in Google Workspace'],
  [('Wat het is','Losse AI-assistent van OpenAI.','Gemini als onderdeel van Google Workspace (zakelijk).'),
   ('Gratis instap','Ja, ChatGPT Free (met beperkingen).','De gratis Gemini-app voor particulieren hebben we niet gecontroleerd. Workspace heeft een proefperiode van 14 dagen.'),
-  ('Betaald','Plus: $20 per maand.','Business Starter: $7 per gebruiker per maand (excl. belastingen), met Gemini in Gmail en chat met Gemini. Business Standard: $14 per gebruiker per maand, ook met Gemini in Documenten en Meet.'),
+  ('Betaald','Plus; het bedrag zie je op de prijspagina van OpenAI.','Business Starter: €8,10 per gebruiker per maand, met een contract van 1 jaar €6,80, met Gemini in Gmail en chat met Gemini. Business Standard: €16,20 per gebruiker per maand, met een contract van 1 jaar €13,60, ook met Gemini in Documenten en Meet (NL-pagina van de aanbieder, bekeken op 26 oktober 2026).'),
   ('Gmail, Docs en Drive','Extensie voor Google Sheets; verder niet gecontroleerd.','Gemini in Gmail vanaf Starter; in Documenten en Meet vanaf Standard.'),
   ('Training op je invoer','Opt-out beschikbaar (Free, Go, Plus en Pro).','Niet gecontroleerd op de pagina\'s die we bekeken.'),
   ('Nederlands','Niet gemeten.','Niet gemeten.')],
@@ -374,19 +374,19 @@ vs('/vergelijken/chatgpt-vs-gemini/','ChatGPT vs Gemini: welke past bij je bedri
       </ul>
 ''')],
  [('Wat is het verschil tussen ChatGPT en Gemini?','ChatGPT is een losse AI-assistent. Gemini zit voor bedrijven in Google Workspace, onder meer in Gmail en, vanaf Business Standard, in Documenten en Meet.'),
-  ('Wat kost Gemini voor een bedrijf?','Gemini zit in Google Workspace. Business Starter kost $7 per gebruiker per maand, Business Standard $14, exclusief belastingen.'),
+  ('Wat kost Gemini voor een bedrijf?','Gemini zit in Google Workspace. Business Starter kost €8,10 per gebruiker per maand, of €6,80 met een contract van 1 jaar. Business Standard kost €16,20, of €13,60 met een contract van 1 jaar. Zo staat het op de NL-pagina van Google, bekeken op 26 oktober 2026.'),
   ('Schrijft Gemini goed Nederlands?','Dat hebben we niet gemeten. Probeer het met een echte tekst uit je werk, bijvoorbeeld in de proefperiode van Workspace.')],
- [CHATGPT_SRC,('Google Workspace: prijzen','https://workspace.google.com/intl/nl/pricing')])
+ [CHATGPT_SRC,('Google Workspace voor bedrijven: abonnementen (NL-pagina van de aanbieder)','https://workspace.google.com/intl/nl/business/'),('Google Workspace: prijzen','https://workspace.google.com/intl/nl/pricing')])
 
 vs('/vergelijken/chatgpt-vs-claude/','ChatGPT vs Claude: verschil voor ondernemers | ToolMatch',
  'ChatGPT of Claude? We vergelijken de prijs per maand, schrijven in het Nederlands, werken met lange documenten en de zakelijke abonnementen.',
  'ChatGPT vs Claude','ChatGPT vs Claude voor ondernemers',
- 'Twee losse AI-assistenten met een gratis versie en een abonnement van rond de 20 dollar. Zo verschillen ze in prijs, zakelijke plannen en wat er met je gesprekken gebeurt.',
+ 'Twee losse AI-assistenten met een gratis versie en een betaald abonnement voor één persoon. Zo verschillen ze in prijs, zakelijke plannen en wat er met je gesprekken gebeurt.',
  ['ChatGPT','Claude'],
  [('Wat het is','AI-assistent van OpenAI.','AI-assistent van Anthropic.'),
-  ('Gratis versie','Ja (met beperkingen).','Ja, $0 (met beperkingen).'),
-  ('Persoonlijk abonnement','Plus: $20 per maand.','Pro: $17 per maand bij jaarbetaling, $20 maandelijks. Max: vanaf $100 per maand.'),
-  ('Voor teams','ChatGPT Business; prijs niet gecontroleerd.','Team, voor 2 tot 150 gebruikers: $20 per gebruiker per maand bij jaarbetaling ($25 maandelijks).'),
+  ('Gratis versie','Ja (met beperkingen).','Ja (met beperkingen).'),
+  ('Persoonlijk abonnement','Plus; het bedrag zie je op de prijspagina van OpenAI.','Pro (per maand of met jaarbetaling) en Max; de bedragen zie je op de prijspagina van Anthropic.'),
+  ('Voor teams','ChatGPT Business; prijs niet gecontroleerd.','Team, voor 2 tot 150 gebruikers, per gebruiker per maand; het bedrag zie je op de prijspagina van Anthropic.'),
   ('Kantoorsoftware','Extensies voor Excel, Word, PowerPoint en Google Sheets (beperkt in Free).','Claude for Microsoft 365 en Claude for Microsoft Outlook vanaf Pro, volgens de prijspagina.'),
   ('Training op je invoer','Opt-out beschikbaar.','Opt-out bij Free, Pro en Max; bij de zakelijke plannen volgens Anthropic standaard geen training op je inhoud.'),
   ('Nederlands','Niet gemeten.','Niet gemeten.')],
@@ -400,7 +400,7 @@ vs('/vergelijken/chatgpt-vs-claude/','ChatGPT vs Claude: verschil voor onderneme
       </ul>
 ''')],
  [('Wat is het verschil tussen ChatGPT en Claude?','Allebei zijn het losse AI-assistenten. Ze verschillen vooral in prijs bij jaarbetaling, koppelingen met kantoorsoftware en de standaardinstellingen voor training.'),
-  ('Wat kost Claude per maand?','Claude Pro kost $17 per maand bij jaarbetaling of $20 per maand bij maandelijkse betaling, volgens Anthropic.'),
+  ('Wat kost Claude per maand?','Claude Pro betaal je per maand of met jaarbetaling. Het bedrag zie je op de prijspagina van Anthropic; een europrijs voor Nederland konden we daar niet nalezen.'),
   ('Gebruikt Claude mijn gesprekken voor training?','Bij Free, Pro en Max kun je dat uitzetten. Bij de zakelijke plannen traint Anthropic volgens de prijspagina standaard niet op je inhoud.')],
  [CHATGPT_SRC,('Claude Pricing','https://claude.com/pricing')])
 
@@ -411,7 +411,7 @@ vs('/vergelijken/zapier-vs-make-vs-n8n/','Zapier vs Make vs n8n: welke past bij 
  ['Zapier','Make','n8n'],
  [('Wat het is','Koppelt duizenden apps; snel te beginnen.','Visuele bouwer met veel controle over elke stap.','Automatiseren met AI-agents en code-stappen; ook zelf te hosten.'),
   ('Gratis versie','Ja (met beperkingen).','Ja: 1.000 credits per maand.','Zelf hosten met de Community Edition; de door n8n gehoste versie is betaald.'),
-  ('Betaald vanaf','Professional: $19,99 per maand bij jaarbetaling (750 taken).','Niet gecontroleerd.','Starter: €20 per maand bij jaarbetaling.'),
+  ('Betaald vanaf','Professional, met 750 taken; het bedrag zie je op de prijspagina van Zapier.','Niet gecontroleerd.','Starter: €20 per maand bij jaarbetaling.'),
   ('Hoe het telt','Per taak.','Per credit.','Per uitvoering.'),
   ('Gegevens','Niet gecontroleerd.','Niet gecontroleerd.','In de EU (Frankfurt) als n8n host; zelf hosten kan ook.'),
   ('Instap (onze indeling)','Eenvoudig.','Gemiddeld.','Technisch.')],
@@ -426,7 +426,7 @@ vs('/vergelijken/zapier-vs-make-vs-n8n/','Zapier vs Make vs n8n: welke past bij 
         <li>Lees ook {L('/automatiseren-zonder-code/','wat je allemaal kunt automatiseren')}, en meer over {L('/gids/ai-veilig-gebruiken/','EU-hosting en je gegevens')}.</li>
       </ul>
 ''')],
- [('Wat is goedkoper: Zapier of Make?','Zapier Professional kost $19,99 per maand bij jaarbetaling met 750 taken. De prijs van Make konden we op de prijspagina niet controleren. Een taak en een credit zijn bovendien niet hetzelfde, dus reken met je eigen automatiseringen.'),
+ [('Wat is goedkoper: Zapier of Make?','Dat konden we niet in euro vergelijken. Volgens Zapier hangt een prijs in euro af van de wisselkoers op het moment van betalen, en de prijs van Make konden we op de prijspagina niet controleren. Een taak en een credit zijn bovendien niet hetzelfde, dus reken met je eigen automatiseringen.'),
   ('Is n8n gratis?','De Community Edition kun je volgens n8n zelf hosten. De versie die n8n voor je host, begint bij Starter: €20 per maand bij jaarbetaling.'),
   ('Waar staan mijn gegevens?','Bij n8n Cloud volgens de aanbieder in de EU (Frankfurt). Bij Zapier en Make hebben we de locatie niet gecontroleerd.')],
  [tuple(b) for i in ('zapier','make','n8n') for b in T[i]['bronnen']])
@@ -446,7 +446,7 @@ for v in VS:
 '''
     body=v['intro']+tbl+''.join(f'      <h2>{h}</h2>\n{b}' for h,b in v['secties'])+faq_html(v['faq'])+bronnen_html(v['src'])+byline()
     crumb=f'<a href="/vergelijken/">Vergelijken</a> › {v["crumb"]}'
-    graph=[{"@type":"Article","@id":D+v['slug']+"#artikel","headline":v['h1'],"description":v['desc'],"inLanguage":"nl-NL","url":D+v['slug'],"mainEntityOfPage":D+v['slug'],"datePublished":PUB,"dateModified":SCHEMA_UPD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+    graph=[{"@type":"Article","@id":D+v['slug']+"#artikel","headline":v['h1'],"description":v['desc'],"inLanguage":"nl-NL","url":D+v['slug'],"mainEntityOfPage":D+v['slug'],"datePublished":PUB,"dateModified":VALUTA_UPD.get(v['slug'],SCHEMA_UPD),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),('Vergelijken','/vergelijken/'),(v['crumb'],v['slug'])]),faq_ld(v['slug'],v['faq'])]
     zet(v['slug'],v['title'],v['desc'],crumb,v['h1'],v['lead'],body,graph)
 

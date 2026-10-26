@@ -117,19 +117,7 @@ export function rekensom(h) {
 export const ogImages = (h) => (h.match(/property=["']og:image["']/g) || []).length;
 
 // Bekende overtredingen in de build van 45151e3 (26-10). Zie de kop van dit bestand.
-const BEKEND_VALUTA = {
-  '/ai-chatbot-website/': ['$29', '$19', '$0,99', '$24,17'],
-  '/ai-data-analyse/': ['$9'],
-  '/ai-vertalen/': ['$20', '$10'],
-  '/automatiseren-zonder-code/': ['$19,99'],
-  '/crm-klein-bedrijf/': ['$15', '$14'],
-  '/online-afspraken-plannen/': ['$16', '$20', '$12', '$10', '$11,90', '$24,90'],
-  '/social-media-inplannen/': ['$5', '$60', '$99'],
-  '/vergelijken/chatgpt-vs-claude/': ['dollar', '$0', '$20', '$17', '$100', '$25'],
-  '/vergelijken/chatgpt-vs-copilot/': ['$20'],
-  '/vergelijken/chatgpt-vs-gemini/': ['$20', '$7', '$14'],
-  '/vergelijken/zapier-vs-make-vs-n8n/': ['$19,99'],
-};
+const BEKEND_VALUTA = {}; // leeg sinds de valuta-fix van 26-10: elke $, USD of dollar op een NL-pagina laat de test falen
 const BEKEND_VOLGORDE = {
 };
 

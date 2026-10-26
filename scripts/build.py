@@ -303,4 +303,5 @@ URLS+=SPOKES
 # Pagina's met schema-update 26-10: Article image (vergelijken/gids) en BreadcrumbList (losse pagina's).
 LASTMOD={u:'2026-10-26' for u in URLS if u in BC_LOSSE or (u.startswith(('/vergelijken/','/gids/')) and u not in ('/vergelijken/','/gids/'))}
 LASTMOD.update(WL_LASTMOD)
+LASTMOD.update(VALUTA_UPD); LASTMOD['/keuzehulp/']='2026-10-27'
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')

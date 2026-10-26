@@ -118,18 +118,11 @@ export const ogImages = (h) => (h.match(/property=["']og:image["']/g) || []).len
 
 // Bekende overtredingen in de build van 45151e3 (26-10). Zie de kop van dit bestand.
 const BEKEND_VALUTA = {
-  '/ai-afbeeldingen-en-ontwerp/': ['$144', '$20', '$14,99', '$24,99'],
-  '/ai-assistenten/': ['$20', '$17', '$25', '$7', '$14,99', '$24,99', '$14'],
   '/ai-chatbot-website/': ['$29', '$19', '$0,99', '$24,17'],
-  '/ai-data-analyse/': ['$20', '$9'],
-  '/ai-mail-en-offertes/': ['$20', '$17', '$25', '$7', '$14'],
-  '/ai-notuleren/': ['$8,17', '$8,33'],
-  '/ai-tekst-schrijven/': ['$20', '$17', '$25', '$14,99', '$24,99'],
-  '/ai-vertalen/': ['$20', '$10', '$14,99', '$24,99'],
+  '/ai-data-analyse/': ['$9'],
+  '/ai-vertalen/': ['$20', '$10'],
   '/automatiseren-zonder-code/': ['$19,99'],
   '/crm-klein-bedrijf/': ['$15', '$14'],
-  '/gids/wat-kosten-ai-abonnementen/': ['$20', '$17', '$25', '$14,99', '$24,99', '$7', 'Dollar', 'dollars'],
-  '/keuzehulp/': ['$144', '$20', '$17', '$25', '$7', '$29', '$19', '$0,99', '$14,99', '$24,99', '$9', '$8,17', '$8,33', '$24,17', '$19,99'],
   '/online-afspraken-plannen/': ['$16', '$20', '$12', '$10', '$11,90', '$24,90'],
   '/social-media-inplannen/': ['$5', '$60', '$99'],
   '/vergelijken/chatgpt-vs-claude/': ['dollar', '$0', '$20', '$17', '$100', '$25'],

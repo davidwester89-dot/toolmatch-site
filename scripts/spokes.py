@@ -11,6 +11,8 @@ def X(href,txt): return f'<a href="{E(href)}" rel="noopener">{txt}</a>'
 PUB='2026-10-20'
 # Schema-update 26-10 (image in Article = de og:image van de pagina): dateModified en sitemap-lastmod van de gewijzigde pagina's.
 SCHEMA_UPD='2026-10-26'
+# Valuta-fix (alleen euro's): inhoudelijk gewijzigd, dateModified en lastmod = pushdatum.
+VALUTA_UPD={u:'2026-10-27' for u in ('/gids/wat-kosten-ai-abonnementen/','/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/')}
 ORG={"@id":D+"/#organization"}
 def ldscript(graph): return '<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":graph},ensure_ascii=False,indent=1)+'\n</script>\n'
 def crumbs_ld(items): return {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":D+u} for i,(n,u) in enumerate(items)]}
@@ -19,11 +21,13 @@ def faq_ld(path,faq):
     return {"@type":"FAQPage","@id":D+path+"#faq","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":strip(a)}} for q,a in faq]}
 def faq_html(faq):
     return '      <h2 id="faq">Veelgestelde vragen</h2>\n      <div class="faq">\n'+''.join(f'      <details>\n        <summary>{q}</summary>\n        <p>{a}</p>\n      </details>\n' for q,a in faq)+'      </div>\n'
+# Bronnen die voor de valuta-fix op 26-10 voor het eerst zijn bekeken.
+BRON_DATUM={'https://www.notta.ai/nl/pricing':'26 oktober 2026','https://workspace.google.com/intl/nl/business/':'26 oktober 2026','https://www.deepl.com/nl/pro':'26 oktober 2026'}
 def bronnen_html(srcs):
     seen=[]; 
     for s in srcs:
         if s not in seen: seen.append(s)
-    return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n))}, bekeken op {GCN}</li>\n' for n,u in seen)+'      </ul>\n'
+    return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n))}, bekeken op {BRON_DATUM.get(u,GCN)}</li>\n' for n,u in seen)+'      </ul>\n'
 def byline(): return f'      <p class="note">Redactie ToolMatch · gecontroleerd op {GCN}. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
 JN=lambda v: 'Ja' if v is True else ('Nee' if v is False else 'Niet gecontroleerd')
 EUL={'ja':'In de EU (volgens de aanbieder)','deels':'Vooral in de EU (volgens de aanbieder)'}
@@ -300,7 +304,7 @@ for c in CAT:
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
     body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
     body+=faq_html(c['faq'])+bronnen_html(srcs)+byline()
-    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":GC},
+    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":VALUTA_UPD.get(c['slug'],GC)},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
       crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
     zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)
@@ -598,7 +602,7 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
  'Wat kosten AI-abonnementen','Wat kosten ChatGPT, Copilot en andere AI-tools?',
  'De prijzen van de bekende AI-assistenten op een rij, zoals de aanbieders ze vermelden. Met waar je op moet letten: valuta, btw, jaarbetaling en prijs per gebruiker.',
  f'''      <h2 id="prijzen">De prijzen op een rij</h2>
-      <p>Gecontroleerd op {GCN}, in de valuta van de aanbieder en met of zonder btw zoals daar staat.</p>
+      <p>Nagelezen op 26 oktober 2026, met of zonder btw zoals de aanbieder het vermeldt. We noemen alleen bedragen in euro. Konden we op een Nederlandse prijspagina geen europrijs nalezen, dan staat alleen het abonnement erbij en vind je het bedrag via de bron.</p>
       <div class="tbl" role="region" aria-label="Prijzen van AI-abonnementen" tabindex="0">
         <table>
           <thead><tr><th scope="col">Tool</th><th scope="col">Gratis versie</th><th scope="col">Betaald vanaf</th><th scope="col">Bron</th></tr></thead>
@@ -610,23 +614,25 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
       <p>Persoonlijke abonnementen zoals ChatGPT Plus en Claude Pro reken je per persoon. Zakelijke abonnementen zoals Copilot Business en Google Workspace reken je ook per gebruiker, maar daar horen beheer en afspraken over je gegevens bij. Werk je met klantgegevens, dan is een zakelijk abonnement vaak de betere keuze. Twijfel je tussen de twee bekendste? Lees {L('/vergelijken/chatgpt-vs-copilot/','ChatGPT of Copilot zakelijk')}.</p>
       <h2 id="let-op">Waar je op let</h2>
       <ul>
-        <li><strong>Dollar of euro.</strong> Veel aanbieders noemen hun prijs in dollars. Wat je in euro betaalt, hangt af van de koers en je betaalmethode.</li>
+        <li><strong>Kijk naar de Nederlandse prijs.</strong> Sommige aanbieders tonen hun prijs in een andere munt, afhankelijk van waar je de pagina bekijkt. Wat je betaalt, zie je op de betaalpagina voordat je afrekent.</li>
         <li><strong>Met of zonder btw.</strong> Microsoft noemt de prijs van Copilot exclusief btw, DeepL de prijs van Individual inclusief btw. Vergelijk dus niet zomaar.</li>
-        <li><strong>Jaarbetaling.</strong> "Per maand bij jaarbetaling" betekent dat je een jaar vooruit betaalt. Bij maandbetaling is de prijs vaak hoger, zoals bij Claude Pro: $17 per maand bij jaarbetaling, $20 maandelijks.</li>
+        <li><strong>Jaarbetaling.</strong> "Per maand bij jaarbetaling" betekent dat je een jaar vooruit betaalt. Zonder jaarcontract is de prijs vaak hoger, zoals bij Google Workspace Business Starter: €8,10 per gebruiker per maand, met een contract van 1 jaar €6,80.</li>
         <li><strong>Actieprijzen.</strong> Copilot Business heeft tot en met 31 december 2026 een actieprijs voor het eerste jaar. Daarna betaal je de normale prijs.</li>
         <li><strong>Per gebruiker.</strong> Met vijf mensen betaal je vijf keer. Kijk of iedereen echt een eigen abonnement nodig heeft.</li>
       </ul>
       <p>Welke assistent het beste past, lees je bij {L('/ai-assistenten/','welke assistent bij je past')}.</p>
 ''',
- [('Wat kost ChatGPT per maand?','ChatGPT Plus kost $20 per maand, volgens de prijspagina van OpenAI. Er is ook een gratis versie met beperkingen.'),
+ [('Wat kost ChatGPT per maand?','Het betaalde abonnement voor één persoon heet ChatGPT Plus. Het bedrag zie je op de prijspagina van OpenAI; een europrijs voor Nederland konden we daar niet nalezen. Er is ook een gratis versie met beperkingen.'),
   ('Wat kost Copilot per maand?','Copilot Business kost €18,20 per gebruiker per maand bij jaarbetaling, exclusief btw. Bij aanschaf tot en met 31 december 2026 geldt een actieprijs van €15,60 voor het eerste jaar.'),
   ('Wat is het verschil tussen ChatGPT Plus en Business?','Plus is een persoonlijk abonnement. Business is voor teams, met beheer en zakelijke afspraken. De prijs van Business konden we op de prijspagina niet aflezen.')],
  [tuple(b) for i,_ in PRIJZEN for b in T[i]['bronnen']])
 
 for g in GIDS:
-    body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}</p>\n'
+    upd=VALUTA_UPD.get(g['slug'])
+    noot=f'gepubliceerd op {GCN}, bijgewerkt op 27 oktober 2026' if upd else f'gepubliceerd op {GCN}, gecontroleerd op {GCN}'
+    body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+f'      <p class="note">Redactie ToolMatch · {noot}</p>\n'
     crumb=f'<a href="/gids/">Gidsen</a> › {g["crumb"]}'
-    graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":SCHEMA_UPD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+    graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":upd or SCHEMA_UPD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),('Gidsen','/gids/'),(g['crumb'],g['slug'])]),faq_ld(g['slug'],g['faq'])]
     zet(g['slug'],g['title'],g['desc'],crumb,g['h1'],g['lead'],body,graph)
 
@@ -659,7 +665,7 @@ body+='      <h2 id="tools">De tools</h2>\n'+met_noot('      <div class="results
 body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
 body+=f'      <p>Schrijf je de tekst eerst zelf? Bekijk dan de {L("/ai-tekst-schrijven/","AI-tools voor Nederlandse teksten")}.</p>\n'
 body+=faq_html(c['faq'])+bronnen_html(srcs)+byline()
-graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":GC},
+graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":VALUTA_UPD.get(c['slug'],GC)},
   {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
   crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
 zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)

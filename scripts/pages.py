@@ -52,7 +52,7 @@ rows=''.join(f'''          <tr><th scope="row">{E(t['naam'])}</th><td>{', '.join
 KH_FAQ=[('Hoe komt de volgorde tot stand?','Je antwoorden geven punten volgens vaste regels: je doel telt het zwaarst, daarna budget, team, privacy en techniek. Bij gelijke punten staan de tools op alfabetische volgorde.'),
  ('Hebben partnerlinks invloed op de uitkomst?','Nee. De berekening gebruikt geen partnerlinks. Staat er ooit een partnerlink bij een resultaat, dan wordt dat bij de knoppen vermeld en verandert de volgorde niet.'),
  ('Bewaren jullie mijn antwoorden?','Nee. Je antwoorden blijven in je browser en staan alleen in de adresbalk. We sturen ze nooit naar Google.'),
- ('Waar komen de prijzen vandaan?','Van de sites van de aanbieders, met de bron en de datum erbij. Konden we iets niet controleren, dan staat er "niet gecontroleerd".')]
+ ('Waar komen de prijzen vandaan?','Van de sites van de aanbieders, met de bron en de datum erbij. We noemen alleen bedragen in euro. Konden we geen europrijs nalezen, dan staat alleen het pakket er en vind je het bedrag via de bron. Konden we iets niet controleren, dan staat er "niet gecontroleerd".')]
 KH_FAQ_HTML='      <h2 id="faq">Vragen over de keuzehulp</h2>\n      <div class="faq">\n'+''.join(f'      <details>\n        <summary>{q}</summary>\n        <p>{a}</p>\n      </details>\n' for q,a in KH_FAQ)+'      </div>\n'
 KH=f'''    <div class="kh-wrap">
 {FORM}    </div>
@@ -63,10 +63,10 @@ KH=f'''    <div class="kh-wrap">
         <li><strong>Geen invloed van vergoedingen.</strong> De berekening kent geen partnerlinks. Staat er onder een resultaat ooit een partnerlink, dan wordt dat bij de knoppen vermeld en verandert de volgorde niet. Lees meer over <a href="/partnerlinks/">partnerlinks</a>.</li>
         <li><strong>Alleen wat we konden controleren.</strong> Prijzen en privacygegevens komen van de site van de aanbieder. Konden we iets niet bevestigen, dan staat er "niet gecontroleerd" en telt het niet als pluspunt.</li>
         <li><strong>Instap is onze eigen indeling.</strong> Eenvoudig: je kunt direct beginnen. Gemiddeld: je moet het even inrichten. Technisch: je hebt er meer aan als je met code of zelf hosten overweg kunt.</li>
-        <li><strong>Prijzen zoals vermeld.</strong> In de valuta van de aanbieder, met of zonder btw zoals daar staat. Bij "per maand bij jaarbetaling" betaal je per jaar vooruit.</li>
+        <li><strong>Prijzen in euro.</strong> Met of zonder btw zoals de aanbieder het vermeldt. Konden we op een Nederlandse prijspagina geen europrijs nalezen, dan noemen we alleen het pakket; het bedrag zie je dan op de prijspagina bij de bron. Bij "per maand bij jaarbetaling" betaal je per jaar vooruit.</li>
       </ul>
       <h2 id="alle-tools">Alle tools in de keuzehulp</h2>
-      <p>Gecontroleerd op {GCN}. Klopt er iets niet meer? Mail naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>.</p>
+      <p>Gecontroleerd op {GCN}; de prijzen hebben we op 26 oktober 2026 opnieuw nagelezen. Klopt er iets niet meer? Mail naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>.</p>
       <div class="tbl" role="region" aria-labelledby="alle-tools" tabindex="0">
         <table>
           <thead><tr><th scope="col">Tool</th><th scope="col">Geschikt voor</th><th scope="col">Gratis versie</th><th scope="col">Betaald vanaf</th><th scope="col">Gegevens</th><th scope="col">Instap</th><th scope="col">Bron</th></tr></thead>

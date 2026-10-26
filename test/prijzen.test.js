@@ -24,7 +24,7 @@
 // R4 og:image: hoogstens één property="og:image" per pagina (og:image:width e.d. tellen niet).
 //
 // BEKEND: overtredingen die al in de build stonden toen deze test kwam (26-10, op 45151e3). Ze staan hier expliciet zodat de
-// suite groen blijft, maar elke nieuwe overtreding faalt (R1: 79 bedragen/woorden op 18 pagina's; R2: 2 zinnen op /ai-website-maken/).
+// suite groen blijft, maar elke nieuwe overtreding faalt (R1: 79 bedragen/woorden op 18 pagina's; R2: geen).
 // Is een bekend item opgelost, dan meldt de test dat als diagnostic; haal het dan uit de lijst.
 // Niet stilletjes aanvullen: een nieuw item vraagt een OK van Moneymaker.
 import { test } from 'node:test';
@@ -138,7 +138,6 @@ const BEKEND_VALUTA = {
   '/vergelijken/zapier-vs-make-vs-n8n/': ['$19,99'],
 };
 const BEKEND_VOLGORDE = {
-  '/ai-website-maken/': ['Bij Hostinger Premium betaal je €95,52 voor de eerste 48 maanden.', 'Bij JouwWeb Pro is het eerste jaar met de actie €59,88 (12 × €4,99) en daarna €120 per jaar'],
 };
 
 execSync('python3 scripts/build.py', { cwd: ROOT });

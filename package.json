@@ -1,2 +1,2 @@
 { "name": "toolmatch-site", "version": "1.0.0", "private": true, "type": "module",
-  "scripts": { "build": "python3 scripts/build.py", "test": "node --test test/" } }
+  "scripts": { "build": "python3 scripts/build.py", "test": "node --test --test-concurrency=1 test/" } }

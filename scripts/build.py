@@ -106,6 +106,7 @@ CATS=[
 ('Automatisering (no-code)','<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>','Losse apps aan elkaar koppelen zodat terugkerend werk vanzelf gaat, zonder te programmeren. Kijk goed hoe de kosten meegroeien met het aantal taken.',[('/automatiseren-zonder-code/','apps koppelen zonder code')],''),
 ('Chatbot op je website','<circle cx="12" cy="12" r="9"/><path d="M8 10h.01M12 10h.01M16 10h.01"/><path d="M8 15c1.2 1 2.5 1.5 4 1.5s2.8-.5 4-1.5"/>','Een chatbot die vragen van klanten beantwoordt, ook buiten kantoortijd. Regel wel dat een klant altijd een mens kan bereiken.',[('/ai-chatbot-website/','een chatbot op je website')],''),
 ('Vertalen','<path d="M4 5h8M8 3v2M5 11c2-1 4-3.5 5-6M6 7c1 2 3 3.5 5 4"/><path d="m12 21 4.5-10 4.5 10M13.5 18h6"/>','Mails, teksten en documenten vertalen met AI. Laat een belangrijke vertaling altijd nalezen door iemand die de taal goed kent.',[('/ai-vertalen/','teksten en documenten vertalen')],''),
+('Website &amp; bezoekers','<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>','Een website maken met AI, en zien welke bedrijven hem bezoeken. Let op de verlengprijs en op wat de AVG van je vraagt.',[('/ai-website-maken/','een website maken met AI'),('/websitebezoekers-herkennen/','websitebezoekers herkennen')],''),
 ('Data &amp; analyse','<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>','Je cijfers laten analyseren met AI of in een dashboard zetten, zonder dat je data-analist bent.',[('/ai-data-analyse/','je cijfers in een dashboard')],''),
 ]
 METH=[
@@ -297,7 +298,9 @@ open('privacy/index.html','w').write(sub('/privacy/','Privacy en cookies | ToolM
 open('over/index.html','w').write(sub('/over/','Over ToolMatch: wie we zijn en hoe we werken','ToolMatch helpt ondernemers de juiste (AI-)tools kiezen. Lees hoe Redactie ToolMatch werkt: onafhankelijk, met echte prijzen en privacy als criterium.','Over ToolMatch','Over ToolMatch','ToolMatch helpt ondernemers de juiste (AI-)tools te kiezen, zonder geld en tijd te verspillen aan abonnementen die niet bij hun werk passen.',OVER))
 exec(open('scripts/pages.py').read())
 exec(open('scripts/spokes.py').read())
+exec(open('scripts/website_leads.py').read())
 URLS+=SPOKES
 # Pagina's met schema-update 26-10: Article image (vergelijken/gids) en BreadcrumbList (losse pagina's).
 LASTMOD={u:'2026-10-26' for u in URLS if u in BC_LOSSE or (u.startswith(('/vergelijken/','/gids/')) and u not in ('/vergelijken/','/gids/'))}
+LASTMOD.update(WL_LASTMOD)
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')

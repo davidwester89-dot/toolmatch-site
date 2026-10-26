@@ -4,7 +4,14 @@ os.chdir(ROOT)
 D='https://toolmatch.nl'
 CSP='''<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; base-uri 'self'; form-action 'self'; object-src 'none'">'''
 MARK='<svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#0f6e6e"/><path d="M11 21.5l6 6 12-13" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M31 4.5l1.3 3.2 3.2 1.3-3.2 1.3L31 13.5l-1.3-3.2L26.5 9l3.2-1.3z" fill="#f0a83c"/></svg>'
+# BreadcrumbList voor de losse pagina's (Home › pagina), gelijk aan het zichtbare kruimelpad.
+BC_LOSSE={'/over/':'Over ToolMatch','/partnerlinks/':'Partnerlinks','/contact/':'Contact','/disclaimer/':'Disclaimer','/privacy/':'Privacy en cookies'}
+def bc_losse(path):
+    if path not in BC_LOSSE: return ''
+    ld={"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":D+"/"},{"@type":"ListItem","position":2,"name":BC_LOSSE[path],"item":D+path}]}
+    return '<script type="application/ld+json">\n'+json.dumps(ld,ensure_ascii=False,indent=1)+'\n</script>\n'
 def head(path,title,desc,ogt,extra=''):
+    extra=bc_losse(path)+extra
     return f'''<!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -291,4 +298,6 @@ open('over/index.html','w').write(sub('/over/','Over ToolMatch: wie we zijn en h
 exec(open('scripts/pages.py').read())
 exec(open('scripts/spokes.py').read())
 URLS+=SPOKES
-write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{GC}</lastmod></url>\n' for u in URLS)+'</urlset>\n')
+# Pagina's met schema-update 26-10: Article image (vergelijken/gids) en BreadcrumbList (losse pagina's).
+LASTMOD={u:'2026-10-26' for u in URLS if u in BC_LOSSE or (u.startswith(('/vergelijken/','/gids/')) and u not in ('/vergelijken/','/gids/'))}
+write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')

@@ -9,6 +9,8 @@ def alfa(paren): return sorted(paren,key=lambda p:_ORDE.index(T[p[0]]['naam']))
 def L(href,txt): return f'<a href="{href}">{txt}</a>'
 def X(href,txt): return f'<a href="{E(href)}" rel="noopener">{txt}</a>'
 PUB='2026-10-20'
+# Schema-update 26-10 (image in Article = de og:image van de pagina): dateModified en sitemap-lastmod van de gewijzigde pagina's.
+SCHEMA_UPD='2026-10-26'
 ORG={"@id":D+"/#organization"}
 def ldscript(graph): return '<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":graph},ensure_ascii=False,indent=1)+'\n</script>\n'
 def crumbs_ld(items): return {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":D+u} for i,(n,u) in enumerate(items)]}
@@ -440,7 +442,7 @@ for v in VS:
 '''
     body=v['intro']+tbl+''.join(f'      <h2>{h}</h2>\n{b}' for h,b in v['secties'])+faq_html(v['faq'])+bronnen_html(v['src'])+byline()
     crumb=f'<a href="/vergelijken/">Vergelijken</a> › {v["crumb"]}'
-    graph=[{"@type":"Article","@id":D+v['slug']+"#artikel","headline":v['h1'],"description":v['desc'],"inLanguage":"nl-NL","url":D+v['slug'],"mainEntityOfPage":D+v['slug'],"datePublished":PUB,"dateModified":GC,"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+    graph=[{"@type":"Article","@id":D+v['slug']+"#artikel","headline":v['h1'],"description":v['desc'],"inLanguage":"nl-NL","url":D+v['slug'],"mainEntityOfPage":D+v['slug'],"datePublished":PUB,"dateModified":SCHEMA_UPD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),('Vergelijken','/vergelijken/'),(v['crumb'],v['slug'])]),faq_ld(v['slug'],v['faq'])]
     zet(v['slug'],v['title'],v['desc'],crumb,v['h1'],v['lead'],body,graph)
 
@@ -624,7 +626,7 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
 for g in GIDS:
     body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}</p>\n'
     crumb=f'<a href="/gids/">Gidsen</a> › {g["crumb"]}'
-    graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":GC,"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+    graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":SCHEMA_UPD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),('Gidsen','/gids/'),(g['crumb'],g['slug'])]),faq_ld(g['slug'],g['faq'])]
     zet(g['slug'],g['title'],g['desc'],crumb,g['h1'],g['lead'],body,graph)
 
@@ -694,7 +696,7 @@ g=dict(slug='/gids/prompts-voor-ondernemers/',title='AI-prompts voor ondernemers
  crumb='Prompts voor ondernemers',h1='AI-prompts voor ondernemers: voorbeelden',
  lead='Prompts die je meteen kunt gebruiken voor mail, social media, meetings en je website. Vul de plekken tussen [haken] in en controleer altijd wat eruit komt.')
 body=PR+faq_html(PF)+f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}</p>\n'
-graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":GC,"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":SCHEMA_UPD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
   crumbs_ld([('Home','/'),('Gidsen','/gids/'),(g['crumb'],g['slug'])]),faq_ld(g['slug'],PF)]
 zet(g['slug'],g['title'],g['desc'],f'<a href="/gids/">Gidsen</a> › {g["crumb"]}',g['h1'],g['lead'],body,graph)
 GIDS.append(dict(slug=g['slug'],h1=g['h1'],lead=g['lead']))

@@ -631,7 +631,7 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
 
 for g in GIDS:
     upd=VALUTA_UPD.get(g['slug'])
-    body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+(byline(g['slug']) if upd else f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}</p>\n')
+    body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+(f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}, bijgewerkt op 27 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n' if upd else f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}</p>\n')
     crumb=f'<a href="/gids/">Gidsen</a> › {g["crumb"]}'
     graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":upd or SCHEMA_UPD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),('Gidsen','/gids/'),(g['crumb'],g['slug'])]),faq_ld(g['slug'],g['faq'])]

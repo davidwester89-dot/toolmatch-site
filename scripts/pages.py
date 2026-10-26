@@ -74,11 +74,11 @@ KH=f'''    <div class="kh-wrap">
 {rows}          </tbody>
         </table>
       </div>
-{KH_FAQ_HTML}      <p class="note">Redactie ToolMatch · gecontroleerd op {GCN}. De keuzehulp is een hulpmiddel, geen persoonlijk advies.</p>
+{KH_FAQ_HTML}      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 27 oktober 2026. De keuzehulp is een hulpmiddel, geen persoonlijk advies.</p>
     </div>'''
 KH_LD='<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":[
  {"@type":"WebApplication","name":"Keuzehulp (AI-)tools voor ondernemers","url":D+"/keuzehulp/","applicationCategory":"BusinessApplication","operatingSystem":"Web","inLanguage":"nl-NL","isAccessibleForFree":True,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"publisher":{"@id":D+"/#organization"}},
- {"@type":"WebPage","@id":D+"/keuzehulp/","url":D+"/keuzehulp/","name":"Keuzehulp: welke (AI-)tool past bij jou?","inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":{"@id":D+"/#organization"}},
+ {"@type":"WebPage","@id":D+"/keuzehulp/","url":D+"/keuzehulp/","name":"Keuzehulp: welke (AI-)tool past bij jou?","inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":{"@id":D+"/#organization"},"dateModified":"2026-10-27"},
  {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":D+"/"},{"@type":"ListItem","position":2,"name":"Keuzehulp","item":D+"/keuzehulp/"}]},
  {"@type":"FAQPage","@id":D+"/keuzehulp/#faq","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in KH_FAQ]}]},ensure_ascii=False,indent=1)+'\n</script>\n'
 write('keuzehulp/index.html',page('/keuzehulp/','Keuzehulp: welke (AI-)tool past bij jou? | ToolMatch',

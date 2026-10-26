@@ -28,7 +28,9 @@ def bronnen_html(srcs):
     for s in srcs:
         if s not in seen: seen.append(s)
     return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n.replace(' (NL-pagina van de aanbieder)','')))}, {('NL-pagina van de aanbieder, bekeken op '+BRON_DATUM[u]) if u in BRON_DATUM else 'bekeken op '+GCN}</li>\n' for n,u in seen)+'      </ul>\n'
-def byline(): return f'      <p class="note">Redactie ToolMatch · gecontroleerd op {GCN}. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
+def byline(slug=None):
+    if slug in VALUTA_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 27 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
+    return f'      <p class="note">Redactie ToolMatch · gecontroleerd op {GCN}. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
 JN=lambda v: 'Ja' if v is True else ('Nee' if v is False else 'Niet gecontroleerd')
 EUL={'ja':'In de EU (volgens de aanbieder)','deels':'Vooral in de EU (volgens de aanbieder)'}
 DPA={'ja':'Ja (volgens de aanbieder)'}
@@ -303,7 +305,7 @@ for c in CAT:
     body+='      <h2 id="tools">De tools</h2>\n'+met_noot('      <div class="results">\n'+''.join(kaart(T[i],p) for i,p in c['tools'])+'      </div>\n')
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
     body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
-    body+=faq_html(c['faq'])+bronnen_html(srcs)+byline()
+    body+=faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
     graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":VALUTA_UPD.get(c['slug'],GC)},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
       crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
@@ -426,7 +428,7 @@ vs('/vergelijken/zapier-vs-make-vs-n8n/','Zapier vs Make vs n8n: welke past bij 
         <li>Lees ook {L('/automatiseren-zonder-code/','wat je allemaal kunt automatiseren')}, en meer over {L('/gids/ai-veilig-gebruiken/','EU-hosting en je gegevens')}.</li>
       </ul>
 ''')],
- [('Wat is goedkoper: Zapier of Make?','Dat konden we niet in euro vergelijken. Volgens Zapier hangt een prijs in euro af van de wisselkoers op het moment van betalen, en de prijs van Make konden we op de prijspagina niet controleren. Een taak en een credit zijn bovendien niet hetzelfde, dus reken met je eigen automatiseringen.'),
+ [('Wat is goedkoper: Zapier of Make?','Dat hangt af van hoeveel taken je nodig hebt. Het bedrag van Zapier Professional (750 taken) zie je op de prijspagina van Zapier, dat van Make op de prijspagina van Make. Een taak bij Zapier en een credit bij Make zijn niet hetzelfde, dus reken met je eigen automatiseringen.'),
   ('Is n8n gratis?','De Community Edition kun je volgens n8n zelf hosten. De versie die n8n voor je host, begint bij Starter: €20 per maand bij jaarbetaling.'),
   ('Waar staan mijn gegevens?','Bij n8n Cloud volgens de aanbieder in de EU (Frankfurt). Bij Zapier en Make hebben we de locatie niet gecontroleerd.')],
  [tuple(b) for i in ('zapier','make','n8n') for b in T[i]['bronnen']])
@@ -444,7 +446,7 @@ for v in VS:
         </table>
       </div>
 '''
-    body=v['intro']+tbl+''.join(f'      <h2>{h}</h2>\n{b}' for h,b in v['secties'])+faq_html(v['faq'])+bronnen_html(v['src'])+byline()
+    body=v['intro']+tbl+''.join(f'      <h2>{h}</h2>\n{b}' for h,b in v['secties'])+faq_html(v['faq'])+bronnen_html(v['src'])+byline(v['slug'])
     crumb=f'<a href="/vergelijken/">Vergelijken</a> › {v["crumb"]}'
     graph=[{"@type":"Article","@id":D+v['slug']+"#artikel","headline":v['h1'],"description":v['desc'],"inLanguage":"nl-NL","url":D+v['slug'],"mainEntityOfPage":D+v['slug'],"datePublished":PUB,"dateModified":VALUTA_UPD.get(v['slug'],SCHEMA_UPD),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),('Vergelijken','/vergelijken/'),(v['crumb'],v['slug'])]),faq_ld(v['slug'],v['faq'])]
@@ -629,8 +631,7 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
 
 for g in GIDS:
     upd=VALUTA_UPD.get(g['slug'])
-    noot=f'gepubliceerd op {GCN}, bijgewerkt op 27 oktober 2026' if upd else f'gepubliceerd op {GCN}, gecontroleerd op {GCN}'
-    body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+f'      <p class="note">Redactie ToolMatch · {noot}</p>\n'
+    body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+(byline(g['slug']) if upd else f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}</p>\n')
     crumb=f'<a href="/gids/">Gidsen</a> › {g["crumb"]}'
     graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":upd or SCHEMA_UPD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),('Gidsen','/gids/'),(g['crumb'],g['slug'])]),faq_ld(g['slug'],g['faq'])]
@@ -664,7 +665,7 @@ body=c['intro']+'      <h2 id="overzicht">In het kort</h2>\n      <p>De tools st
 body+='      <h2 id="tools">De tools</h2>\n'+met_noot('      <div class="results">\n'+''.join(kaart(T[i],p) for i,p in c['tools'])+'      </div>\n')
 body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
 body+=f'      <p>Schrijf je de tekst eerst zelf? Bekijk dan de {L("/ai-tekst-schrijven/","AI-tools voor Nederlandse teksten")}.</p>\n'
-body+=faq_html(c['faq'])+bronnen_html(srcs)+byline()
+body+=faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
 graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":VALUTA_UPD.get(c['slug'],GC)},
   {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
   crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]

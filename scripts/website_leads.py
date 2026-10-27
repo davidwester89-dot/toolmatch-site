@@ -1,12 +1,20 @@
 # Nieuwe pagina's 27-10-2026: /ai-website-maken/ en /websitebezoekers-herkennen/. Wordt uitgevoerd door build.py (na spokes.py).
-# Bronnen bekeken op 26-10-2026. Aanbieders op alfabetische volgorde; geen partnerlinks (gewone links met rel="noopener").
+# Bronnen bekeken op 26-10-2026. Aanbieders op alfabetische volgorde. Knoppen: partnerlink uit PARTNERLINKS_PAGINA (js/lib/partnerlinks.js)
+# met rel="sponsored nofollow noopener" en de partnerzin eronder; anders een gewone link (rel="noopener"). Bronnen blijven gewone links.
 WL_PUB='2026-10-27'
+# Inhoudelijk gewijzigd na publicatie (partnerlink Hostinger): dateModified, lastmod en zichtbare bijwerkdatum.
+WL_UPD={'/ai-website-maken/':'2026-10-28'}
 WL_CHECK='26 oktober 2026'
-WL_LASTMOD={'/ai-website-maken/':WL_PUB,'/websitebezoekers-herkennen/':WL_PUB,'/':WL_PUB}
+WL_LASTMOD={'/ai-website-maken/':WL_UPD.get('/ai-website-maken/',WL_PUB),'/websitebezoekers-herkennen/':WL_UPD.get('/websitebezoekers-herkennen/',WL_PUB),'/':WL_PUB}
+def wl_datum(iso): y,m,d=iso.split('-'); return f'{int(d)} {MAANDEN[int(m)-1]} {y}'
 WL_EXTRA='<meta name="author" content="Redactie ToolMatch">\n<meta property="og:image:type" content="image/png">\n'
 def wl_bronnen(srcs):
     return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n))}, bekeken op {WL_CHECK}</li>\n' for n,u in srcs)+'      </ul>\n'
+PLP=json.loads(subprocess.check_output(['node','--input-type=module','-e',
+ "import {PARTNERLINKS_PAGINA} from './js/lib/partnerlinks.js'; console.log(JSON.stringify(PARTNERLINKS_PAGINA))"]))
 def wl_knop(vid,naam,url):
+    p=PLP.get(vid)
+    if p: return met_noot(f'<p class="go"><a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{vid}" data-cta="partner" aria-label="Naar de site van {E(naam)} (opent in een nieuw tabblad)">Naar de site van {E(naam)}</a></p>\n').rstrip('\n')
     return f'<p class="go"><a class="btn ghost" href="{E(url)}" rel="noopener" target="_blank" data-vendor="{vid}" data-cta="outbound" aria-label="Naar de site van {E(naam)} (opent in een nieuw tabblad)">Naar de site van {E(naam)}</a></p>'
 def wl_tabel(label,cols,rows):
     th=''.join(f'<th scope="col">{E(c)}</th>' for c in cols)
@@ -20,8 +28,8 @@ def wl_tabel(label,cols,rows):
       </div>
 '''
 def wl_zet(slug,title,desc,crumb,h1,lead,body,faq,srcs):
-    body=body+faq_html(faq)+wl_bronnen(srcs)+f'      <p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026, bronnen bekeken op {WL_CHECK}. Prijzen zoals de aanbieder ze vermeldt.</p>\n'
-    graph=[{"@type":"Article","@id":D+slug+"#artikel","headline":h1,"description":desc,"inLanguage":"nl-NL","url":D+slug,"mainEntityOfPage":D+slug,"datePublished":WL_PUB,"dateModified":WL_PUB,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+    body=body+faq_html(faq)+wl_bronnen(srcs)+f'      <p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026{(", bijgewerkt op "+wl_datum(WL_UPD[slug])) if slug in WL_UPD else ""}, bronnen bekeken op {WL_CHECK}. Prijzen zoals de aanbieder ze vermeldt.</p>\n'
+    graph=[{"@type":"Article","@id":D+slug+"#artikel","headline":h1,"description":desc,"inLanguage":"nl-NL","url":D+slug,"mainEntityOfPage":D+slug,"datePublished":WL_PUB,"dateModified":WL_UPD.get(slug,WL_PUB),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),(crumb,slug)]),faq_ld(slug,faq)]
     write(slug.strip('/')+'/index.html',page(slug,title,desc,crumb,h1,lead,body,wide=True,extra=ldscript(graph)+WL_EXTRA))
     SPOKES.append(slug)

@@ -2,6 +2,13 @@
 // Pas invullen na goedkeuring en akkoord. De match (match.js) leest dit bestand NOOIT: geen invloed op score of volgorde.
 export const PARTNERLINKS = {};
 
+// Goedgekeurde partnerlinks voor aanbieders die geen tool in tools.js zijn (alleen knoppen op inhoudspagina's, bv. /ai-website-maken/).
+// Ook dit leest de match NOOIT; de volgorde op die pagina's blijft alfabetisch.
+// Hostinger: Daisycon-campagne 16780, goedgekeurd op 27-10-2026.
+export const PARTNERLINKS_PAGINA = {
+  hostinger: 'https://jf79.net/c/?si=16780&li=1722914&wi=440699&ws=&dl=nl%2Fwebsite-maken-met-ai',
+};
+
 /** Uitgaande link: partnerlink (rel sponsored nofollow noopener, met label) als die er is, anders de officiële site. */
 export function uitgaand(tool, partnerlinks = PARTNERLINKS) {
   const pl = partnerlinks[tool.id];

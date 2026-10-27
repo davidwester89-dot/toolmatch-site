@@ -124,10 +124,10 @@ write('partnerlinks/index.html',page('/partnerlinks/','Partnerlinks: zo verdient
       <h2>Geen invloed op de volgorde</h2>
       <p>De keuzehulp en onze vergelijkingen rekenen alleen met wat bij jouw situatie past: je doel, budget, team, privacy-eisen en techniek. De partnerlinks staan in een apart bestand dat de berekening niet gebruikt. Een aanbieder kan geen betere plek kopen.</p>
       <h2>Stand van zaken</h2>
-      <p>Op dit moment staan er nog geen partnerlinks op ToolMatch. Alle links naar aanbieders zijn gewone links.</p>
+      <p>Sommige knoppen naar aanbieders zijn partnerlinks; direct daaronder staat dan de zin dat dat de volgorde nooit verandert. Alle andere links naar aanbieders zijn gewone links naar hun eigen site.</p>
       <h2>Vragen?</h2>
       <p>Mail naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>.</p>
-      <p class="note">Redactie ToolMatch · bijgewerkt op {GCN}</p>'''))
+      <p class="note">Redactie ToolMatch · bijgewerkt op 28 oktober 2026</p>'''))
 
 # ---------- 404 ----------
 write('404.html',page('/404.html','Pagina niet gevonden | ToolMatch','Deze pagina bestaat niet (meer). Ga naar de homepage of start de keuzehulp.','Niet gevonden','Pagina niet gevonden','Deze pagina bestaat niet (meer).','''      <p><a class="btn" href="/keuzehulp/">Start de keuzehulp</a></p>

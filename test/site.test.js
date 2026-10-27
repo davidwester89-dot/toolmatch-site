@@ -77,6 +77,21 @@ test('externe links: noopener; partnerlinks nooit zonder sponsored', () => {
   }
 });
 
+test('partnerlinks: rel exact "sponsored nofollow noopener" en direct daarna p.pnoot', () => {
+  let n = 0;
+  for (const f of pages) {
+    const h = read(f);
+    for (const m of h.matchAll(/<a\s[^>]*rel="([^"]*\bsponsored\b[^"]*)"[^>]*>/g)) {
+      n++;
+      assert.equal(m[1], 'sponsored nofollow noopener', f + ' ' + m[0]);
+      const rest = h.slice(h.indexOf('</a>', m.index) + 4);
+      const volgend = rest.match(/<(?!\/)[a-z][^>]*>/i);
+      assert.ok(volgend && /^<p\s+class="pnoot">$/.test(volgend[0]), f + ': na partnerlink volgt ' + (volgend && volgend[0]));
+    }
+  }
+  assert.ok(n >= 1, 'geen enkele partnerlink gevonden');
+});
+
 test('sitemap en robots: alle indexeerbare pagina’s, geen 404', () => {
   const sm = read(join(ROOT, 'sitemap.xml'));
   for (const f of pages) if (!f.endsWith('404.html')) assert.ok(sm.includes(`<loc>https://toolmatch.nl${url(f)}</loc>`), f);

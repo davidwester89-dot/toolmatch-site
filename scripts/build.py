@@ -271,6 +271,10 @@ PRIV='''      <h2 id="cookies">Cookies en statistieken</h2>
       <h2>Geen account, geen nieuwsbrief</h2>
       <p>Je hoeft geen account aan te maken en er is geen nieuwsbrief. Je antwoorden in de keuzehulp blijven in je browser en staan alleen in de adresbalk; die tekst sturen we nooit naar Google.</p>
 
+      <h2>Links naar aanbieders</h2>
+      <p>Klik je door naar een aanbieder of neem je daar een abonnement, dan geldt de privacyverklaring van die aanbieder.</p>
+      <p>Partnerlinks worden bij de knoppen vermeld. Klik je erop, dan ga je via een affiliatenetwerk (Daisycon) naar de aanbieder. Dat netwerk plaatst op zijn eigen domein een cookie of klik-ID, om vast te leggen dat je via ToolMatch kwam. Sluit je iets af, dan kunnen wij daardoor een vergoeding krijgen. Het netwerk is zelf verantwoordelijk voor die gegevens; zie het privacybeleid van <a href="https://daisycon.com/en/legal-information/privacy-policy/" rel="noopener">Daisycon</a>.</p>
+
       <h2>Als je ons mailt</h2>
       <p>Mail je naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>, dan gebruiken we je mailadres en je bericht alleen om je te antwoorden. We delen ze met niemand.</p>
 
@@ -280,7 +284,7 @@ PRIV='''      <h2 id="cookies">Cookies en statistieken</h2>
       <h2>Je rechten</h2>
       <p>Je mag vragen welke gegevens we van je hebben en vragen om ze te laten verwijderen. Mail daarvoor naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>. Ben je het niet eens met hoe we met je gegevens omgaan, dan kun je een klacht indienen bij de <a href="https://www.autoriteitpersoonsgegevens.nl/" rel="noopener">Autoriteit Persoonsgegevens</a>.</p>
 
-      <p class="note">Redactie ToolMatch · bijgewerkt op 20 oktober 2026</p>'''
+      <p class="note">Redactie ToolMatch · bijgewerkt op 28 oktober 2026</p>'''
 OVER='''      <h2>Wie we zijn</h2>
       <p>ToolMatch wordt gemaakt door Redactie ToolMatch. We zoeken uit wat tools echt doen, wat ze per maand kosten en hoe ze met je gegevens omgaan. Dat zetten we in gewone taal op een rij, voor ondernemers die zelf hun tools kiezen: van zzp'ers tot kleine teams.</p>
 
@@ -304,4 +308,5 @@ URLS+=SPOKES
 LASTMOD={u:'2026-10-26' for u in URLS if u in BC_LOSSE or (u.startswith(('/vergelijken/','/gids/')) and u not in ('/vergelijken/','/gids/'))}
 LASTMOD.update(WL_LASTMOD)
 LASTMOD.update(VALUTA_UPD); LASTMOD['/keuzehulp/']='2026-10-27'
+LASTMOD['/partnerlinks/']='2026-10-28'; LASTMOD['/privacy/']='2026-10-28'  # partnerlink Hostinger: stand van zaken + privacysectie
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')

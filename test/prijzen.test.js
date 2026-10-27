@@ -27,9 +27,9 @@
 // suite groen blijft, maar elke nieuwe overtreding faalt (R1: 79 bedragen/woorden op 18 pagina's; R2: geen).
 // Is een bekend item opgelost, dan meldt de test dat als diagnostic; haal het dan uit de lijst.
 // Niet stilletjes aanvullen: een nieuw item vraagt een OK van Moneymaker.
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync, statSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -54,8 +54,10 @@ const FIXTURE_HTML = `<!doctype html>
 </body>
 </html>
 `;
-const FIXTURE = join(mkdtempSync(join(tmpdir(), 'tm-prijzen-')), 'prijzen-fout.html');
+const FIXTURE_DIR = mkdtempSync(join(tmpdir(), 'tm-prijzen-'));
+const FIXTURE = join(FIXTURE_DIR, 'prijzen-fout.html');
 writeFileSync(FIXTURE, FIXTURE_HTML);
+after(() => rmSync(FIXTURE_DIR, { recursive: true, force: true }));
 
 const ENT = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', euro: '€', dollar: '$', times: '×', hellip: '…', ndash: '–', mdash: '—', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '“' };
 const decode = (s) => s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) =>

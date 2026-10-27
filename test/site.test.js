@@ -34,11 +34,14 @@ test('koppen in de juiste volgorde (geen sprong van h1 naar h3)', () => {
   }
 });
 
+// Persoonsnamen die nergens op de site mogen staan. Base64, zodat de namen zelf niet in de repo staan.
+const NAMEN = new RegExp(['RGF2ZQ==', 'V2VzdFxi'].map((b) => Buffer.from(b, 'base64').toString()).join('|'));
+
 test('huisregels: geen concept, geen gmail, geen persoonsnamen; footer met rechten en info@', () => {
   for (const f of pages) {
     const h = read(f);
     assert.ok(!/concept/i.test(h), f + ' concept'); assert.ok(!/@gmail|gmail\.com/i.test(h), f + ' gmail-adres');
-    assert.ok(!/Dave|West\b/.test(h), f + ' naam');
+    assert.ok(!NAMEN.test(h), f + ' persoonsnaam');
     assert.ok(h.includes('alle rechten voorbehouden') && h.includes('mailto:info@toolmatch.nl'), f + ' footer');
     for (const p of ['/contact/', '/disclaimer/', '/partnerlinks/', '/privacy/', '/keuzehulp/']) assert.ok(h.includes(`href="${p}"`), f + ' ' + p);
   }
@@ -76,7 +79,7 @@ test('verificatiebestand, IndexNow-sleutel en CNAME blijven staan', () => {
   assert.equal(read(join(ROOT, 'CNAME')).trim(), 'toolmatch.nl');
 });
 
-test('kopteksten van Dave blijven staan', () => {
+test('kopteksten van de eigenaar blijven staan', () => {
   const h = read(join(ROOT, 'index.html'));
   assert.ok(h.includes('<h2 id="h-zo">Zo vergelijken wij</h2>'));
   assert.ok(h.includes('5 vragen voordat je een AI-tool kiest'));

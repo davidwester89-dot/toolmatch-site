@@ -43,3 +43,30 @@ test('artefact: geen repo-bestanden (test, scripts, README, package.json, node_m
     assert.ok(!/\.(py|md|mjs)$/.test(f) && !/\.test\.js$/.test(f), f + ' hoort niet in het artefact');
   }
 });
+
+test('artefact: elke lokale href/src/srcset/url() uit html en css bestaat in het artefact', () => {
+  const missing = [];
+  for (const f of files.filter((x) => /\.(html|css)$/.test(x))) {
+    const t = readFileSync(join(OUT, f), 'utf8');
+    const refs = [...t.matchAll(/(?:href|src)="([^"]+)"/g)].map((m) => m[1])
+      .concat([...t.matchAll(/srcset="([^"]+)"/g)].flatMap((m) => m[1].split(',').map((s) => s.trim().split(/\s+/)[0])))
+      .concat([...t.matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)/g)].map((m) => m[1]))
+      .concat([...t.matchAll(/<meta (?:property|name)="(?:og:image|twitter:image)" content="([^"]+)"/g)].map((m) => m[1]));
+    for (const r of refs) {
+      if (/^(data:|mailto:|tel:|#|javascript:)/.test(r)) continue;
+      const u = new URL(r, 'https://toolmatch.nl/' + f);
+      if (u.hostname !== 'toolmatch.nl') continue;
+      let p = decodeURIComponent(u.pathname).slice(1);
+      if (p === '' || p.endsWith('/')) p += 'index.html';
+      if (!files.includes(p)) missing.push(`${f} -> ${u.pathname}`);
+    }
+  }
+  assert.deepEqual(missing, [], 'verwijst naar bestand dat niet in het artefact staat (assemble.py-allowlist uitbreiden?)');
+});
+
+test('artefact: elk getrackt bestand is óf gepubliceerd óf bewust uitgesloten', () => {
+  const UIT = /^(test|scripts|\.github)\/|^(README\.md|package\.json|package-lock\.json|LICENSE|\.gitignore|\.nojekyll)$/;
+  const tracked = execFileSync('git', ['ls-files'], { cwd: ROOT, encoding: 'utf8' }).split('\n').filter(Boolean);
+  const vergeten = tracked.filter((f) => !UIT.test(f) && !files.includes(f));
+  assert.deepEqual(vergeten, [], 'getrackt bestand valt stil buiten het artefact');
+});

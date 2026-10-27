@@ -145,7 +145,7 @@ const BEKEND_VOLGORDE = {
 };
 
 execSync('python3 scripts/build.py', { cwd: ROOT });
-const walk = (d) => readdirSync(d).flatMap((f) => { const p = join(d, f); if (/^(\.git|node_modules|scripts|test)$/.test(f)) return []; return statSync(p).isDirectory() ? walk(p) : [p]; });
+const walk = (d) => readdirSync(d).flatMap((f) => { const p = join(d, f); if (/^(\.git|node_modules|scripts|test|_site)$/.test(f)) return []; return statSync(p).isDirectory() ? walk(p) : [p]; });
 const pages = walk(ROOT).filter((f) => f.endsWith('.html') && !/google[0-9a-f]+\.html$/.test(f));
 const read = (f) => readFileSync(f, 'utf8');
 const url = (f) => '/' + f.slice(ROOT.length).replace(/index\.html$/, '').replace(/^\//, '');

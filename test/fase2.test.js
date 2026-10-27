@@ -14,7 +14,7 @@ const CATS = ['/ai-assistenten/', '/ai-tekst-schrijven/', '/ai-mail-en-offertes/
 const VS = ['/vergelijken/chatgpt-vs-copilot/', '/vergelijken/chatgpt-vs-gemini/', '/vergelijken/chatgpt-vs-claude/', '/vergelijken/zapier-vs-make-vs-n8n/'];
 const GIDS = ['/gids/ai-gebruiken-in-je-bedrijf/', '/gids/ai-veilig-gebruiken/', '/gids/ai-act-ondernemers/', '/gids/ai-beleid-opstellen/', '/gids/wat-kosten-ai-abonnementen/', '/gids/prompts-voor-ondernemers/'];
 const ALL = [...CATS, ...VS, ...GIDS, '/vergelijken/', '/gids/'];
-const walk = (d) => readdirSync(d).flatMap((f) => { const p = join(d, f); if (/^(\.git|node_modules|scripts|test)$/.test(f)) return []; return statSync(p).isDirectory() ? walk(p) : [p]; });
+const walk = (d) => readdirSync(d).flatMap((f) => { const p = join(d, f); if (/^(\.git|node_modules|scripts|test|_site)$/.test(f)) return []; return statSync(p).isDirectory() ? walk(p) : [p]; });
 const pages = walk(ROOT).filter((f) => f.endsWith('.html') && !/google[0-9a-f]+\.html$/.test(f));
 const ld = (h) => [...h.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].flatMap((m) => JSON.parse(m[1])['@graph'] || []);
 const strip = (s) => s.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim().toLowerCase();

@@ -6,7 +6,7 @@ import { join } from 'node:path';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 execSync('python3 scripts/build.py', { cwd: ROOT });
-const walk = (d) => readdirSync(d).flatMap((f) => { const p = join(d, f); if (/^(\.git|node_modules|scripts|test)$/.test(f)) return []; return statSync(p).isDirectory() ? walk(p) : [p]; });
+const walk = (d) => readdirSync(d).flatMap((f) => { const p = join(d, f); if (/^(\.git|node_modules|scripts|test|_site)$/.test(f)) return []; return statSync(p).isDirectory() ? walk(p) : [p]; });
 const pages = walk(ROOT).filter((f) => f.endsWith('.html') && !/google[0-9a-f]+\.html$/.test(f));
 const read = (f) => readFileSync(f, 'utf8');
 const url = (f) => '/' + f.slice(ROOT.length).replace(/index\.html$/, '').replace(/^\//, '');
@@ -36,12 +36,21 @@ test('koppen in de juiste volgorde (geen sprong van h1 naar h3)', () => {
 
 // Persoonsnamen die nergens op de site mogen staan. Base64, zodat de namen zelf niet in de repo staan.
 const NAMEN = new RegExp(['RGF2ZQ==', 'V2VzdFxi'].map((b) => Buffer.from(b, 'base64').toString()).join('|'));
+// Ook de achternaam en de gecombineerde schrijfwijze, hoofdletterongevoelig.
+// Achternaam alleen als heel woord (dus niet 'Westerse'); de gecombineerde schrijfwijze zonder woordgrens (vangt ook e-mail en handles).
+const [ACHTER, COMBI] = ['V2VzdGVy', 'ZGF2aWR3ZXN0ZXI='].map((b) => Buffer.from(b, 'base64').toString());
+const NAMEN_I = new RegExp(`\\b${ACHTER}\\b|${COMBI}`, 'i');
+
+test('namencheck: heel woord voor de achternaam, gecombineerde schrijfwijze overal', () => {
+  for (const w of ['Westerse', 'westerling']) assert.ok(!NAMEN_I.test(w), w + ' mag niet matchen');
+  for (const w of [ACHTER, ACHTER.toLowerCase(), COMBI + '89']) assert.ok(NAMEN_I.test(w), 'moet matchen');
+});
 
 test('huisregels: geen concept, geen gmail, geen persoonsnamen; footer met rechten en info@', () => {
   for (const f of pages) {
     const h = read(f);
     assert.ok(!/concept/i.test(h), f + ' concept'); assert.ok(!/@gmail|gmail\.com/i.test(h), f + ' gmail-adres');
-    assert.ok(!NAMEN.test(h), f + ' persoonsnaam');
+    assert.ok(!NAMEN.test(h) && !NAMEN_I.test(h), f + ' persoonsnaam');
     assert.ok(h.includes('alle rechten voorbehouden') && h.includes('mailto:info@toolmatch.nl'), f + ' footer');
     for (const p of ['/contact/', '/disclaimer/', '/partnerlinks/', '/privacy/', '/keuzehulp/']) assert.ok(h.includes(`href="${p}"`), f + ' ' + p);
   }

@@ -29,12 +29,33 @@
 // Niet stilletjes aanvullen: een nieuw item vraagt een OK van Moneymaker.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { join } from 'node:path';
+import { tmpdir } from 'node:os';
 
 const ROOT = new URL('..', import.meta.url).pathname;
-const FIXTURE = join(ROOT, 'test/fixtures/prijzen-fout.html');
+// Bewust foute fixture: staat als string in de test (niet als bestand in de repo, want de repo-root is de live site)
+// en wordt tijdens de test naar een tijdelijke map geschreven.
+const FIXTURE_HTML = `<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>Bewust foute fixture voor test/prijzen.test.js</title>
+<meta property="og:image" content="https://toolmatch.nl/og.png">
+<meta property="og:image" content="https://toolmatch.nl/og-2.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Offer","price":"9","priceCurrency":"USD","description":"Vanaf $9 per maand"}</script>
+</head>
+<body>
+<p>Pro kost $12 per maand, of 10 dollar bij jaarbetaling (USD).</p>
+<table><tr><td>Introprijs €1,99 per maand de eerste 12 maanden, daarna €9,99 per maand.</td></tr></table>
+<p>Bij Voorbeeld Pro geldt een actieprijs van €5 per maand; de standaardprijs is €10 per maand.</p>
+<p>Drie licenties kosten samen €40 (3 × €10).</p>
+</body>
+</html>
+`;
+const FIXTURE = join(mkdtempSync(join(tmpdir(), 'tm-prijzen-')), 'prijzen-fout.html');
+writeFileSync(FIXTURE, FIXTURE_HTML);
 
 const ENT = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', euro: '€', dollar: '$', times: '×', hellip: '…', ndash: '–', mdash: '—', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '“' };
 const decode = (s) => s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) =>

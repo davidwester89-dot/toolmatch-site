@@ -104,7 +104,7 @@ test('vendor buttons use the vendor name (vendor field, else product name)', asy
   const { TOOLS } = await import('../js/lib/tools.js');
   const byId = Object.fromEntries(TOOLS.map(t => [t.id, t]));
   let n = 0;
-  for (const f of readdirSync(ROOT, { recursive: true }).filter(f => f.endsWith('index.html') && !/^(node_modules|\.git)/.test(f))) {
+  for (const f of readdirSync(ROOT, { recursive: true }).filter(f => f.endsWith('index.html') && !/^(node_modules|\.git|_site)/.test(f))) {
     const h = readFileSync(join(ROOT, f), 'utf8');
     for (const m of h.matchAll(/data-vendor="([^"]+)"[^>]*>Naar de site van ([^<]+)</g)) {
       const t = byId[m[1]]; if (!t) continue;
@@ -120,7 +120,7 @@ test('external tool buttons carry an aria-label with vendor, product and new-tab
   const byId = Object.fromEntries(TOOLS.map(t => [t.id, t]));
   const ent = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
   let n = 0;
-  for (const f of readdirSync(ROOT, { recursive: true }).filter(f => f.endsWith('index.html') && !/^(node_modules|\.git)/.test(f))) {
+  for (const f of readdirSync(ROOT, { recursive: true }).filter(f => f.endsWith('index.html') && !/^(node_modules|\.git|_site)/.test(f))) {
     const h = readFileSync(join(ROOT, f), 'utf8');
     for (const m of h.matchAll(/<a [^>]*data-vendor="([^"]+)"[^>]*>/g)) {
       const t = byId[m[1]]; if (!t) continue;
@@ -140,6 +140,6 @@ test('external tool buttons carry an aria-label with vendor, product and new-tab
   assert.match(kh, /aria-label="\$\{esc\(knopLabel\(t\)\)\}"/);
   assert.match(kh, /target="_blank" aria-label="\$\{esc\(n2\)\} \(opent in een nieuw tabblad\)"/);
   const lbl = { hubspot: 'Naar de site van HubSpot CRM (opent in een nieuw tabblad)', zoho: 'Naar de site van Zoho CRM (opent in een nieuw tabblad)', googlecloudtranslate: 'Naar de site van Google Cloud Translation (opent in een nieuw tabblad)', powerbi: 'Naar de site van Microsoft (Power BI) (opent in een nieuw tabblad)' };
-  const all = readdirSync(ROOT, { recursive: true }).filter(f => f.endsWith('index.html') && !/^(node_modules|\.git)/.test(f)).map(f => readFileSync(join(ROOT, f), 'utf8')).join('');
+  const all = readdirSync(ROOT, { recursive: true }).filter(f => f.endsWith('index.html') && !/^(node_modules|\.git|_site)/.test(f)).map(f => readFileSync(join(ROOT, f), 'utf8')).join('');
   for (const [id, l] of Object.entries(lbl)) assert.ok(all.includes(`data-vendor="${id}"`) && all.includes(`aria-label="${l}"`), id);
 });

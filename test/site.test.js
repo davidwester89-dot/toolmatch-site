@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { join } from 'node:path';
+import { createHash } from 'node:crypto';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 execSync('python3 scripts/build.py', { cwd: ROOT });
@@ -42,6 +43,8 @@ const [ACHTER, COMBI] = ['V2VzdGVy', 'ZGF2aWR3ZXN0ZXI='].map((b) => Buffer.from(
 const NAMEN_I = new RegExp(`\\b${ACHTER}\\b|${COMBI}`, 'i');
 
 test('namencheck: heel woord voor de achternaam, gecombineerde schrijfwijze overal', () => {
+  const h = (s) => createHash('sha256').update(s).digest('hex').slice(0, 12);
+  assert.deepEqual([ACHTER, COMBI].map(h), ['bf620972f397', 'b3f7d0818bac'], 'base64 decodeert niet naar de bedoelde namen');
   for (const w of ['Westerse', 'westerling']) assert.ok(!NAMEN_I.test(w), w + ' mag niet matchen');
   for (const w of [ACHTER, ACHTER.toLowerCase(), COMBI + '89']) assert.ok(NAMEN_I.test(w), 'moet matchen');
 });

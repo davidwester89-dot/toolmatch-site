@@ -74,3 +74,26 @@ test('onbekende gratis versie telt niet als pluspunt en wordt niet als "geen" ge
   assert.ok(r.let_op.includes('Gratis versie niet gecontroleerd'));
   assert.ok(!r.plus.includes('Er is een gratis versie'));
 });
+
+test('budgetgetal (prijsMaand) = europrijs op de pagina, of expliciet intern gemarkeerd zonder bedrag in de tekst', () => {
+  const nl = (x) => { const [e, c] = x.toFixed(2).split('.'); return c === '00' ? [`€${e}`, `€${e},00`, `${e}€`] : [`€${e},${c}`, `${e},${c}€`]; };
+  for (const t of TOOLS) {
+    if (t.prijsMaand == null) { assert.equal(t.prijsMaandBron, undefined, t.id); continue; }
+    assert.ok(['pagina', 'gratis', 'intern'].includes(t.prijsMaandBron), t.id + ': prijsMaandBron ontbreekt');
+    const tekst = t.prijs.replace(/€\s/g, '€');
+    if (t.prijsMaandBron === 'pagina') {
+      const eerste = tekst.match(/€\d+(?:,\d{2})?|\d+(?:,\d{2})?€/);
+      assert.ok(eerste, t.id + ': geen europrijs in de tekst');
+      assert.ok(nl(t.prijsMaand).some((v) => eerste[0].startsWith(v) && eerste[0].length === v.length), `${t.id}: prijsMaand ${t.prijsMaand} ≠ eerste europrijs ${eerste[0]}`);
+    } else if (t.prijsMaandBron === 'gratis') {
+      assert.equal(t.prijsMaand, 0, t.id); assert.match(t.prijs, /gratis/i, t.id);
+    } else {
+      assert.doesNotMatch(t.prijs, /[€$£]\s?\d|\d\s?[€$£]|\b(USD|EUR)\b/, t.id + ': intern getal maar wel een bedrag in de tekst');
+    }
+  }
+  const src = readFileSync(new URL('../js/lib/tools.js', import.meta.url), 'utf8');
+  for (const t of TOOLS.filter((x) => x.prijsMaandBron === 'intern')) {
+    const regel = src.split('\n').find((l) => l.includes(`prijsMaandBron: 'intern'`) && l.includes(`prijsMaand: ${t.prijsMaand},`) && src.indexOf(l) > src.indexOf(`id: '${t.id}'`));
+    assert.ok(regel && regel.includes('// INTERN budgetgetal'), t.id + ': intern getal zonder commentaar');
+  }
+});

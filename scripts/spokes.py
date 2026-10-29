@@ -13,6 +13,8 @@ PUB='2026-10-20'
 SCHEMA_UPD='2026-10-26'
 # Valuta-fix (alleen euro's): inhoudelijk gewijzigd, dateModified en lastmod = pushdatum.
 VALUTA_UPD={u:'2026-10-27' for u in ('/gids/wat-kosten-ai-abonnementen/','/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/vergelijken/chatgpt-vs-claude/','/vergelijken/chatgpt-vs-copilot/','/vergelijken/chatgpt-vs-gemini/','/vergelijken/zapier-vs-make-vs-n8n/')}
+VERDER_UPD='2026-10-29'  # Verder lezen + gidslinks: zichtbare wijziging, L7
+VERDER_GIDS=('/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')
 ORG={"@id":D+"/#organization"}
 def ldscript(graph): return '<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":graph},ensure_ascii=False,indent=1)+'\n</script>\n'
 def crumbs_ld(items): return {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":D+u} for i,(n,u) in enumerate(items)]}
@@ -29,6 +31,7 @@ def bronnen_html(srcs):
         if s not in seen: seen.append(s)
     return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n.replace(' (NL-pagina van de aanbieder)','')))}, {('NL-pagina van de aanbieder, bekeken op '+BRON_DATUM[u]) if u in BRON_DATUM else 'bekeken op '+GCN}</li>\n' for n,u in seen)+'      </ul>\n'
 def byline(slug=None):
+    if slug in VERDER: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 29 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug in VALUTA_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 27 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     return f'      <p class="note">Redactie ToolMatch · gecontroleerd op {GCN}. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
 JN=lambda v: 'Ja' if v is True else ('Nee' if v is False else 'Niet gecontroleerd')
@@ -294,6 +297,26 @@ cat('/ai-data-analyse/','AI voor data-analyse en dashboards: welke tool? | ToolM
   ('Is Looker Studio gratis?','Ja, Looker Studio is gratis. Voor Looker Studio Pro betaal je per gebruiker per project per maand; het bedrag zie je op de pagina van Google.'),
   ('Wat is het verschil tussen Power BI en Looker Studio?','Power BI is van Microsoft en past bij Excel en Microsoft 365. Looker Studio is van Google en past bij Sheets en Analytics. Allebei hebben ze een gratis instap.')])
 
+# Verder lezen: per categoriepagina 3 verwante categoriepagina's (gewone interne links, geen rangorde).
+VL_TXT={'/ai-assistenten/':'AI-assistenten: ChatGPT en de alternatieven','/ai-tekst-schrijven/':'AI-tools voor Nederlandse teksten',
+ '/ai-mail-en-offertes/':'AI voor offertes en zakelijke mail','/ai-notuleren/':'Een AI-notulist kiezen','/crm-klein-bedrijf/':'Een CRM voor een klein bedrijf',
+ '/ai-vertalen/':'Teksten en mails vertalen met AI','/ai-afbeeldingen-en-ontwerp/':'AI voor afbeeldingen, logo’s en presentaties',
+ '/ai-website-maken/':'Een website maken met AI','/websitebezoekers-herkennen/':'Zien welke bedrijven je website bezoeken',
+ '/automatiseren-zonder-code/':'Automatiseren zonder code','/ai-chatbot-website/':'Een chatbot voor je website','/ai-data-analyse/':'AI voor data-analyse en dashboards'}
+VERDER={'/ai-assistenten/':['/ai-mail-en-offertes/','/ai-notuleren/','/ai-data-analyse/'],
+ '/ai-tekst-schrijven/':['/ai-mail-en-offertes/','/ai-afbeeldingen-en-ontwerp/','/ai-website-maken/'],
+ '/ai-mail-en-offertes/':['/ai-tekst-schrijven/','/ai-notuleren/','/ai-vertalen/'],
+ '/ai-notuleren/':['/ai-mail-en-offertes/','/ai-vertalen/','/ai-assistenten/'],
+ '/crm-klein-bedrijf/':['/websitebezoekers-herkennen/','/ai-chatbot-website/','/ai-data-analyse/'],
+ '/online-afspraken-plannen/':['/ai-chatbot-website/','/ai-website-maken/','/ai-mail-en-offertes/'],
+ '/ai-afbeeldingen-en-ontwerp/':['/ai-tekst-schrijven/','/ai-website-maken/','/ai-assistenten/'],
+ '/social-media-inplannen/':['/ai-website-maken/','/websitebezoekers-herkennen/','/automatiseren-zonder-code/'],
+ '/automatiseren-zonder-code/':['/ai-mail-en-offertes/','/ai-notuleren/','/ai-assistenten/'],
+ '/ai-chatbot-website/':['/ai-website-maken/','/websitebezoekers-herkennen/','/ai-assistenten/'],
+ '/ai-data-analyse/':['/ai-assistenten/','/crm-klein-bedrijf/','/websitebezoekers-herkennen/']}
+def verder_lezen(slug):
+    return '      <h2 id="verder-lezen">Verder lezen</h2>\n      <ul>\n'+''.join(f'        <li>{L(u,VL_TXT[u])}</li>\n' for u in VERDER[slug])+'      </ul>\n'
+
 for c in CAT:
     c['tools']=alfa(c['tools'])
     ids=[i for i,_ in c['tools']]
@@ -305,8 +328,8 @@ for c in CAT:
     body+='      <h2 id="tools">De tools</h2>\n'+met_noot('      <div class="results">\n'+''.join(kaart(T[i],p) for i,p in c['tools'])+'      </div>\n')
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
     body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
-    body+=faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
-    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":VALUTA_UPD.get(c['slug'],GC)},
+    body+=verder_lezen(c['slug'])+faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
+    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":(VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
       crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
     zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)
@@ -523,9 +546,10 @@ gids('/gids/ai-veilig-gebruiken/','ChatGPT en AI veilig gebruiken in je bedrijf 
       <h2 id="verwerkersovereenkomst">Regel een verwerkersovereenkomst</h2>
       <p>Verwerkt een aanbieder persoonsgegevens voor jou, dan is die aanbieder een verwerker. De AVG eist dan een verwerkersovereenkomst: schriftelijke afspraken over onder meer beveiliging, subverwerkers en het verwijderen van gegevens. Volgens de Autoriteit Persoonsgegevens ben je in overtreding als je met een verwerker werkt zonder zo'n overeenkomst. Kijk daarom vóór je klantgegevens invoert of de aanbieder een verwerkersovereenkomst biedt bij jouw abonnement. Wil je je gegevens in Europa houden, bekijk dan {L('/ai-assistenten/','assistenten met EU-opslag')}.</p>
       <h2 id="koppelingen">Let op koppelingen</h2>
-      <p>Koppel je apps met een tool als Zapier, Make of n8n, dan gaan je gegevens via die tool. Ook daarvoor heb je dan afspraken nodig. n8n biedt hosting in de EU (Frankfurt) of zelf hosten; bij de andere twee hebben we de locatie niet gecontroleerd.</p>
+      <p>Koppel je apps met een tool als {L('/vergelijken/zapier-vs-make-vs-n8n/','Zapier, Make of n8n')}, dan gaan je gegevens via die tool. Ook daarvoor heb je dan afspraken nodig. n8n biedt hosting in de EU (Frankfurt) of zelf hosten; bij de andere twee hebben we de locatie niet gecontroleerd.</p>
       <h2 id="vastleggen">Leg het vast</h2>
       <p>Spreek met je team af welke tools mogen en welke gegevens nooit in een AI-tool gaan, en {L('/gids/ai-beleid-opstellen/','leg het vast in een AI-beleid')}. De Autoriteit Persoonsgegevens heeft ook een hulpmiddel gepubliceerd om in te schatten of je generatieve AI kunt en mag inzetten.</p>
+      <p>Begin je net met AI? Volg dan {L('/gids/ai-gebruiken-in-je-bedrijf/','het stappenplan voor AI in je bedrijf')}. Als startpunt kun je {L('/gids/prompts-voor-ondernemers/','de voorbeeldprompts voor ondernemers')} gebruiken.</p>
 ''',
  [('Mag ik klantgegevens in ChatGPT zetten?','Alleen als je weet wat er met die gegevens gebeurt en je afspraken hebt gemaakt met de aanbieder, zoals een verwerkersovereenkomst. Is dat niet geregeld, haal persoonsgegevens dan weg.'),
   ('Hoe zet ik training uit in ChatGPT?','ChatGPT noemt op de prijspagina een opt-out voor training op je inhoud bij Free, Go, Plus en Pro. Je vindt die in de instellingen voor gegevensbeheer (Data Controls).'),
@@ -590,6 +614,7 @@ gids('/gids/ai-beleid-opstellen/','AI-beleid opstellen, met voorbeeld | ToolMatc
         </ol>
       </div>
       <p>Pas het voorbeeld aan op je eigen bedrijf. Bespreek het met je team, zodat iedereen weet waarom de afspraken er zijn.</p>
+      <p>Weet je nog niet voor welke taken je AI wilt inzetten? Volg dan {L('/gids/ai-gebruiken-in-je-bedrijf/','het stappenplan voor AI in je bedrijf')}. Wil je je team een begin geven, deel dan {L('/gids/prompts-voor-ondernemers/','de voorbeeldprompts voor ondernemers')}.</p>
 ''',
  [('Is een AI-beleid verplicht?','Een apart AI-beleid wordt in de bronnen die we bekeken niet als verplichting genoemd. Wel moeten organisaties die AI gebruiken volgens de Autoriteit Persoonsgegevens zorgen voor AI-geletterdheid, en een beleid helpt daarbij.'),
   ('Hoe lang moet een AI-beleid zijn?','Voor een klein bedrijf is één pagina genoeg: welke tools mogen, welke gegevens niet, wie controleert en bij wie je terechtkunt.'),
@@ -631,9 +656,9 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
 
 for g in GIDS:
     upd=VALUTA_UPD.get(g['slug'])
-    body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+(f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}, bijgewerkt op 27 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n' if upd else f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}</p>\n')
+    body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+(f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}, bijgewerkt op 27 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n' if upd else f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}{", bijgewerkt op 29 oktober 2026" if g["slug"] in VERDER_GIDS else ""}</p>\n')
     crumb=f'<a href="/gids/">Gidsen</a> › {g["crumb"]}'
-    graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":upd or SCHEMA_UPD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+    graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":upd or (VERDER_UPD if g['slug'] in VERDER_GIDS else SCHEMA_UPD),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),('Gidsen','/gids/'),(g['crumb'],g['slug'])]),faq_ld(g['slug'],g['faq'])]
     zet(g['slug'],g['title'],g['desc'],crumb,g['h1'],g['lead'],body,graph)
 

@@ -309,4 +309,5 @@ LASTMOD={u:'2026-10-26' for u in URLS if u in BC_LOSSE or (u.startswith(('/verge
 LASTMOD.update(WL_LASTMOD)
 LASTMOD.update(VALUTA_UPD); LASTMOD['/keuzehulp/']='2026-10-27'
 LASTMOD['/partnerlinks/']='2026-10-28'; LASTMOD['/privacy/']='2026-10-28'  # partnerlink Hostinger: stand van zaken + privacysectie
+LASTMOD.update({u:'2026-10-29' for u in ('/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')})  # Verder lezen + gidslinks 29-10 (L7)
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')

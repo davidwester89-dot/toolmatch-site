@@ -30,7 +30,7 @@ export const DOELEN = {
 export const TOOLS = [
   { id: 'chatgpt', naam: 'ChatGPT', vendor: 'OpenAI', url: 'https://chatgpt.com/', doelen: ['schrijven', 'data', 'beeld'],
     wat: 'Algemene AI-assistent van OpenAI voor tekst, samenvatten, data-analyse en afbeeldingen.',
-    gratis: true, prijs: 'Plus (het bedrag zie je op de prijspagina van OpenAI)', prijsMaand: 20, prijsMaandBron: 'intern', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig', // INTERN budgetgetal: alleen voor de budgetvraag, nooit tonen. Geen europrijs op een NL-pagina; getal van de prijspagina zoals eerder gecontroleerd, niet omgerekend.
+    gratis: true, prijs: 'Plus: €23 per maand (btw niet vermeld op de prijspagina)', prijsMaand: 23, prijsMaandBron: 'pagina', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig', // NL-IP 30-10, MM-besluit groeilog 30-10 14:25
     eu: null, privacy: 'Je kunt uitzetten dat je gesprekken worden gebruikt om modellen te trainen (Data Controls).',
     bronnen: [['ChatGPT Pricing', 'https://chatgpt.com/pricing'], ['OpenAI Help: What is ChatGPT Plus?', 'https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus']] },
   { id: 'lechat', naam: 'Le Chat (Mistral AI)', vendor: 'Mistral AI', url: 'https://mistral.ai/', doelen: ['schrijven', 'beeld'],
@@ -115,12 +115,12 @@ export const TOOLS = [
     bronnen: [['Google Workspace voor bedrijven: abonnementen (NL-pagina van de aanbieder)', 'https://workspace.google.com/intl/nl/business/'], ['Google Workspace: prijzen', 'https://workspace.google.com/intl/nl/pricing']] },
   { id: 'claude', naam: 'Claude (Anthropic)', vendor: 'Anthropic', url: 'https://claude.com/', doelen: ['schrijven'],
     wat: 'AI-assistent van Anthropic voor schrijven, samenvatten en werken met lange documenten.',
-    gratis: true, prijs: 'Pro; Team per gebruiker (het bedrag zie je op de prijspagina van Anthropic)', prijsMaand: 17, prijsMaandBron: 'intern', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig', // INTERN budgetgetal: alleen voor de budgetvraag, nooit tonen. Geen europrijs op een NL-pagina; getal van de prijspagina zoals eerder gecontroleerd, niet omgerekend.
+    gratis: true, prijs: 'Pro: €18 per maand bij maandelijks betalen, €15 per maand bij jaarbetaling (€180 per jaar), excl. btw', prijsMaand: 18, prijsMaandBron: 'pagina', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig', // NL-IP 30-10, MM-besluit groeilog 30-10 14:25
     eu: null, privacy: 'Bij de abonnementen voor particulieren (Free, Pro, Max) kun je modeltraining op je gesprekken uitzetten (opt-out). Bij de zakelijke abonnementen traint Anthropic volgens de prijspagina standaard niet op je inhoud.',
     bronnen: [['Claude Pricing', 'https://claude.com/pricing']] },
   { id: 'notta', naam: 'Notta', url: 'https://www.notta.ai/', doelen: ['notuleren'],
     wat: 'Meetings en opnames uitschrijven en samenvatten, met optionele vertaling.',
-    gratis: true, prijs: 'Pro: €7 per maand bij jaarbetaling, €83,99 per jaar (NL-pagina van de aanbieder, bekeken op 26 oktober 2026)', prijsMaand: 7, prijsMaandBron: 'pagina', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
+    gratis: true, prijs: 'Pro: €11,69 per maand bij maandelijks betalen, €7 per maand bij jaarbetaling (€83,99 per jaar); btw niet vermeld (NL-pagina van de aanbieder, bekeken op 30 oktober 2026)', prijsMaand: 11.69, prijsMaandBron: 'pagina', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
     eu: null, privacy: null,
     bronnen: [['Notta: prijzen (NL-pagina van de aanbieder)', 'https://www.notta.ai/nl/pricing'], ['Notta Pricing', 'https://notta.ai/en/pricing']] },
   { id: 'notuly', naam: 'Notuly', url: 'https://notuly.nl/', doelen: [], // Alleen op /ai-notuleren/ (MM-OK 30-10). Niet in de keuzehulp: dat verandert de matchuitkomsten en vraagt een apart MM-OK.
@@ -155,7 +155,7 @@ export const TOOLS = [
     bronnen: [['Zoho CRM Pricing', 'https://www.zoho.com/crm/zohocrm-pricing.html']] },
   { id: 'calendly', naam: 'Calendly', url: 'https://calendly.com/', doelen: [],
     wat: 'Klanten kiezen zelf een tijd in je agenda via een boekingspagina.',
-    gratis: true, prijs: 'Standard, per gebruiker per maand (het bedrag zie je op de prijspagina van Calendly)', prijsMaand: 10, prijsMaandBron: 'intern', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig', // INTERN budgetgetal: alleen voor de budgetvraag, nooit tonen. Geen europrijs op een NL-pagina; getal van de prijspagina zoals eerder gecontroleerd, niet omgerekend.
+    gratis: true, prijs: 'Standard: €12 per gebruiker per maand bij maandelijks betalen, €10 per maand bij jaarbetaling (EUR gekozen op de prijspagina; btw niet vermeld)', prijsMaand: 12, prijsMaandBron: 'pagina', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig', // NL-IP 30-10, MM-besluit groeilog 30-10 14:25
     eu: null, privacy: null,
     bronnen: [['Calendly Pricing', 'https://calendly.com/pricing']] },
   { id: 'calcom', naam: 'Cal.com', url: 'https://cal.com/', doelen: [],

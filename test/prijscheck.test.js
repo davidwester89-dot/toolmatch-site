@@ -31,3 +31,15 @@ test('prijscheck L7: gewijzigde pagina\'s op 30-10, bronnen bekeken op 30 oktobe
     assert.match(t, /https:\/\/chatgpt\.com\/nl-NL\/pricing" rel="noopener">ChatGPT: Prijzen<\/a>, bekeken op 30 oktober 2026|chatgpt\.com\/pricing" rel="noopener">[^<]+<\/a>, bekeken op 30 oktober 2026/, p);
   }
 });
+
+test('prijscheck: prijsMaand = europrijs bij maandelijks betalen (MM-besluit groeilog 30-10 14:25)', async () => {
+  const { TOOLS } = await import('../js/lib/tools.js');
+  const T = Object.fromEntries(TOOLS.map((t) => [t.id, t]));
+  for (const [id, v] of [['chatgpt', 23], ['claude', 18], ['notta', 11.69], ['calendly', 12]]) {
+    assert.equal(T[id].prijsMaand, v, id); assert.equal(T[id].prijsMaandBron, 'pagina', id);
+  }
+  assert.equal(T.canva.prijsMaand, 12); assert.equal(T.canva.prijsMaandBron, 'intern');
+  assert.equal(T.buffer.prijsMaand, 5); assert.equal(T.buffer.prijsMaandBron, 'intern');
+  assert.match(T.calendly.prijs, /^Standard: €12 per gebruiker per maand bij maandelijks betalen, .*\(EUR gekozen op de prijspagina; btw niet vermeld\)$/);
+  assert.match(T.notta.prijs, /^Pro: €11,69 per maand bij maandelijks betalen, €7 per maand bij jaarbetaling/);
+});

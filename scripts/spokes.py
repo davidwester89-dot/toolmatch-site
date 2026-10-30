@@ -33,9 +33,9 @@ def faq_ld(path,faq):
 def faq_html(faq):
     return '      <h2 id="faq">Veelgestelde vragen</h2>\n      <div class="faq">\n'+''.join(f'      <details>\n        <summary>{q}</summary>\n        <p>{a}</p>\n      </details>\n' for q,a in faq)+'      </div>\n'
 # Bronnen die voor de valuta-fix op 26-10 voor het eerst zijn bekeken.
-BRON_DATUM={'https://notuly.nl/prijzen':'30 oktober 2026','https://notuly.nl/privacy':'30 oktober 2026','https://www.notta.ai/nl/pricing':'26 oktober 2026','https://workspace.google.com/intl/nl/business/':'26 oktober 2026','https://www.deepl.com/nl/pro':'26 oktober 2026'}
+BRON_DATUM={'https://notuly.nl/prijzen':'30 oktober 2026','https://notuly.nl/privacy':'30 oktober 2026','https://www.notta.ai/nl/pricing':'30 oktober 2026','https://workspace.google.com/intl/nl/business/':'26 oktober 2026','https://www.deepl.com/nl/pro':'26 oktober 2026'}
 # NL-IP-prijscheck 30-10 (site-checks/2026-10-30/tm-nl-ip-prijscheck.md): prijspagina's opnieuw bekeken vanuit Nederland.
-BRON_BEKEKEN={'https://chatgpt.com/nl-NL/pricing':'30 oktober 2026','https://chatgpt.com/pricing':'30 oktober 2026','https://claude.com/pricing':'30 oktober 2026'}
+BRON_BEKEKEN={'https://chatgpt.com/nl-NL/pricing':'30 oktober 2026','https://chatgpt.com/pricing':'30 oktober 2026','https://claude.com/pricing':'30 oktober 2026','https://calendly.com/pricing':'30 oktober 2026'}
 def bronnen_html(srcs):
     seen=[]; 
     for s in srcs:
@@ -652,7 +652,7 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
  'Wat kosten AI-abonnementen','Wat kosten ChatGPT, Copilot en andere AI-tools?',
  'De prijzen van de bekende AI-assistenten op een rij, zoals de aanbieders ze vermelden. Met waar je op moet letten: valuta, btw, jaarbetaling en prijs per gebruiker.',
  f'''      <h2 id="prijzen">De prijzen op een rij</h2>
-      <p>Gecontroleerd op {GCN}; de europrijzen van Google Workspace en DeepL hebben we op 26 oktober 2026 nagelezen op hun Nederlandse prijspagina. Met of zonder btw zoals de aanbieder het vermeldt. We noemen alleen bedragen in euro. Konden we op een Nederlandse prijspagina geen europrijs nalezen, dan staat alleen het abonnement erbij en vind je het bedrag via de bron.</p>
+      <p>Gecontroleerd op {GCN}; de europrijzen van Google Workspace en DeepL hebben we op 26 oktober 2026 nagelezen op hun Nederlandse prijspagina. Die van ChatGPT en Claude hebben we op 30 oktober 2026 nagelezen, vanuit Nederland. Met of zonder btw zoals de aanbieder het vermeldt. We noemen alleen bedragen in euro. Konden we op een Nederlandse prijspagina geen europrijs nalezen, dan staat alleen het abonnement erbij en vind je het bedrag via de bron.</p>
       <div class="tbl" role="region" aria-label="Prijzen van AI-abonnementen" tabindex="0">
         <table>
           <thead><tr><th scope="col">Tool</th><th scope="col">Gratis versie</th><th scope="col">Betaald vanaf</th><th scope="col">Bron</th></tr></thead>

@@ -432,7 +432,7 @@ vs('/vergelijken/chatgpt-vs-claude/','ChatGPT vs Claude: verschil voor onderneme
  ['ChatGPT','Claude'],
  [('Wat het is','AI-assistent van OpenAI.','AI-assistent van Anthropic.'),
   ('Gratis versie','Ja (met beperkingen).','Ja (met beperkingen).'),
-  ('Persoonlijk abonnement','Plus: €23 per maand (btw niet vermeld op de prijspagina).','Pro: €18 per maand bij maandelijks betalen, €15 per maand bij jaarbetaling (€180 per jaar), excl. btw. Max vanaf €90 per maand.'),
+  ('Persoonlijk abonnement','Plus: €23 per maand (btw niet vermeld op de prijspagina).','Pro: €18 per maand bij maandelijks betalen, €15 per maand bij jaarbetaling (€180 per jaar), excl. btw. Max vanaf €90 per maand, ook excl. btw.'),
   ('Voor teams','ChatGPT Business; prijs niet gecontroleerd.','Team, voor 2 tot 150 gebruikers: €21,04 per gebruiker per maand bij maandelijks betalen, €18 bij jaarbetaling, excl. btw.'),
   ('Kantoorsoftware','Extensies voor Excel, Word, PowerPoint en Google Sheets (beperkt in Free).','Claude for Microsoft 365 en Claude for Microsoft Outlook vanaf Pro, volgens de prijspagina.'),
   ('Training op je invoer','Opt-out beschikbaar.','Opt-out bij Free, Pro en Max; bij de zakelijke plannen volgens Anthropic standaard geen training op je inhoud.'),
@@ -441,7 +441,7 @@ vs('/vergelijken/chatgpt-vs-claude/','ChatGPT vs Claude: verschil voor onderneme
       <p>Werk je met lange documenten, probeer dan allebei met hetzelfde document. Hoe goed ze lange teksten verwerken of Nederlands schrijven, hebben we niet gemeten.</p>
 ''',
  [('Zo kies je',f'''      <ul>
-        <li><strong>Kies Claude</strong> als je bij jaarbetaling iets minder wilt betalen voor een persoonlijk abonnement, of als je de koppeling met Microsoft 365 en Outlook wilt.</li>
+        <li><strong>Kies Claude</strong> als je voor een persoonlijk abonnement minder wilt betalen: Claude Pro kost €18 per maand (€15 bij jaarbetaling), exclusief btw; ChatGPT Plus kost €23 per maand, zonder vermelding van btw. Ook met 21% btw erbij is Claude Pro goedkoper (€21,78 per maand, onze rekensom). Kies Claude ook als je de koppeling met Microsoft 365 en Outlook wilt.</li>
         <li><strong>Kies ChatGPT</strong> als je ook de extensies voor Excel en Google Sheets wilt gebruiken.</li>
         <li><strong>Vooral schrijfwerk?</strong> Bekijk ook {L('/ai-tekst-schrijven/','tools speciaal voor teksten')}, en {L('/gids/wat-kosten-ai-abonnementen/','wat de abonnementen kosten')}.</li>
       </ul>
@@ -647,8 +647,8 @@ gids('/gids/ai-beleid-opstellen/','AI-beleid opstellen, met voorbeeld | ToolMatc
 PRIJZEN=[('chatgpt','ChatGPT'),('claude','Claude'),('lechat','Le Chat'),('copilot','Copilot Business'),('gemini','Gemini in Google Workspace'),('deepl','DeepL')]
 prijsrows=''.join(f'''          <tr><th scope="row">{LG(i)}{E(n)}</th><td>{JN(T[i]['gratis'])}</td><td>{E(T[i]['prijs'])}</td><td>{', '.join(X(u,E(b)) for b,u in T[i]['bronnen'])}</td></tr>
 ''' for i,n in PRIJZEN)
-gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere AI-tools? | ToolMatch',
- 'Wat betaal je per maand voor ChatGPT, Copilot, Gemini en Claude? Persoonlijk en zakelijk naast elkaar, met de bron en de datum bij elke prijs.',
+gids('/gids/wat-kosten-ai-abonnementen/','Wat kost ChatGPT Plus? AI-abonnementen 2026 | ToolMatch',
+ 'ChatGPT Plus kost €23 per maand (btw niet vermeld), Claude Pro €18 excl. btw. Ook Copilot en Gemini, persoonlijk en zakelijk, met bron en datum per prijs.',
  'Wat kosten AI-abonnementen','Wat kosten ChatGPT, Copilot en andere AI-tools?',
  'De prijzen van de bekende AI-assistenten op een rij, zoals de aanbieders ze vermelden. Met waar je op moet letten: valuta, btw, jaarbetaling en prijs per gebruiker.',
  f'''      <h2 id="prijzen">De prijzen op een rij</h2>

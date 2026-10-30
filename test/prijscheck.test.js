@@ -54,3 +54,18 @@ test('prijscheck gids wat-kosten: europrijzen ChatGPT en Claude in tabel, H2 en 
   assert.match(t, /"name": "Wat kost Claude per maand\?"/);
   assert.doesNotMatch(t, /Canva[^<]{0,80}per maand/);
 });
+
+test('prijscheck gids wat-kosten: meta noemt de btw-basis per prijs (SC 30-10)', () => {
+  const t = read('gids/wat-kosten-ai-abonnementen/index.html');
+  const m = t.match(/<meta name="description" content="([^"]*)"/)[1];
+  assert.match(m, /^ChatGPT Plus kost €23 per maand \(btw niet vermeld\), Claude Pro €18 excl\. btw\./);
+  assert.ok(m.length <= 155, String(m.length));
+  assert.match(t, /<meta property="og:description" content="ChatGPT Plus kost €23 per maand \(btw niet vermeld\)/);
+});
+
+test('prijscheck: "Zo kies je" Claude vergelijkt met btw-basis per prijs (SC 30-10)', () => {
+  const v = read('vergelijken/chatgpt-vs-claude/index.html');
+  assert.doesNotMatch(v, /bij jaarbetaling iets minder wilt betalen/);
+  assert.match(v, /Claude Pro kost €18 per maand \(€15 bij jaarbetaling\), exclusief btw; ChatGPT Plus kost €23 per maand, zonder vermelding van btw\. Ook met 21% btw erbij is Claude Pro goedkoper \(€21,78 per maand, onze rekensom\)\./);
+  assert.equal(Math.round(18 * 1.21 * 100) / 100, 21.78);
+});

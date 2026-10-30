@@ -1,5 +1,5 @@
-// Logo's van aanbieders (Dave 30-10): elk logo lokaal, klein, met vaste maat, lazy en decoratief (alt="", aria-hidden: de naam staat ernaast).
-// Besluit Dave 30-10: elk merk toont zijn logo; alleen een merk dat om weghalen vraagt komt in ZONDER_LOGO (neutrale letter).
+// Logo's van aanbieders (30-10): elk logo lokaal, klein, met vaste maat, lazy en decoratief (alt="", aria-hidden: de naam staat ernaast).
+// Besluit 30-10: elk merk toont zijn logo; alleen een merk dat om weghalen vraagt komt in ZONDER_LOGO (neutrale letter).
 // Neutraal: dezelfde maat voor iedereen; logo's veranderen niets aan de volgorde, de match of de partnerlinks.
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -74,7 +74,7 @@ test('logo: de match (match.js) leest de logo\'s nooit', () => {
   assert.equal(typeof match, 'function');
 });
 
-test('logo: ZONDER_LOGO is leeg (besluit Dave 30-10: alle merken met logo, weghalen alleen op verzoek van het merk)', () => {
+test('logo: ZONDER_LOGO is leeg (besluit 30-10: alle merken met logo, weghalen alleen op verzoek van het merk)', () => {
   assert.equal(ZONDER_LOGO.size, 0);
   for (const t of TOOLS) assert.ok(LOGOS[t.id], t.id);
 });

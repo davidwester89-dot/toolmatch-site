@@ -2,7 +2,7 @@
 // Neutraal: elke aanbieder krijgt precies hetzelfde vak, partner of niet. Logo's tellen nooit mee in de match of de volgorde.
 // Ook in de browser gebruikt (keuzehulp.js), daarom zonder Node-imports.
 
-/** Alle merken tonen hun logo (besluit Dave 30-10), ook merken met strenge merkregels. Vraagt een merk om weghalen,
+/** Alle merken tonen hun logo (besluit 30-10), ook merken met strenge merkregels. Vraagt een merk om weghalen,
  *  zet de tool-id hier: dan krijgt die tool de neutrale letter in hetzelfde vak. Microsoft-producten delen het Microsoft-logo. */
 export const ZONDER_LOGO = new Set([]);
 

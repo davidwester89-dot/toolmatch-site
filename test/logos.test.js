@@ -1,5 +1,5 @@
 // Logo's van aanbieders (Dave 30-10): elk logo lokaal, klein, met vaste maat, lazy en decoratief (alt="", aria-hidden: de naam staat ernaast).
-// Merken waarvan de richtlijn logogebruik alleen met toestemming toestaat staan in ZONDER_LOGO en krijgen de neutrale letter (SC 30-10).
+// Besluit Dave 30-10: elk merk toont zijn logo; alleen een merk dat om weghalen vraagt komt in ZONDER_LOGO (neutrale letter).
 // Neutraal: dezelfde maat voor iedereen; logo's veranderen niets aan de volgorde, de match of de partnerlinks.
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -52,7 +52,7 @@ test('logo: elke img is decoratief (alt="" en aria-hidden), vaste width/height, 
       assert.ok(!ZONDER_LOGO.has(src[1]), f + ': logo van ' + src[1] + ' mag niet');
     }
   }
-  assert.ok(n >= 40, 'te weinig logo\'s: ' + n);
+  assert.ok(n >= 100, 'te weinig logo\'s: ' + n);
 });
 
 test('logo: categoriepagina\'s hebben een logo of de neutrale letter bij elke tool in de tabel en bij elke kaart', () => {
@@ -72,6 +72,11 @@ test('logo: geen score- of sterrenicoontjes', () => {
 test('logo: de match (match.js) leest de logo\'s nooit', () => {
   assert.doesNotMatch(readFileSync(ROOT + 'js/lib/match.js', 'utf8'), /logos/);
   assert.equal(typeof match, 'function');
+});
+
+test('logo: ZONDER_LOGO is leeg (besluit Dave 30-10: alle merken met logo, weghalen alleen op verzoek van het merk)', () => {
+  assert.equal(ZONDER_LOGO.size, 0);
+  for (const t of TOOLS) assert.ok(LOGOS[t.id], t.id);
 });
 
 test('logo: fallback is een neutrale letter in hetzelfde vak', () => {

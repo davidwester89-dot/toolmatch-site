@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # L7: basis = github.event.before moet in de clone zitten
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -25,6 +27,8 @@ jobs:
         with:
           python-version: '3.12'
       - run: npm test
+        env:
+          L7_BASE: ${{ github.event.before }} # L7 vergelijkt met wat live stond, niet HEAD met zichzelf
       - name: Build controleren (gecommitte html moet gelijk zijn aan de build)
         run: python3 scripts/build.py && git status --porcelain && test -z "$(git status --porcelain)"
       - name: Publieke bestanden verzamelen

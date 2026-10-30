@@ -32,8 +32,8 @@ test('gidsen: ai-veilig-gebruiken en ai-beleid-opstellen linken naar het stappen
 
 test('L7 29-10: de 13 gewijzigde pagina\'s hebben dateModified, sitemap-lastmod en zichtbaar bijgewerkt op 29 oktober 2026', () => {
   const sm = readFileSync('sitemap.xml', 'utf8');
-  // ai-notuleren is op 30-10 opnieuw bijgewerkt (Notuly); die datum test test/notuly.test.js.
-  for (const p of [...CAT.filter((c) => c !== 'ai-notuleren'), 'gids/ai-veilig-gebruiken', 'gids/ai-beleid-opstellen']) {
+  // De categoriepagina's zijn op 30-10 opnieuw bijgewerkt (Notuly, logo's van aanbieders); die datum test test/logos.test.js.
+  for (const p of ['gids/ai-veilig-gebruiken', 'gids/ai-beleid-opstellen']) {
     const t = readFileSync(`${p}/index.html`, 'utf8');
     assert.match(t, /"dateModified": "2026-10-29"/, p);
     assert.match(t, /<p class="note">Redactie ToolMatch · [^<]*gecontroleerd op 20 oktober 2026, bijgewerkt op 29 oktober 2026/, p);

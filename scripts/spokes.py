@@ -5,9 +5,9 @@ T={t['id']:t for t in TL}
 LOGOS=json.loads(subprocess.check_output(['node','--input-type=module','-e',
  "import {LOGOS} from './js/lib/logos.js'; console.log(JSON.stringify(LOGOS))"]))
 def LG(i,px=24,naam=''):
-    """Logo in een vast vak (zelfde maat voor elke aanbieder, partner of niet); geen logo = neutrale letter. Zelfde markup als js/lib/logos.js."""
+    """Logo in een vast vak (zelfde maat voor elke aanbieder, partner of niet); decoratief (alt="", aria-hidden), de naam staat ernaast; geen logo = neutrale letter. Zelfde markup als js/lib/logos.js."""
     if i not in LOGOS: return f'<span class="tlogo tlogo-f" style="width:{px}px;height:{px}px" aria-hidden="true">{E((naam or i)[0].upper())}</span>'
-    return f'<img class="tlogo" src="/logos/{i}.webp" alt="{E(LOGOS[i])} logo" width="{px}" height="{px}" loading="lazy" decoding="async">'
+    return f'<img class="tlogo" src="/logos/{i}.webp" alt="" aria-hidden="true" width="{px}" height="{px}" loading="lazy" decoding="async">'
 _ORDE=json.loads(subprocess.check_output(['node','-e',
  "const n=JSON.parse(process.argv[1]); const c=new Intl.Collator('nl',{sensitivity:'base'}); console.log(JSON.stringify(n.sort(c.compare)))",
  json.dumps([t['naam'] for t in TL])]))
@@ -21,6 +21,7 @@ SCHEMA_UPD='2026-10-26'
 VALUTA_UPD={u:'2026-10-27' for u in ('/gids/wat-kosten-ai-abonnementen/','/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/vergelijken/chatgpt-vs-claude/','/vergelijken/chatgpt-vs-copilot/','/vergelijken/chatgpt-vs-gemini/','/vergelijken/zapier-vs-make-vs-n8n/')}
 VERDER_UPD='2026-10-29'  # Verder lezen + gidslinks: zichtbare wijziging, L7
 NOTULY_UPD={'/ai-notuleren/':'2026-10-30'}  # Notuly toegevoegd 30-10 (MM-OK): zichtbare wijziging, L7
+LOGO_UPD={u:'2026-10-30' for u in ('/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/gids/wat-kosten-ai-abonnementen/','/vergelijken/chatgpt-vs-claude/','/vergelijken/chatgpt-vs-copilot/','/vergelijken/chatgpt-vs-gemini/','/vergelijken/zapier-vs-make-vs-n8n/')}  # logo's van aanbieders 30-10: zichtbare wijziging in de body, L7
 VERDER_GIDS=('/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')
 ORG={"@id":D+"/#organization"}
 def ldscript(graph): return '<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":graph},ensure_ascii=False,indent=1)+'\n</script>\n'
@@ -38,6 +39,7 @@ def bronnen_html(srcs):
         if s not in seen: seen.append(s)
     return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n.replace(' (NL-pagina van de aanbieder)','')))}, {('NL-pagina van de aanbieder, bekeken op '+BRON_DATUM[u]) if u in BRON_DATUM else 'bekeken op '+GCN}</li>\n' for n,u in seen)+'      </ul>\n'
 def byline(slug=None):
+    if slug in LOGO_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 30 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug in NOTULY_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 30 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug in VERDER: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 29 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug in VALUTA_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 27 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
@@ -339,7 +341,7 @@ for c in CAT:
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
     body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
     body+=verder_lezen(c['slug'])+faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
-    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":(NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
+    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":LOGO_UPD.get(c['slug']) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
       crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
     zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)
@@ -482,7 +484,7 @@ for v in VS:
 '''
     body=v['intro']+tbl+''.join(f'      <h2>{h}</h2>\n{b}' for h,b in v['secties'])+faq_html(v['faq'])+bronnen_html(v['src'])+byline(v['slug'])
     crumb=f'<a href="/vergelijken/">Vergelijken</a> › {v["crumb"]}'
-    graph=[{"@type":"Article","@id":D+v['slug']+"#artikel","headline":v['h1'],"description":v['desc'],"inLanguage":"nl-NL","url":D+v['slug'],"mainEntityOfPage":D+v['slug'],"datePublished":PUB,"dateModified":VALUTA_UPD.get(v['slug'],SCHEMA_UPD),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+    graph=[{"@type":"Article","@id":D+v['slug']+"#artikel","headline":v['h1'],"description":v['desc'],"inLanguage":"nl-NL","url":D+v['slug'],"mainEntityOfPage":D+v['slug'],"datePublished":PUB,"dateModified":LOGO_UPD.get(v['slug']) or VALUTA_UPD.get(v['slug'],SCHEMA_UPD),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),('Vergelijken','/vergelijken/'),(v['crumb'],v['slug'])]),faq_ld(v['slug'],v['faq'])]
     zet(v['slug'],v['title'],v['desc'],crumb,v['h1'],v['lead'],body,graph)
 
@@ -666,8 +668,8 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
  [tuple(b) for i,_ in PRIJZEN for b in T[i]['bronnen']])
 
 for g in GIDS:
-    upd=VALUTA_UPD.get(g['slug'])
-    body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+(f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}, bijgewerkt op 27 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n' if upd else f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}{", bijgewerkt op 29 oktober 2026" if g["slug"] in VERDER_GIDS else ""}</p>\n')
+    upd=LOGO_UPD.get(g['slug']) or VALUTA_UPD.get(g['slug'])
+    body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+(f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}, bijgewerkt op {datum_nl(upd)}. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n' if upd else f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}{", bijgewerkt op 29 oktober 2026" if g["slug"] in VERDER_GIDS else ""}</p>\n')
     crumb=f'<a href="/gids/">Gidsen</a> › {g["crumb"]}'
     graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":upd or (VERDER_UPD if g['slug'] in VERDER_GIDS else SCHEMA_UPD),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),('Gidsen','/gids/'),(g['crumb'],g['slug'])]),faq_ld(g['slug'],g['faq'])]
@@ -702,7 +704,7 @@ body+='      <h2 id="tools">De tools</h2>\n'+met_noot('      <div class="results
 body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
 body+=f'      <p>Schrijf je de tekst eerst zelf? Bekijk dan de {L("/ai-tekst-schrijven/","AI-tools voor Nederlandse teksten")}.</p>\n'
 body+=faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
-graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":VALUTA_UPD.get(c['slug'],GC)},
+graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":LOGO_UPD.get(c['slug']) or VALUTA_UPD.get(c['slug'],GC)},
   {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
   crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
 zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)

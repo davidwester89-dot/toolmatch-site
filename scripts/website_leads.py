@@ -3,7 +3,7 @@
 # met rel="sponsored nofollow noopener" en de partnerzin eronder; anders een gewone link (rel="noopener"). Bronnen blijven gewone links.
 WL_PUB='2026-10-27'
 # Inhoudelijk gewijzigd na publicatie (partnerlink Hostinger): dateModified, lastmod en zichtbare bijwerkdatum.
-WL_UPD={'/ai-website-maken/':'2026-10-28'}
+WL_UPD={'/ai-website-maken/':'2026-10-30','/websitebezoekers-herkennen/':'2026-10-30'}  # 28-10 partnerlink Hostinger; 30-10 logo's van aanbieders (L7)
 WL_CHECK='26 oktober 2026'
 WL_LASTMOD={'/ai-website-maken/':WL_UPD.get('/ai-website-maken/',WL_PUB),'/websitebezoekers-herkennen/':WL_UPD.get('/websitebezoekers-herkennen/',WL_PUB),'/':WL_PUB}
 def wl_datum(iso): y,m,d=iso.split('-'); return f'{int(d)} {MAANDEN[int(m)-1]} {y}'

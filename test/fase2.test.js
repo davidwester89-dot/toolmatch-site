@@ -64,10 +64,10 @@ test('categoriepagina: tools op alfabetische volgorde (Nederlandse sortering), o
   const col = new Intl.Collator('nl', { sensitivity: 'base' });
   for (const p of CATS) {
     const h = read(p);
-    const h3 = [...h.matchAll(/<article class="res tool" id="[^"]+">\s*<h3>(?:<img class="tlogo"[^>]*>)?([^<]+)<\/h3>/g)].map((m) => m[1].replace(/&amp;/g, '&'));
+    const h3 = [...h.matchAll(/<article class="res tool" id="[^"]+">\s*<h3>(?:<img class="tlogo"[^>]*>|<span class="tlogo tlogo-f"[^>]*>[^<]<\/span>)?([^<]+)<\/h3>/g)].map((m) => m[1].replace(/&amp;/g, '&'));
     assert.ok(h3.length >= 3, p);
     assert.deepEqual(h3, [...h3].sort(col.compare), p + ': ' + h3.join(', '));
-    const rij = [...h.split('id="overzicht"')[1].split('</table>')[0].matchAll(/<th scope="row"><a href="#[^"]+">(?:<img class="tlogo"[^>]*>)?([^<]+)<\/a>/g)].map((m) => m[1].replace(/&amp;/g, '&'));
+    const rij = [...h.split('id="overzicht"')[1].split('</table>')[0].matchAll(/<th scope="row"><a href="#[^"]+">(?:<img class="tlogo"[^>]*>|<span class="tlogo tlogo-f"[^>]*>[^<]<\/span>)?([^<]+)<\/a>/g)].map((m) => m[1].replace(/&amp;/g, '&'));
     assert.deepEqual(rij, h3, p + ' tabel');
     const il = ld(h).find((n) => n['@type'] === 'ItemList').itemListElement.map((x) => x.name);
     assert.deepEqual(il, h3, p + ' ItemList');

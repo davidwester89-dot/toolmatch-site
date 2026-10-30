@@ -38,6 +38,12 @@ def bronnen_html(srcs):
     for s in srcs:
         if s not in seen: seen.append(s)
     return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n.replace(' (NL-pagina van de aanbieder)','')))}, {('NL-pagina van de aanbieder, bekeken op '+BRON_DATUM[u]) if u in BRON_DATUM else 'bekeken op '+GCN}</li>\n' for n,u in seen)+'      </ul>\n'
+# Datumsweep 30-10: een kaart noemt naast "gecontroleerd op" ook de datum waarop een Nederlandse prijspagina later is nagelezen
+# (BRON_DATUM, valuta-fix cd561d0 26-10), zodat de kaart niet tegenspreekt wat er in de bronnenlijst staat.
+def kaartdatum(t): return datum_nl(t['gecontroleerd']) if t.get('gecontroleerd') else GCN
+def nagelezen(t):
+    d=sorted({BRON_DATUM[u] for _,u in t['bronnen'] if u in BRON_DATUM and BRON_DATUM[u]!=kaartdatum(t)})
+    return f'; Nederlandse prijspagina bekeken op {d[0]}' if len(d)==1 else ''
 def byline(slug=None):
     if slug in LOGO_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 30 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug in NOTULY_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 30 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
@@ -82,7 +88,7 @@ def kaart(t,past):
           <div><dt>Nederlands</dt><dd>{JN(t.get('nl'))}</dd></div>
           <div><dt>Instap</dt><dd>{INSTAP[t['instap']]} <small>(onze indeling)</small></dd></div>
         </dl>{pv}
-        <p class="src">Bron: {', '.join(X(u,E(n)) for n,u in t['bronnen'])} · gecontroleerd op {datum_nl(t['gecontroleerd']) if t.get('gecontroleerd') else GCN}</p>
+        <p class="src">Bron: {', '.join(X(u,E(n)) for n,u in t['bronnen'])} · gecontroleerd op {kaartdatum(t)}{nagelezen(t)}</p>
         <p class="go">{uit(t)}</p>
       </article>
 '''
@@ -642,7 +648,7 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
  'Wat kosten AI-abonnementen','Wat kosten ChatGPT, Copilot en andere AI-tools?',
  'De prijzen van de bekende AI-assistenten op een rij, zoals de aanbieders ze vermelden. Met waar je op moet letten: valuta, btw, jaarbetaling en prijs per gebruiker.',
  f'''      <h2 id="prijzen">De prijzen op een rij</h2>
-      <p>Nagelezen op 26 oktober 2026, met of zonder btw zoals de aanbieder het vermeldt. We noemen alleen bedragen in euro. Konden we op een Nederlandse prijspagina geen europrijs nalezen, dan staat alleen het abonnement erbij en vind je het bedrag via de bron.</p>
+      <p>Gecontroleerd op {GCN}; de europrijzen van Google Workspace en DeepL hebben we op 26 oktober 2026 nagelezen op hun Nederlandse prijspagina. Met of zonder btw zoals de aanbieder het vermeldt. We noemen alleen bedragen in euro. Konden we op een Nederlandse prijspagina geen europrijs nalezen, dan staat alleen het abonnement erbij en vind je het bedrag via de bron.</p>
       <div class="tbl" role="region" aria-label="Prijzen van AI-abonnementen" tabindex="0">
         <table>
           <thead><tr><th scope="col">Tool</th><th scope="col">Gratis versie</th><th scope="col">Betaald vanaf</th><th scope="col">Bron</th></tr></thead>

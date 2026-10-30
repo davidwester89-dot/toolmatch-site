@@ -123,6 +123,11 @@ export const TOOLS = [
     gratis: true, prijs: 'Pro: €7 per maand bij jaarbetaling, €83,99 per jaar (NL-pagina van de aanbieder, bekeken op 26 oktober 2026)', prijsMaand: 7, prijsMaandBron: 'pagina', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
     eu: null, privacy: null,
     bronnen: [['Notta: prijzen (NL-pagina van de aanbieder)', 'https://www.notta.ai/nl/pricing'], ['Notta Pricing', 'https://notta.ai/en/pricing']] },
+  { id: 'notuly', naam: 'Notuly', url: 'https://notuly.nl/', doelen: [], // Alleen op /ai-notuleren/ (MM-OK 30-10). Niet in de keuzehulp: dat verandert de matchuitkomsten en vraagt een apart MM-OK.
+    wat: 'Neemt gesprekken op via de app op je telefoon of laptop, zonder bot in je meeting, en mailt een verslag met besluiten en actiepunten.',
+    gratis: true, prijs: 'Pro: €13,49 per gebruiker per maand bij maandelijks betalen, €9,99 per maand bij jaarbetaling (€119,88 per jaar), incl. btw', prijsMaand: 13.49, prijsMaandBron: 'pagina', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig',
+    eu: 'ja', dpa: 'team', gecontroleerd: '2026-10-30', privacy: 'Verwerking op Nederlandse servers in Amsterdam; de audio wordt binnen een minuut na verwerking gewist. Verwerkersovereenkomst vanaf een Team-licentie.',
+    bronnen: [['Notuly: prijzen', 'https://notuly.nl/prijzen'], ['Notuly: privacy', 'https://notuly.nl/privacy']] },
   { id: 'otter', naam: 'Otter.ai', url: 'https://otter.ai/', doelen: ['notuleren'],
     wat: 'Notulist voor online meetings met live transcriptie en samenvattingen.',
     gratis: true, prijs: 'Pro, per gebruiker per maand (het bedrag zie je op de prijspagina van Otter.ai)', prijsMaand: 8.33, prijsMaandBron: 'intern', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig', // INTERN budgetgetal: alleen voor de budgetvraag, nooit tonen. Geen europrijs op een NL-pagina; getal van de prijspagina zoals eerder gecontroleerd, niet omgerekend.

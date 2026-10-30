@@ -22,7 +22,7 @@ test('tooldata: unieke ids, https-bronnen, prijs alleen met getal, geldige waard
     assert.equal(t.prijs == null, t.prijsMaand == null, t.id);
     assert.ok([null, 'ja', 'deels'].includes(t.eu)); assert.ok(['eenvoudig', 'gemiddeld', 'technisch'].includes(t.instap));
     assert.ok(['gebruiker', 'team'].includes(t.prijsPer)); assert.ok(t.gratis === null || typeof t.gratis === 'boolean', t.id);
-    assert.ok(Array.isArray(t.doelen)); assert.ok([undefined, null, 'ja'].includes(t.dpa), t.id);
+    assert.ok(Array.isArray(t.doelen)); assert.ok([undefined, null, 'ja', 'team'].includes(t.dpa), t.id);
   }
 });
 

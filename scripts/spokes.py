@@ -14,6 +14,7 @@ SCHEMA_UPD='2026-10-26'
 # Valuta-fix (alleen euro's): inhoudelijk gewijzigd, dateModified en lastmod = pushdatum.
 VALUTA_UPD={u:'2026-10-27' for u in ('/gids/wat-kosten-ai-abonnementen/','/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/vergelijken/chatgpt-vs-claude/','/vergelijken/chatgpt-vs-copilot/','/vergelijken/chatgpt-vs-gemini/','/vergelijken/zapier-vs-make-vs-n8n/')}
 VERDER_UPD='2026-10-29'  # Verder lezen + gidslinks: zichtbare wijziging, L7
+NOTULY_UPD={'/ai-notuleren/':'2026-10-30'}  # Notuly toegevoegd 30-10 (MM-OK): zichtbare wijziging, L7
 VERDER_GIDS=('/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')
 ORG={"@id":D+"/#organization"}
 def ldscript(graph): return '<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":graph},ensure_ascii=False,indent=1)+'\n</script>\n'
@@ -24,19 +25,20 @@ def faq_ld(path,faq):
 def faq_html(faq):
     return '      <h2 id="faq">Veelgestelde vragen</h2>\n      <div class="faq">\n'+''.join(f'      <details>\n        <summary>{q}</summary>\n        <p>{a}</p>\n      </details>\n' for q,a in faq)+'      </div>\n'
 # Bronnen die voor de valuta-fix op 26-10 voor het eerst zijn bekeken.
-BRON_DATUM={'https://www.notta.ai/nl/pricing':'26 oktober 2026','https://workspace.google.com/intl/nl/business/':'26 oktober 2026','https://www.deepl.com/nl/pro':'26 oktober 2026'}
+BRON_DATUM={'https://notuly.nl/prijzen':'30 oktober 2026','https://notuly.nl/privacy':'30 oktober 2026','https://www.notta.ai/nl/pricing':'26 oktober 2026','https://workspace.google.com/intl/nl/business/':'26 oktober 2026','https://www.deepl.com/nl/pro':'26 oktober 2026'}
 def bronnen_html(srcs):
     seen=[]; 
     for s in srcs:
         if s not in seen: seen.append(s)
     return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n.replace(' (NL-pagina van de aanbieder)','')))}, {('NL-pagina van de aanbieder, bekeken op '+BRON_DATUM[u]) if u in BRON_DATUM else 'bekeken op '+GCN}</li>\n' for n,u in seen)+'      </ul>\n'
 def byline(slug=None):
+    if slug in NOTULY_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 30 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug in VERDER: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 29 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug in VALUTA_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 27 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     return f'      <p class="note">Redactie ToolMatch · gecontroleerd op {GCN}. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
 JN=lambda v: 'Ja' if v is True else ('Nee' if v is False else 'Niet gecontroleerd')
 EUL={'ja':'In de EU (volgens de aanbieder)','deels':'Vooral in de EU (volgens de aanbieder)'}
-DPA={'ja':'Ja (volgens de aanbieder)'}
+DPA={'ja':'Ja (volgens de aanbieder)','team':'Vanaf Team (volgens de aanbieder)'}
 def dpa(t):
     if t.get('dpa'): return DPA[t['dpa']]
     if t.get('privacy') and re.search(r'verwerkersovereenkomst|DPA',t['privacy']): return 'Ja (volgens de aanbieder)'
@@ -57,6 +59,7 @@ PNOOT='      <p class="pnoot">Sommige links zijn partnerlinks; dat verandert de 
 def met_noot(blok):
     """Precies één partnerzin direct na een blok waarin een partnerlink (rel sponsored) staat; anders niets."""
     return blok+PNOOT if re.search(r'<a\s[^>]*rel="[^"]*\bsponsored\b',blok) else blok
+def datum_nl(iso): y,m,d=iso.split('-'); return f'{int(d)} {MAANDEN[int(m)-1]} {y}'
 def kaart(t,past):
     pv=f'\n        <p class="priv">{E(t["privacy"])}</p>' if t.get('privacy') else ''
     return f'''      <article class="res tool" id="{t['id']}">
@@ -71,7 +74,7 @@ def kaart(t,past):
           <div><dt>Nederlands</dt><dd>{JN(t.get('nl'))}</dd></div>
           <div><dt>Instap</dt><dd>{INSTAP[t['instap']]} <small>(onze indeling)</small></dd></div>
         </dl>{pv}
-        <p class="src">Bron: {', '.join(X(u,E(n)) for n,u in t['bronnen'])} · gecontroleerd op {GCN}</p>
+        <p class="src">Bron: {', '.join(X(u,E(n)) for n,u in t['bronnen'])} · gecontroleerd op {datum_nl(t['gecontroleerd']) if t.get('gecontroleerd') else GCN}</p>
         <p class="go">{uit(t)}</p>
       </article>
 '''
@@ -159,19 +162,20 @@ cat('/ai-notuleren/','AI-notulist kiezen: notuleren en transcriptie | ToolMatch'
  'Meetings laten notuleren met AI, in Teams of aan tafel. Vergelijk AI-notulisten op Nederlands, waar je opnames staan, verwerkersovereenkomst en prijs.',
  'Notuleren','AI-notulist kiezen: notuleren en transcriptie',
  'Een meeting laten uitschrijven en samenvatten, online of aan tafel. Zo vergelijk je AI-notulisten op prijs, opslag van je opnames en afspraken over je gegevens.',
- f'''      <p>Een AI-notulist neemt een gesprek op, schrijft het uit en maakt er een samenvatting met actiepunten van. Sommige tools schuiven aan bij je online meeting, andere werken met een opname die je uploadt. Werk je in Teams met Microsoft 365, dan kan ook {L('/vergelijken/chatgpt-vs-copilot/','Copilot in Teams')} vergaderingen samenvatten, volgens Microsoft.</p>
+ f'''      <p>Een AI-notulist neemt een gesprek op, schrijft het uit en maakt er een samenvatting met actiepunten van. Sommige tools schuiven aan bij je online meeting, andere werken met een opname die je uploadt of met een app die het gesprek op je telefoon of laptop opneemt. Werk je in Teams met Microsoft 365, dan kan ook {L('/vergelijken/chatgpt-vs-copilot/','Copilot in Teams')} vergaderingen samenvatten, volgens Microsoft.</p>
       <p>Een opname bevat stemmen, namen en vaak vertrouwelijke informatie. Lees daarom ook wat er geldt voor {L('/gids/ai-veilig-gebruiken/','opnames en de AVG')} voordat je begint.</p>
 ''',
  [('amberscript','opslag in de EU en een verwerkersovereenkomst belangrijk zijn; ook nagekeken door mensen mogelijk.'),
   ('notta','je een gratis versie wilt proberen en ook opnames wilt laten vertalen.'),
+  ('notuly','verwerking in Nederland belangrijk is en je gesprekken aan tafel én online wilt vastleggen; gratis voor 3 gesprekken per maand.'),
   ('otter','je vooral online meetings live wilt laten uitschrijven.'),
   ('tldv','je online meetings wilt opnemen en er notities en samenvattingen van wilt.')],
  ['<strong>Vraag toestemming.</strong> Vertel deelnemers vooraf dat je opneemt en waarom.',
   '<strong>Check het Nederlands.</strong> Of een tool Nederlands goed verstaat, verschilt. Test met een echte opname met dialect of vaktermen.',
-  '<strong>Kijk waar de opnames staan.</strong> En hoe lang ze bewaard blijven. Bij Amberscript staan ze volgens de aanbieder op servers in de EU; bij de andere tools konden we dat niet bevestigen.'],
+  '<strong>Kijk waar de opnames staan.</strong> En hoe lang ze bewaard blijven. Bij Amberscript staan ze volgens de aanbieder op servers in de EU. Notuly verwerkt gesprekken volgens de aanbieder op Nederlandse servers in Amsterdam en wist de audio binnen een minuut na verwerking. Bij de andere tools konden we dat niet bevestigen.'],
  [('Wat is het verschil tussen transcriptie en notuleren?','Transcriptie is het letterlijk uitschrijven van wat er gezegd is. Notuleren is samenvatten: besluiten en actiepunten. De meeste tools op deze pagina doen allebei.'),
   ('Mag ik een meeting opnemen met AI?','Vertel deelnemers vooraf dat je opneemt en waarvoor. In een opname staan persoonsgegevens, dus dan geldt ook de AVG.'),
-  ('Is er een gratis AI-notulist?','Notta, Otter en tl;dv hebben een gratis versie met beperkingen. Bij Amberscript zagen we geen gratis versie op de prijspagina.')])
+  ('Is er een gratis AI-notulist?','Notta, Notuly, Otter en tl;dv hebben een gratis versie met beperkingen; bij Notuly zijn dat 3 gesprekken per maand. Bij Amberscript zagen we geen gratis versie op de prijspagina.')])
 
 cat('/crm-klein-bedrijf/','CRM voor een klein bedrijf: gratis en betaald | ToolMatch',
  'Een eenvoudig CRM voor je klantgegevens, contactmomenten en offertes. Vergelijk gratis en betaalde CRM-systemen voor kleine bedrijven op prijs en limieten.',
@@ -329,7 +333,7 @@ for c in CAT:
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
     body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
     body+=verder_lezen(c['slug'])+faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
-    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":(VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
+    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":(NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
       crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
     zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)

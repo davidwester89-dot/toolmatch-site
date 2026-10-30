@@ -197,3 +197,11 @@ button{font:inherit;font-weight:700;display:inline-flex;align-items:center;justi
 
 /* Partnerzin per blok met partnerlinks (vervangt het label per knop) */
 .pnoot{font-size:.875rem;color:var(--muted);margin:6px 0 0}
+
+/* Logo's van aanbieders: vast vak, voor iedereen gelijk (30-10) */
+.tlogo{display:inline-block;width:24px;height:24px;object-fit:contain;border-radius:6px;vertical-align:-6px;margin-right:8px;flex:none}
+h3 .tlogo{width:32px;height:32px;vertical-align:-7px;margin-right:10px}
+.tlogo-f{display:inline-grid;place-items:center;background:var(--tint);color:#33434b;font-weight:800;font-size:.8rem;line-height:1;text-decoration:none}
+.tbl th[scope=row] > a:has(> .tlogo){display:inline-flex;align-items:flex-start;gap:8px}
+.tbl th[scope=row] > a > .tlogo{margin:0}
+.tbl th[scope=col] > .tlogo{display:block;margin:0 0 6px}

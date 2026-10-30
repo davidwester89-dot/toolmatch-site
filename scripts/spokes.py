@@ -2,6 +2,12 @@
 PL=json.loads(subprocess.check_output(['node','--input-type=module','-e',
  "import {PARTNERLINKS} from './js/lib/partnerlinks.js'; console.log(JSON.stringify(PARTNERLINKS))"]))
 T={t['id']:t for t in TL}
+LOGOS=json.loads(subprocess.check_output(['node','--input-type=module','-e',
+ "import {LOGOS} from './js/lib/logos.js'; console.log(JSON.stringify(LOGOS))"]))
+def LG(i,px=24,naam=''):
+    """Logo in een vast vak (zelfde maat voor elke aanbieder, partner of niet); geen logo = neutrale letter. Zelfde markup als js/lib/logos.js."""
+    if i not in LOGOS: return f'<span class="tlogo tlogo-f" style="width:{px}px;height:{px}px" aria-hidden="true">{E((naam or i)[0].upper())}</span>'
+    return f'<img class="tlogo" src="/logos/{i}.webp" alt="{E(LOGOS[i])} logo" width="{px}" height="{px}" loading="lazy" decoding="async">'
 _ORDE=json.loads(subprocess.check_output(['node','-e',
  "const n=JSON.parse(process.argv[1]); const c=new Intl.Collator('nl',{sensitivity:'base'}); console.log(JSON.stringify(n.sort(c.compare)))",
  json.dumps([t['naam'] for t in TL])]))
@@ -63,7 +69,7 @@ def datum_nl(iso): y,m,d=iso.split('-'); return f'{int(d)} {MAANDEN[int(m)-1]} {
 def kaart(t,past):
     pv=f'\n        <p class="priv">{E(t["privacy"])}</p>' if t.get('privacy') else ''
     return f'''      <article class="res tool" id="{t['id']}">
-        <h3>{E(t['naam'])}</h3>
+        <h3>{LG(t['id'],32)}{E(t['naam'])}</h3>
         <p>{E(t['wat'])}</p>
         <p><strong>Past als</strong> {past}</p>
         <dl class="facts">
@@ -79,7 +85,7 @@ def kaart(t,past):
       </article>
 '''
 def kort_tabel(ids,cap):
-    rows=''.join(f'''          <tr><th scope="row"><a href="#{i}">{E(T[i]['naam'])}</a></th><td>{JN(T[i]['gratis'])}</td><td>{E(T[i]['prijs']) if T[i]['prijs'] else 'Niet gecontroleerd'}</td><td>{EUL.get(T[i]['eu'],'Niet gecontroleerd')}</td><td>{dpa(T[i])}</td></tr>
+    rows=''.join(f'''          <tr><th scope="row"><a href="#{i}">{LG(i)}{E(T[i]['naam'])}</a></th><td>{JN(T[i]['gratis'])}</td><td>{E(T[i]['prijs']) if T[i]['prijs'] else 'Niet gecontroleerd'}</td><td>{EUL.get(T[i]['eu'],'Niet gecontroleerd')}</td><td>{dpa(T[i])}</td></tr>
 ''' for i in ids)
     return f'''      <div class="tbl" role="region" aria-label="{cap}" tabindex="0">
         <table>
@@ -460,9 +466,10 @@ vs('/vergelijken/zapier-vs-make-vs-n8n/','Zapier vs Make vs n8n: welke past bij 
   ('Waar staan mijn gegevens?','Bij n8n Cloud volgens de aanbieder in de EU (Frankfurt). Bij Zapier en Make hebben we de locatie niet gecontroleerd.')],
  [tuple(b) for i in ('zapier','make','n8n') for b in T[i]['bronnen']])
 
+VSID={'ChatGPT':'chatgpt','Copilot Business':'copilot','Gemini in Google Workspace':'gemini','Claude':'claude','Zapier':'zapier','Make':'make','n8n':'n8n'}
 for v in VS:
     nc=len(v['cols'])
-    th=''.join(f'<th scope="col">{E(c)}</th>' for c in v['cols'])
+    th=''.join(f'<th scope="col">{LG(VSID[c])}{E(c)}</th>' for c in v['cols'])
     tr=''.join('          <tr><th scope="row">'+r[0]+'</th>'+''.join(f'<td>{E(x)}</td>' for x in r[1:])+'</tr>\n' for r in v['rows'])
     tbl=f'''      <h2 id="naast-elkaar">Naast elkaar</h2>
       <div class="tbl" role="region" aria-label="{E(v['crumb'])} naast elkaar" tabindex="0">
@@ -626,7 +633,7 @@ gids('/gids/ai-beleid-opstellen/','AI-beleid opstellen, met voorbeeld | ToolMatc
  [AP_GESL,AP_VWO,AP_RISK])
 
 PRIJZEN=[('chatgpt','ChatGPT'),('claude','Claude'),('lechat','Le Chat'),('copilot','Copilot Business'),('gemini','Gemini in Google Workspace'),('deepl','DeepL')]
-prijsrows=''.join(f'''          <tr><th scope="row">{E(n)}</th><td>{JN(T[i]['gratis'])}</td><td>{E(T[i]['prijs'])}</td><td>{', '.join(X(u,E(b)) for b,u in T[i]['bronnen'])}</td></tr>
+prijsrows=''.join(f'''          <tr><th scope="row">{LG(i)}{E(n)}</th><td>{JN(T[i]['gratis'])}</td><td>{E(T[i]['prijs'])}</td><td>{', '.join(X(u,E(b)) for b,u in T[i]['bronnen'])}</td></tr>
 ''' for i,n in PRIJZEN)
 gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere AI-tools? | ToolMatch',
  'Wat betaal je per maand voor ChatGPT, Copilot, Gemini en Claude? Persoonlijk en zakelijk naast elkaar, met de bron en de datum bij elke prijs.',

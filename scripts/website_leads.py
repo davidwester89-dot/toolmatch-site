@@ -16,8 +16,9 @@ def wl_knop(vid,naam,url):
     p=PLP.get(vid)
     if p: return met_noot(f'<p class="go"><a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{vid}" data-cta="partner" aria-label="Naar de site van {E(naam)} (opent in een nieuw tabblad)">Naar de site van {E(naam)}</a></p>\n').rstrip('\n')
     return f'<p class="go"><a class="btn ghost" href="{E(url)}" rel="noopener" target="_blank" data-vendor="{vid}" data-cta="outbound" aria-label="Naar de site van {E(naam)} (opent in een nieuw tabblad)">Naar de site van {E(naam)}</a></p>'
+WLID={'Albacross':'albacross','Leadfeeder (Dealfront)':'leadfeeder','Leadinfo':'leadinfo','Hostinger':'hostinger','JouwWeb':'jouwweb','Wix':'wix','WordPress (zelf hosten)':'wordpress'}
 def wl_tabel(label,cols,rows):
-    th=''.join(f'<th scope="col">{E(c)}</th>' for c in cols)
+    th=''.join(f'<th scope="col">{LG(WLID[c])}{E(c)}</th>' for c in cols)
     tr=''.join('          <tr><th scope="row">'+r[0]+'</th>'+''.join(f'<td>{x}</td>' for x in r[1:])+'</tr>\n' for r in rows)
     return f'''      <div class="tbl" role="region" aria-label="{E(label)}" tabindex="0">
         <table class="vs">
@@ -61,19 +62,19 @@ A_BODY=f'''      <h2 id="wat-het-doet">Wat een AI-websitebouwer wel en niet voor
  ('AI','Bouwen met AI (handmatig of Agentic), met AI-credits per plan.','AI-functies genoemd in de pakketvergelijking.','Site maken vanuit één prompt.','Niet genoemd op de pagina\'s die we bekeken.'),
  ('Nederlands','Nederlandstalige site; taal van de support niet gecontroleerd.','Nederlandstalige site, persoonlijke ondersteuning.','Nederlandstalige klantenservice, volgens de Nederlandse prijspagina.','Nederlandstalige site (nl.wordpress.org).')])}      <p>Bij Wix noemen we geen bedragen: Wix toont prijzen per land, en de uiteindelijke prijs zie je op de aankooppagina.</p>
       <h2 id="opties">De opties</h2>
-      <h3 id="hostinger">Hostinger Website Bouwer</h3>
+      <h3 id="hostinger">{LG('hostinger',32)}Hostinger Website Bouwer</h3>
       <p>Hostinger verkoopt de AI Bouwer als pakket met hosting, domein en e-mail. Je beschrijft je idee, de AI maakt een eerste versie en met "Ga live" staat hij online. Premium is voor maximaal 3 websites; voor een webshop noemt Hostinger Onbeperkt. Premium kost €9,99 per maand (verlengprijs); de eerste 48 maanden €1,99 per maand (€95,52 vooraf). Onbeperkt kost €16,99 per maand; de eerste 48 maanden €2,99. Alles excl. btw.</p>
       <p><strong>Past als</strong> je alles in één pakket wilt en lang vooruit betalen geen bezwaar is.</p>
       {wl_knop('hostinger','Hostinger','https://www.hostinger.com/nl/website-maken-met-ai')}
-      <h3 id="jouwweb">JouwWeb</h3>
+      <h3 id="jouwweb">{LG('jouwweb',32)}JouwWeb</h3>
       <p>Lite (€5,50 per maand) toont advertenties op je site. Pro (€10 per maand) heeft een eigen mailbox en een webshop voor 10 producten, Business (€20 per maand) een webshop zonder limiet. Standaardtarieven bij jaarbetaling, exclusief btw; tot en met 31 oktober 2026 betaal je de eerste 12 maanden de helft. Je domeinnaam staat op jouw naam, zodat je hem later kunt verhuizen.</p>
       <p><strong>Past als</strong> je een eenvoudige zakelijke site wilt en per maand wilt kunnen betalen, met een korte opzegtermijn.</p>
       {wl_knop('jouwweb','JouwWeb','https://www.jouwweb.nl/')}
-      <h3 id="wix">Wix</h3>
+      <h3 id="wix">{LG('wix',32)}Wix</h3>
       <p>Je kunt gratis beginnen, met een adres als naam.wixsite.com en Wix-branding. Met een Premium-pakket koppel je een eigen domein en verdwijnt die branding. Betalingen ontvangen en afspraken laten boeken kan vanaf Core. De pakketten zijn Light, Core, Business en Business Elite; de prijzen staan op de <a href="https://nl.wix.com/pricing" target="_blank" rel="noopener">prijspagina van Wix</a>.</p>
       <p><strong>Past als</strong> je eerst gratis wilt bouwen en later wilt uitbreiden met boekingen of een winkel.</p>
       {wl_knop('wix','Wix','https://www.wix.com/')}
-      <h3 id="wordpress">WordPress (zelf hosten)</h3>
+      <h3 id="wordpress">{LG('wordpress',32)}WordPress (zelf hosten)</h3>
       <p>WordPress is open source software onder de GPL-licentie. Je kunt het zelf downloaden en installeren; volgens WordPress.org is dat "voor iedereen die zich op zijn gemak voelt bij het regelen van zijn eigen hosting en domein". Of je laat het instellen bij een hostingpartij. Met plugins voeg je bijvoorbeeld een winkel of nieuwsbrief toe. Wat het kost, hangt af van de hosting en het domein die je kiest.</p>
       <p><strong>Past als</strong> je alle vrijheid wilt en het technische beheer zelf wilt regelen.</p>
       {wl_knop('wordpress','WordPress.org','https://nl.wordpress.org/')}
@@ -146,15 +147,15 @@ B_BODY=f'''      <h2 id="hoe-werkt-het">Hoe bedrijfsherkenning werkt</h2>
  ('CRM-koppelingen','Pipedrive vanaf Starter, HubSpot vanaf Professional (€149), Salesforce bij Organisation.','HubSpot, Salesforce en Pipedrive.','Starter: handmatig naar je CRM. HubSpot en Microsoft Dynamics vanaf Scale (€159), Salesforce vanaf Pro (€359).'),
  ('Contactpersonen','Tegoeden voor geverifieerde e-mail (10) en telefoon (5) in Starter.','Geverifieerde e-mail en telefoon vanaf Activate (vanaf €369 per maand).','LinkedIn-profielen, telefoonnummers en e-mailadressen; mobiele nummers vanaf Pro.'),
  ('Opslag van gegevens','Niet gecontroleerd.','Niet gecontroleerd.','Ierland (AWS), volgens Leadinfo.')])}      <h2 id="tools">De tools</h2>
-      <h3 id="albacross">Albacross</h3>
+      <h3 id="albacross">{LG('albacross',32)}Albacross</h3>
       <p>Albacross herkent bedrijven op je site en combineert dat met opvolgen: automatische e-mail- en LinkedIn-reeksen met AI zitten volgens de prijspagina al in Starter. Starter kost €59 per maand bij jaarbetaling, Professional €149 per maand. Je kunt 14 dagen gratis proberen, zonder creditcard.</p>
       <p><strong>Past als</strong> je herkennen en opvolgen in één tool wilt en met Pipedrive werkt.</p>
       {wl_knop('albacross','Albacross','https://www.albacross.com/')}
-      <h3 id="leadfeeder">Leadfeeder (Dealfront)</h3>
+      <h3 id="leadfeeder">{LG('leadfeeder',32)}Leadfeeder (Dealfront)</h3>
       <p>Leadfeeder is van Dealfront; de prijspagina van Dealfront stuurt door naar die van Leadfeeder. Lite is gratis, met de laatste 100 herkende bedrijven per maand en 7 dagen historie. Discover begint bij €79 per maand bij jaarbetaling (€113 bij maandbetaling) voor maximaal 50 bedrijven per maand. In elk plan zitten onbeperkt gebruikers en websites. Contactgegevens van personen haal je met credits, vanaf Activate.</p>
       <p><strong>Past als</strong> je eerst gratis wilt zien welke bedrijven langskomen, met je hele team.</p>
       {wl_knop('leadfeeder','Leadfeeder','https://www.leadfeeder.com/')}
-      <h3 id="leadinfo">Leadinfo</h3>
+      <h3 id="leadinfo">{LG('leadinfo',32)}Leadinfo</h3>
       <p>Leadinfo herkent volgens de aanbieder bedrijven in real time en toont bedrijfsinformatie, bezochte pagina's en contactpersonen. Starter kost €69 per maand bij jaarbetaling voor maximaal 50 bedrijven per maand, met 3 gebruikers. Scale (vanaf €159) koppelt ook met HubSpot en Microsoft Dynamics. Na de gratis proefperiode van 14 dagen, waarvoor je geen creditcard nodig hebt, krijg je een voorstel op maat. Leadinfo host in Ierland en is ISO 27001-gecertificeerd, volgens de aanbieder.</p>
       <p><strong>Past als</strong> je een Nederlandstalige tool zoekt met een verwerkersovereenkomst en hosting in de EU.</p>
       {wl_knop('leadinfo','Leadinfo','https://www.leadinfo.com/nl/')}

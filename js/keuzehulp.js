@@ -2,6 +2,7 @@
 import { match, normaliseer, VRAGEN } from './lib/match.js';
 import { DOELEN, GECONTROLEERD } from './lib/tools.js';
 import { uitgaand, metNoot } from './lib/partnerlinks.js';
+import { logoImg } from './lib/logos.js';
 import { track } from './consent.js';
 
 const form = document.getElementById('form');
@@ -30,7 +31,7 @@ function kaart(r, n) {
   const li = (xs, cls) => xs.length ? `<ul class="${cls}">${xs.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
   return `<article class="res${n === 0 ? ' top' : ''}">
   <p class="rank">${n === 0 ? 'Beste match' : '#' + (n + 1)}</p>
-  <h3>${esc(t.naam)}</h3>
+  <h3>${logoImg(t.id, { px: 32, naam: t.naam })}${esc(t.naam)}</h3>
   <p>${esc(t.wat)}</p>
   ${li(r.plus, 'pros')}${li(r.let_op, 'cons')}
   <dl class="facts">

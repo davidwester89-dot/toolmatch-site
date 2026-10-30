@@ -23,6 +23,7 @@ VERDER_UPD='2026-10-29'  # Verder lezen + gidslinks: zichtbare wijziging, L7
 NOTULY_UPD={'/ai-notuleren/':'2026-10-30'}  # Notuly toegevoegd 30-10 (MM-OK): zichtbare wijziging, L7
 LOGO_UPD={u:'2026-10-30' for u in ('/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/gids/wat-kosten-ai-abonnementen/','/vergelijken/chatgpt-vs-claude/','/vergelijken/chatgpt-vs-copilot/','/vergelijken/chatgpt-vs-gemini/','/vergelijken/zapier-vs-make-vs-n8n/')}  # logo's van aanbieders 30-10: zichtbare wijziging in de body, L7
 VERDER_GIDS=('/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')
+PRIJS_UPD={'/gids/ai-veilig-gebruiken/':'2026-10-30'}  # NL-IP-prijscheck 30-10: bronnen ChatGPT/Claude opnieuw bekeken (opt-out-claims nagelezen), L7
 ORG={"@id":D+"/#organization"}
 def ldscript(graph): return '<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":graph},ensure_ascii=False,indent=1)+'\n</script>\n'
 def crumbs_ld(items): return {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":D+u} for i,(n,u) in enumerate(items)]}
@@ -33,17 +34,20 @@ def faq_html(faq):
     return '      <h2 id="faq">Veelgestelde vragen</h2>\n      <div class="faq">\n'+''.join(f'      <details>\n        <summary>{q}</summary>\n        <p>{a}</p>\n      </details>\n' for q,a in faq)+'      </div>\n'
 # Bronnen die voor de valuta-fix op 26-10 voor het eerst zijn bekeken.
 BRON_DATUM={'https://notuly.nl/prijzen':'30 oktober 2026','https://notuly.nl/privacy':'30 oktober 2026','https://www.notta.ai/nl/pricing':'26 oktober 2026','https://workspace.google.com/intl/nl/business/':'26 oktober 2026','https://www.deepl.com/nl/pro':'26 oktober 2026'}
+# NL-IP-prijscheck 30-10 (site-checks/2026-10-30/tm-nl-ip-prijscheck.md): prijspagina's opnieuw bekeken vanuit Nederland.
+BRON_BEKEKEN={'https://chatgpt.com/nl-NL/pricing':'30 oktober 2026','https://chatgpt.com/pricing':'30 oktober 2026','https://claude.com/pricing':'30 oktober 2026'}
 def bronnen_html(srcs):
     seen=[]; 
     for s in srcs:
         if s not in seen: seen.append(s)
-    return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n.replace(' (NL-pagina van de aanbieder)','')))}, {('NL-pagina van de aanbieder, bekeken op '+BRON_DATUM[u]) if u in BRON_DATUM else 'bekeken op '+GCN}</li>\n' for n,u in seen)+'      </ul>\n'
+    return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n.replace(' (NL-pagina van de aanbieder)','')))}, {('NL-pagina van de aanbieder, bekeken op '+BRON_DATUM[u]) if u in BRON_DATUM else 'bekeken op '+BRON_BEKEKEN.get(u,GCN)}</li>\n' for n,u in seen)+'      </ul>\n'
 # Datumsweep 30-10: een kaart noemt naast "gecontroleerd op" ook de datum waarop een Nederlandse prijspagina later is nagelezen
 # (BRON_DATUM, valuta-fix cd561d0 26-10), zodat de kaart niet tegenspreekt wat er in de bronnenlijst staat.
 def kaartdatum(t): return datum_nl(t['gecontroleerd']) if t.get('gecontroleerd') else GCN
 def nagelezen(t):
     d=sorted({BRON_DATUM[u] for _,u in t['bronnen'] if u in BRON_DATUM and BRON_DATUM[u]!=kaartdatum(t)})
-    return f'; Nederlandse prijspagina bekeken op {d[0]}' if len(d)==1 else ''
+    b=sorted({BRON_BEKEKEN[u] for _,u in t['bronnen'] if u in BRON_BEKEKEN and BRON_BEKEKEN[u]!=kaartdatum(t)})
+    return (f'; Nederlandse prijspagina bekeken op {d[0]}' if len(d)==1 else '')+(f'; prijspagina bekeken op {b[0]}' if len(b)==1 and not d else '')
 def byline(slug=None):
     if slug in LOGO_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 30 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug in NOTULY_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 30 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
@@ -372,7 +376,7 @@ vs('/vergelijken/chatgpt-vs-copilot/','ChatGPT vs Copilot: verschil, prijs en ke
  ['ChatGPT','Copilot Business'],
  [('Wat het is','Losse AI-assistent van OpenAI, op web, desktop en mobiel.','AI-assistent in de Microsoft 365-apps, voor bedrijven die daar al in werken.'),
   ('Gratis instap','Ja, ChatGPT Free (met beperkingen).','Copilot Chat is volgens Microsoft zonder extra kosten beschikbaar bij geschikte Microsoft 365-plannen.'),
-  ('Betaald','Plus; het bedrag zie je op de prijspagina van OpenAI.','€18,20 per gebruiker per maand bij jaarbetaling (excl. btw); bij aanschaf tot en met 31-12-2026 actieprijs €15,60 voor het eerste jaar. Alleen als invoegtoepassing bij een geschikt Microsoft 365 Business-abonnement.'),
+  ('Betaald','Plus: €23 per maand (btw niet vermeld op de prijspagina).','€18,20 per gebruiker per maand bij jaarbetaling (excl. btw); bij aanschaf tot en met 31-12-2026 actieprijs €15,60 voor het eerste jaar. Alleen als invoegtoepassing bij een geschikt Microsoft 365 Business-abonnement.'),
   ('Word, Excel en PowerPoint','Extensies voor Excel, Word, PowerPoint en Google Sheets: beperkt in Free, ja in Plus.','Ingebouwd in Word, Excel en PowerPoint.'),
   ('Outlook en Teams','Niet gecontroleerd.','Ingebouwd: mails opstellen en threads samenvatten in Outlook, samenvattingen van vergaderingen in Teams.'),
   ('Training op je invoer','Opt-out beschikbaar (Free, Go, Plus en Pro).','Prompts en antwoorden worden volgens Microsoft niet gebruikt om de modellen te trainen.'),
@@ -403,7 +407,7 @@ vs('/vergelijken/chatgpt-vs-gemini/','ChatGPT vs Gemini: welke past bij je bedri
  ['ChatGPT','Gemini in Google Workspace'],
  [('Wat het is','Losse AI-assistent van OpenAI.','Gemini als onderdeel van Google Workspace (zakelijk).'),
   ('Gratis instap','Ja, ChatGPT Free (met beperkingen).','De gratis Gemini-app voor particulieren hebben we niet gecontroleerd. Workspace heeft een proefperiode van 14 dagen.'),
-  ('Betaald','Plus; het bedrag zie je op de prijspagina van OpenAI.','Business Starter: €8,10 per gebruiker per maand, met een contract van 1 jaar €6,80, met Gemini in Gmail en chat met Gemini. Business Standard: €16,20 per gebruiker per maand, met een contract van 1 jaar €13,60, ook met Gemini in Documenten en Meet (NL-pagina van de aanbieder, bekeken op 26 oktober 2026).'),
+  ('Betaald','Plus: €23 per maand (btw niet vermeld op de prijspagina).','Business Starter: €8,10 per gebruiker per maand, met een contract van 1 jaar €6,80, met Gemini in Gmail en chat met Gemini. Business Standard: €16,20 per gebruiker per maand, met een contract van 1 jaar €13,60, ook met Gemini in Documenten en Meet (NL-pagina van de aanbieder, bekeken op 26 oktober 2026).'),
   ('Gmail, Docs en Drive','Extensie voor Google Sheets; verder niet gecontroleerd.','Gemini in Gmail vanaf Starter; in Documenten en Meet vanaf Standard.'),
   ('Training op je invoer','Opt-out beschikbaar (Free, Go, Plus en Pro).','Niet gecontroleerd op de pagina\'s die we bekeken.'),
   ('Nederlands','Niet gemeten.','Niet gemeten.')],
@@ -428,8 +432,8 @@ vs('/vergelijken/chatgpt-vs-claude/','ChatGPT vs Claude: verschil voor onderneme
  ['ChatGPT','Claude'],
  [('Wat het is','AI-assistent van OpenAI.','AI-assistent van Anthropic.'),
   ('Gratis versie','Ja (met beperkingen).','Ja (met beperkingen).'),
-  ('Persoonlijk abonnement','Plus; het bedrag zie je op de prijspagina van OpenAI.','Pro (per maand of met jaarbetaling) en Max; de bedragen zie je op de prijspagina van Anthropic.'),
-  ('Voor teams','ChatGPT Business; prijs niet gecontroleerd.','Team, voor 2 tot 150 gebruikers, per gebruiker per maand; het bedrag zie je op de prijspagina van Anthropic.'),
+  ('Persoonlijk abonnement','Plus: €23 per maand (btw niet vermeld op de prijspagina).','Pro: €18 per maand bij maandelijks betalen, €15 per maand bij jaarbetaling (€180 per jaar), excl. btw. Max vanaf €90 per maand.'),
+  ('Voor teams','ChatGPT Business; prijs niet gecontroleerd.','Team, voor 2 tot 150 gebruikers: €21,04 per gebruiker per maand bij maandelijks betalen, €18 bij jaarbetaling, excl. btw.'),
   ('Kantoorsoftware','Extensies voor Excel, Word, PowerPoint en Google Sheets (beperkt in Free).','Claude for Microsoft 365 en Claude for Microsoft Outlook vanaf Pro, volgens de prijspagina.'),
   ('Training op je invoer','Opt-out beschikbaar.','Opt-out bij Free, Pro en Max; bij de zakelijke plannen volgens Anthropic standaard geen training op je inhoud.'),
   ('Nederlands','Niet gemeten.','Niet gemeten.')],
@@ -443,7 +447,7 @@ vs('/vergelijken/chatgpt-vs-claude/','ChatGPT vs Claude: verschil voor onderneme
       </ul>
 ''')],
  [('Wat is het verschil tussen ChatGPT en Claude?','Allebei zijn het losse AI-assistenten. Ze verschillen vooral in prijs bij jaarbetaling, koppelingen met kantoorsoftware en de standaardinstellingen voor training.'),
-  ('Wat kost Claude per maand?','Claude Pro betaal je per maand of met jaarbetaling. Het bedrag zie je op de prijspagina van Anthropic; een europrijs voor Nederland konden we daar niet nalezen.'),
+  ('Wat kost Claude per maand?','Claude Pro kost €18 per maand bij maandelijks betalen, of €15 per maand bij jaarbetaling (€180 vooraf). Anthropic noemt de prijzen exclusief btw.'),
   ('Gebruikt Claude mijn gesprekken voor training?','Bij Free, Pro en Max kun je dat uitzetten. Bij de zakelijke plannen traint Anthropic volgens de prijspagina standaard niet op je inhoud.')],
  [CHATGPT_SRC,('Claude Pricing','https://claude.com/pricing')])
 
@@ -668,13 +672,13 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
       </ul>
       <p>Welke assistent het beste past, lees je bij {L('/ai-assistenten/','welke assistent bij je past')}.</p>
 ''',
- [('Wat kost ChatGPT per maand?','Het betaalde abonnement voor één persoon heet ChatGPT Plus. Het bedrag zie je op de prijspagina van OpenAI; een europrijs voor Nederland konden we daar niet nalezen. Er is ook een gratis versie met beperkingen.'),
+ [('Wat kost ChatGPT per maand?','Het betaalde abonnement voor één persoon heet ChatGPT Plus en kost €23 per maand; of daar btw bij zit, staat niet op de prijspagina. Plus betaal je per maand: jaarabonnementen noemt OpenAI alleen voor Business en Enterprise. Er is ook een gratis versie met beperkingen.'),
   ('Wat kost Copilot per maand?','Copilot Business kost €18,20 per gebruiker per maand bij jaarbetaling, exclusief btw. Bij aanschaf tot en met 31 december 2026 geldt een actieprijs van €15,60 voor het eerste jaar.'),
   ('Wat is het verschil tussen ChatGPT Plus en Business?','Plus is een persoonlijk abonnement. Business is voor teams, met beheer en zakelijke afspraken. De prijs van Business konden we op de prijspagina niet aflezen.')],
  [tuple(b) for i,_ in PRIJZEN for b in T[i]['bronnen']])
 
 for g in GIDS:
-    upd=LOGO_UPD.get(g['slug']) or VALUTA_UPD.get(g['slug'])
+    upd=LOGO_UPD.get(g['slug']) or PRIJS_UPD.get(g['slug']) or VALUTA_UPD.get(g['slug'])
     body=g['body']+faq_html(g['faq'])+bronnen_html(g['src'])+(f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}, bijgewerkt op {datum_nl(upd)}. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n' if upd else f'      <p class="note">Redactie ToolMatch · gepubliceerd op {GCN}, gecontroleerd op {GCN}{", bijgewerkt op 29 oktober 2026" if g["slug"] in VERDER_GIDS else ""}</p>\n')
     crumb=f'<a href="/gids/">Gidsen</a> › {g["crumb"]}'
     graph=[{"@type":"Article","@id":D+g['slug']+"#artikel","headline":g['h1'],"description":g['desc'],"inLanguage":"nl-NL","url":D+g['slug'],"mainEntityOfPage":D+g['slug'],"datePublished":PUB,"dateModified":upd or (VERDER_UPD if g['slug'] in VERDER_GIDS else SCHEMA_UPD),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},

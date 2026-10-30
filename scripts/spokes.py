@@ -660,12 +660,14 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
 {prijsrows}          </tbody>
         </table>
       </div>
+      <h2 id="chatgpt-claude-prijs">Wat kosten ChatGPT Plus en Claude Pro?</h2>
+      <p>ChatGPT Plus kost €23 per maand. Je betaalt Plus per maand; of er btw bij zit, staat niet op de prijspagina van OpenAI. Claude Pro kost €18 per maand bij maandelijks betalen, of €15 per maand bij jaarbetaling (€180 vooraf). Anthropic schrijft erbij: "Prices shown don’t include applicable tax." Die bedragen zijn dus exclusief btw. Zo stonden de prijzen op 30 oktober 2026 op de prijspagina's, bekeken vanuit Nederland.</p>
       <h2 id="persoonlijk-zakelijk">Persoonlijk of zakelijk</h2>
       <p>Persoonlijke abonnementen zoals ChatGPT Plus en Claude Pro reken je per persoon. Zakelijke abonnementen zoals Copilot Business en Google Workspace reken je ook per gebruiker, maar daar horen beheer en afspraken over je gegevens bij. Werk je met klantgegevens, dan is een zakelijk abonnement vaak de betere keuze. Twijfel je tussen de twee bekendste? Lees {L('/vergelijken/chatgpt-vs-copilot/','ChatGPT of Copilot zakelijk')}.</p>
       <h2 id="let-op">Waar je op let</h2>
       <ul>
         <li><strong>Kijk naar de Nederlandse prijs.</strong> Sommige aanbieders tonen hun prijs in een andere munt, afhankelijk van waar je de pagina bekijkt. Wat je betaalt, zie je op de betaalpagina voordat je afrekent.</li>
-        <li><strong>Met of zonder btw.</strong> Microsoft noemt de prijs van Copilot exclusief btw, DeepL de prijs van Individual inclusief btw. Vergelijk dus niet zomaar.</li>
+        <li><strong>Met of zonder btw.</strong> Microsoft noemt de prijs van Copilot exclusief btw, DeepL de prijs van Individual inclusief btw. Anthropic noemt de prijs van Claude exclusief btw; OpenAI vermeldt bij ChatGPT niets over btw. Vergelijk dus niet zomaar.</li>
         <li><strong>Jaarbetaling.</strong> "Per maand bij jaarbetaling" betekent dat je een jaar vooruit betaalt. Zonder jaarcontract is de prijs vaak hoger, zoals bij Google Workspace Business Starter: €8,10 per gebruiker per maand, met een contract van 1 jaar €6,80.</li>
         <li><strong>Actieprijzen.</strong> Copilot Business heeft tot en met 31 december 2026 een actieprijs voor het eerste jaar. Daarna betaal je de normale prijs.</li>
         <li><strong>Per gebruiker.</strong> Met vijf mensen betaal je vijf keer. Kijk of iedereen echt een eigen abonnement nodig heeft.</li>
@@ -673,6 +675,7 @@ gids('/gids/wat-kosten-ai-abonnementen/','Wat kosten ChatGPT, Copilot en andere 
       <p>Welke assistent het beste past, lees je bij {L('/ai-assistenten/','welke assistent bij je past')}.</p>
 ''',
  [('Wat kost ChatGPT per maand?','Het betaalde abonnement voor één persoon heet ChatGPT Plus en kost €23 per maand; of daar btw bij zit, staat niet op de prijspagina. Plus betaal je per maand: jaarabonnementen noemt OpenAI alleen voor Business en Enterprise. Er is ook een gratis versie met beperkingen.'),
+  ('Wat kost Claude per maand?','Claude Pro kost €18 per maand bij maandelijks betalen, of €15 per maand bij jaarbetaling (€180 vooraf). Anthropic noemt de prijzen exclusief btw.'),
   ('Wat kost Copilot per maand?','Copilot Business kost €18,20 per gebruiker per maand bij jaarbetaling, exclusief btw. Bij aanschaf tot en met 31 december 2026 geldt een actieprijs van €15,60 voor het eerste jaar.'),
   ('Wat is het verschil tussen ChatGPT Plus en Business?','Plus is een persoonlijk abonnement. Business is voor teams, met beheer en zakelijke afspraken. De prijs van Business konden we op de prijspagina niet aflezen.')],
  [tuple(b) for i,_ in PRIJZEN for b in T[i]['bronnen']])

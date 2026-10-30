@@ -43,3 +43,14 @@ test('prijscheck: prijsMaand = europrijs bij maandelijks betalen (MM-besluit gro
   assert.match(T.calendly.prijs, /^Standard: €12 per gebruiker per maand bij maandelijks betalen, .*\(EUR gekozen op de prijspagina; btw niet vermeld\)$/);
   assert.match(T.notta.prijs, /^Pro: €11,69 per maand bij maandelijks betalen, €7 per maand bij jaarbetaling/);
 });
+
+test('prijscheck gids wat-kosten: europrijzen ChatGPT en Claude in tabel, H2 en tekst; maandprijs eerst; btw zoals de bron', () => {
+  const t = read('gids/wat-kosten-ai-abonnementen/index.html');
+  assert.match(t, /<h2 id="chatgpt-claude-prijs">Wat kosten ChatGPT Plus en Claude Pro\?<\/h2>/);
+  assert.match(t, /<p>ChatGPT Plus kost €23 per maand\./);
+  assert.match(t, /Claude Pro kost €18 per maand bij maandelijks betalen, of €15 per maand bij jaarbetaling \(€180 vooraf\)\. Anthropic schrijft erbij: "Prices shown don’t include applicable tax\."/);
+  assert.match(t, /<td>Plus: €23 per maand \(btw niet vermeld op de prijspagina\)<\/td>/);
+  assert.match(t, /<td>Pro: €18 per maand bij maandelijks betalen, €15 per maand bij jaarbetaling \(€180 per jaar\), excl\. btw<\/td>/);
+  assert.match(t, /"name": "Wat kost Claude per maand\?"/);
+  assert.doesNotMatch(t, /Canva[^<]{0,80}per maand/);
+});

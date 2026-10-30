@@ -54,3 +54,8 @@ test('Notuly zit niet in de keuzehulp (doelen leeg): geen enkele uitkomst bevat 
   })(0, {});
   assert.doesNotMatch(readFileSync('keuzehulp/index.html', 'utf8'), /Notuly/);
 });
+
+test('Notuly: kaart noemt de limiet van het gratis plan (3 gesprekken, max. 60 minuten per opname; notuly.nl/prijzen 30-10)', () => {
+  const kaart = html.split('<article class="res tool" id="notuly">')[1].split('</article>')[0];
+  assert.match(kaart, /gratis voor 3 gesprekken per maand \(max\. 60 minuten per opname\)\./);
+});

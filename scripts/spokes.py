@@ -175,7 +175,7 @@ cat('/ai-notuleren/','AI-notulist kiezen: notuleren en transcriptie | ToolMatch'
 ''',
  [('amberscript','opslag in de EU en een verwerkersovereenkomst belangrijk zijn; ook nagekeken door mensen mogelijk.'),
   ('notta','je een gratis versie wilt proberen en ook opnames wilt laten vertalen.'),
-  ('notuly','verwerking in Nederland belangrijk is en je gesprekken aan tafel én online wilt vastleggen; gratis voor 3 gesprekken per maand.'),
+  ('notuly','verwerking in Nederland belangrijk is en je gesprekken aan tafel én online wilt vastleggen; gratis voor 3 gesprekken per maand (max. 60 minuten per opname).'),
   ('otter','je vooral online meetings live wilt laten uitschrijven.'),
   ('tldv','je online meetings wilt opnemen en er notities en samenvattingen van wilt.')],
  ['<strong>Vraag toestemming.</strong> Vertel deelnemers vooraf dat je opneemt en waarom.',

@@ -3,13 +3,16 @@
 # met rel="sponsored nofollow noopener" en de partnerzin eronder; anders een gewone link (rel="noopener"). Bronnen blijven gewone links.
 WL_PUB='2026-10-27'
 # Inhoudelijk gewijzigd na publicatie (partnerlink Hostinger): dateModified, lastmod en zichtbare bijwerkdatum.
-WL_UPD={'/ai-website-maken/':'2026-10-30','/websitebezoekers-herkennen/':'2026-10-30'}  # 28-10 partnerlink Hostinger; 30-10 logo's van aanbieders (L7)
+WL_UPD={'/ai-website-maken/':'2026-11-01','/websitebezoekers-herkennen/':'2026-10-30'}  # 28-10 partnerlink Hostinger; 30-10 logo's van aanbieders; 1-11 JouwWeb-actie (t/m 31-10) eraf, prijzen Hostinger/JouwWeb opnieuw bekeken (L7)
 WL_CHECK='26 oktober 2026'
+# Opnieuw bekeken op NL-IP op 30-10-2026 (site-checks/2026-10-30/tm-website-prijzen-details.md).
+WL_BRON={'https://www.jouwweb.nl/prijzen':'30 oktober 2026','https://www.hostinger.com/nl/website-maken-met-ai':'30 oktober 2026','https://www.hostinger.com/nl/website-maken':'30 oktober 2026'}
+WL_HERCHECK={'/ai-website-maken/':'Hostinger en JouwWeb op 30 oktober 2026'}
 WL_LASTMOD={'/ai-website-maken/':WL_UPD.get('/ai-website-maken/',WL_PUB),'/websitebezoekers-herkennen/':WL_UPD.get('/websitebezoekers-herkennen/',WL_PUB),'/':WL_PUB}
 def wl_datum(iso): y,m,d=iso.split('-'); return f'{int(d)} {MAANDEN[int(m)-1]} {y}'
 WL_EXTRA='<meta name="author" content="Redactie ToolMatch">\n<meta property="og:image:type" content="image/png">\n'
 def wl_bronnen(srcs):
-    return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n))}, bekeken op {WL_CHECK}</li>\n' for n,u in srcs)+'      </ul>\n'
+    return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n))}, bekeken op {WL_BRON.get(u,WL_CHECK)}</li>\n' for n,u in srcs)+'      </ul>\n'
 PLP=json.loads(subprocess.check_output(['node','--input-type=module','-e',
  "import {PARTNERLINKS_PAGINA} from './js/lib/partnerlinks.js'; console.log(JSON.stringify(PARTNERLINKS_PAGINA))"]))
 def wl_knop(vid,naam,url):
@@ -17,19 +20,19 @@ def wl_knop(vid,naam,url):
     if p: return met_noot(f'<p class="go"><a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{vid}" data-cta="partner" aria-label="Naar de site van {E(naam)} (opent in een nieuw tabblad)">Naar de site van {E(naam)}</a></p>\n').rstrip('\n')
     return f'<p class="go"><a class="btn ghost" href="{E(url)}" rel="noopener" target="_blank" data-vendor="{vid}" data-cta="outbound" aria-label="Naar de site van {E(naam)} (opent in een nieuw tabblad)">Naar de site van {E(naam)}</a></p>'
 WLID={'Albacross':'albacross','Leadfeeder (Dealfront)':'leadfeeder','Leadinfo':'leadinfo','Hostinger':'hostinger','JouwWeb':'jouwweb','Wix':'wix','WordPress (zelf hosten)':'wordpress'}
-def wl_tabel(label,cols,rows):
+def wl_tabel(label,cols,rows,slug=None):
     th=''.join(f'<th scope="col">{LG(WLID[c])}{E(c)}</th>' for c in cols)
     tr=''.join('          <tr><th scope="row">'+r[0]+'</th>'+''.join(f'<td>{x}</td>' for x in r[1:])+'</tr>\n' for r in rows)
     return f'''      <div class="tbl" role="region" aria-label="{E(label)}" tabindex="0">
         <table class="vs">
-          <thead><tr><th scope="col">Gecontroleerd op {WL_CHECK}</th>{th}</tr></thead>
+          <thead><tr><th scope="col">Gecontroleerd op {WL_CHECK}{(' ('+WL_HERCHECK[slug]+')') if slug in WL_HERCHECK else ''}</th>{th}</tr></thead>
           <tbody>
 {tr}          </tbody>
         </table>
       </div>
 '''
 def wl_zet(slug,title,desc,crumb,h1,lead,body,faq,srcs):
-    body=body+faq_html(faq)+wl_bronnen(srcs)+f'      <p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026{(", bijgewerkt op "+wl_datum(WL_UPD[slug])) if slug in WL_UPD else ""}, bronnen bekeken op {WL_CHECK}. Prijzen zoals de aanbieder ze vermeldt.</p>\n'
+    body=body+faq_html(faq)+wl_bronnen(srcs)+f'      <p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026{(", bijgewerkt op "+wl_datum(WL_UPD[slug])) if slug in WL_UPD else ""}, bronnen bekeken op {WL_CHECK}{(', '+WL_HERCHECK[slug]) if slug in WL_HERCHECK else ''}. Prijzen zoals de aanbieder ze vermeldt.</p>\n'
     graph=[{"@type":"Article","@id":D+slug+"#artikel","headline":h1,"description":desc,"inLanguage":"nl-NL","url":D+slug,"mainEntityOfPage":D+slug,"datePublished":WL_PUB,"dateModified":WL_UPD.get(slug,WL_PUB),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),(crumb,slug)]),faq_ld(slug,faq)]
     write(slug.strip('/')+'/index.html',page(slug,title,desc,crumb,h1,lead,body,wide=True,extra=ldscript(graph)+WL_EXTRA))
@@ -53,21 +56,21 @@ A_BODY=f'''      <h2 id="wat-het-doet">Wat een AI-websitebouwer wel en niet voor
 {wl_tabel('Vier opties om een website te maken naast elkaar',['Hostinger','JouwWeb','Wix','WordPress (zelf hosten)'],[
  ('Wat het is','AI Bouwer met hosting, domein en e-mail in één pakket.','Websitebouwer; hosting zit in alle pakketten.','Websitebouwer met AI en slepen en neerzetten; hosting inbegrepen.','Open source software (GPL); hosting en domein regel je zelf of via een hostingpartij.'),
  ('Gratis','Nee; de websitebouwer kun je 14 dagen gratis proberen.','Ja, zonder eigen domeinnaam.','Ja, met een wixsite.com-adres en Wix-branding.','De software is open source; voor hosting en domein ga je naar een hostingpartij.'),
- ('Betaald vanaf','Premium: €9,99 per maand (verlengprijs); de eerste 48 maanden €1,99 per maand (€95,52 vooraf), excl. btw.','Lite: €5,50 per maand bij jaarbetaling, excl. btw. Tot en met 31-10-2026 de eerste 12 maanden €2,75.','Light; het bedrag zie je op de <a href="https://nl.wix.com/pricing" target="_blank" rel="noopener">prijspagina van Wix</a>. Jaarabonnement vooraf betaald, excl. toeslagen.','Hangt af van je hostingpartij.'),
- ('Na de eerste periode','Premium verlengt voor €9,99 per maand, voor dezelfde looptijd.','Standaardtarief; domein na het eerste jaar €20 per jaar.','Niet gecontroleerd.','–'),
+ ('Betaald vanaf','Premium: €9,99 per maand (verlengprijs); de eerste 48 maanden €1,99 per maand (€95,52 vooraf), excl. btw.','Lite: €5,50 per maand bij jaarbetaling, excl. btw.','Light; het bedrag zie je op de <a href="https://nl.wix.com/pricing" target="_blank" rel="noopener">prijspagina van Wix</a>. Jaarabonnement vooraf betaald, excl. toeslagen.','Hangt af van je hostingpartij.'),
+ ('Na de eerste periode','Premium verlengt voor €9,99 per maand, voor dezelfde looptijd.','Het standaardtarief hierboven; domein na het eerste jaar €20 per jaar.','Niet gecontroleerd.','–'),
  ('Opzeggen','Op elk moment opzegbaar; 30 dagen geld-terug-garantie.','Maandbetaling: 1 maand opzegtermijn. Jaarbetaling verlengt automatisch, tenzij je minstens 1 maand vooraf opzegt.','14 dagen geld-terug-garantie.','–'),
  ('Domein','1 jaar gratis.','1 jaar gratis (niet bij Gratis), op jouw naam.','1 jaar gratis bij de meeste jaarabonnementen, alleen voor een nieuw domein via Wix.','Regel je zelf.'),
  ('E-mail','Premium: 2 mailboxen per website, 1 jaar gratis.','Pro: 1 mailbox; Business: 1 XL-mailbox.','Via een los Google Workspace-abonnement.','Niet gecontroleerd.'),
  ('Webshop','E-commerce bij Onbeperkt: €16,99 per maand; de eerste 48 maanden €2,99, excl. btw.','Pro: 10 producten; Business: onbeperkt.','Betalingen en eCommerce vanaf Core.','Met plugins, bijvoorbeeld een winkel.'),
  ('AI','Bouwen met AI (handmatig of Agentic), met AI-credits per plan.','AI-functies genoemd in de pakketvergelijking.','Site maken vanuit één prompt.','Niet genoemd op de pagina\'s die we bekeken.'),
- ('Nederlands','Nederlandstalige site; taal van de support niet gecontroleerd.','Nederlandstalige site, persoonlijke ondersteuning.','Nederlandstalige klantenservice, volgens de Nederlandse prijspagina.','Nederlandstalige site (nl.wordpress.org).')])}      <p>Bij Wix noemen we geen bedragen: Wix toont prijzen per land, en de uiteindelijke prijs zie je op de aankooppagina.</p>
+ ('Nederlands','Nederlandstalige site; taal van de support niet gecontroleerd.','Nederlandstalige site, persoonlijke ondersteuning.','Nederlandstalige klantenservice, volgens de Nederlandse prijspagina.','Nederlandstalige site (nl.wordpress.org).')],slug='/ai-website-maken/')}      <p>Bij Wix noemen we geen bedragen: Wix toont prijzen per land, en de uiteindelijke prijs zie je op de aankooppagina.</p>
       <h2 id="opties">De opties</h2>
       <h3 id="hostinger">{LG('hostinger',32)}Hostinger Website Bouwer</h3>
       <p>Hostinger verkoopt de AI Bouwer als pakket met hosting, domein en e-mail. Je beschrijft je idee, de AI maakt een eerste versie en met "Ga live" staat hij online. Premium is voor maximaal 3 websites; voor een webshop noemt Hostinger Onbeperkt. Premium kost €9,99 per maand (verlengprijs); de eerste 48 maanden €1,99 per maand (€95,52 vooraf). Onbeperkt kost €16,99 per maand; de eerste 48 maanden €2,99. Alles excl. btw.</p>
       <p><strong>Past als</strong> je alles in één pakket wilt en lang vooruit betalen geen bezwaar is.</p>
       {wl_knop('hostinger','Hostinger','https://www.hostinger.com/nl/website-maken-met-ai')}
       <h3 id="jouwweb">{LG('jouwweb',32)}JouwWeb</h3>
-      <p>Lite (€5,50 per maand) toont advertenties op je site. Pro (€10 per maand) heeft een eigen mailbox en een webshop voor 10 producten, Business (€20 per maand) een webshop zonder limiet. Standaardtarieven bij jaarbetaling, exclusief btw; tot en met 31 oktober 2026 betaal je de eerste 12 maanden de helft. Je domeinnaam staat op jouw naam, zodat je hem later kunt verhuizen.</p>
+      <p>Lite (€5,50 per maand) toont advertenties op je site. Pro (€10 per maand) heeft een eigen mailbox en een webshop voor 10 producten, Business (€20 per maand) een webshop zonder limiet. Standaardtarieven bij jaarbetaling, exclusief btw. Je domeinnaam staat op jouw naam, zodat je hem later kunt verhuizen.</p>
       <p><strong>Past als</strong> je een eenvoudige zakelijke site wilt en per maand wilt kunnen betalen, met een korte opzegtermijn.</p>
       {wl_knop('jouwweb','JouwWeb','https://www.jouwweb.nl/')}
       <h3 id="wix">{LG('wix',32)}Wix</h3>
@@ -80,7 +83,7 @@ A_BODY=f'''      <h2 id="wat-het-doet">Wat een AI-websitebouwer wel en niet voor
       {wl_knop('wordpress','WordPress.org','https://nl.wordpress.org/')}
       <h2 id="let-op">Waar je op let</h2>
       <ul>
-        <li><strong>Introductieprijs of verlengprijs.</strong> Een lage maandprijs geldt vaak alleen voor de eerste periode. Bij Hostinger Premium is de verlengprijs €9,99 per maand; voor 48 maanden is dat 48 × €9,99 = €479,52 (onze rekensom, excl. btw). De eerste 48 maanden betaal je met de introductieprijs €95,52 vooraf, excl. btw. Bij JouwWeb Pro is de standaardprijs €10 per maand, dus €120 per jaar (onze rekensom); met de actie t/m 31-10-2026 betaal je het eerste jaar €59,88 (12 × €4,99, onze rekensom). Je domeinnaam kost €20 per jaar vanaf het tweede jaar; in het eerste jaar is hij gratis. Alle bedragen excl. btw.</li>
+        <li><strong>Introductieprijs of verlengprijs.</strong> Een lage maandprijs geldt vaak alleen voor de eerste periode. Bij Hostinger Premium is de verlengprijs €9,99 per maand; voor 48 maanden is dat 48 × €9,99 = €479,52 (onze rekensom, excl. btw). De eerste 48 maanden betaal je met de introductieprijs €95,52 vooraf, excl. btw. Bij JouwWeb Pro is de standaardprijs €10 per maand, dus €120 per jaar (onze rekensom). Je domeinnaam kost €20 per jaar vanaf het tweede jaar; in het eerste jaar is hij gratis. Alle bedragen excl. btw.</li>
         <li><strong>Looptijd.</strong> Bij JouwWeb verlengt een jaarabonnement automatisch, tenzij je minstens een maand van tevoren opzegt.</li>
         <li><strong>Overstappen.</strong> Je domeinnaam wil je kunnen meenemen. JouwWeb registreert hem op jouw naam. Bij Wix geldt het gratis domein alleen voor een nieuw domein dat je via Wix koopt. Hoe makkelijk je de site zelf meeneemt, hebben we niet getest.</li>
         <li><strong>Gegevens van bezoekers.</strong> Komen er via een contactformulier namen en mailadressen binnen, dan geldt de AVG. Waar de servers van deze aanbieders staan, hebben we niet gecontroleerd. Lees ook {L('/gids/ai-veilig-gebruiken/','wat de AVG vraagt bij online tools')}.</li>

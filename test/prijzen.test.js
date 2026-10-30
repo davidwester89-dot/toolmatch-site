@@ -22,6 +22,15 @@
 //    '= ' achter de som, of anders het bedrag direct vóór '(N × €X)' (zoals '€59,88 (12 × €4,99)'). Staat er geen totaal, dan geen oordeel.
 //    Het totaal moet tot op de cent gelijk zijn aan N × X.
 // R4 og:image: hoogstens één property="og:image" per pagina (og:image:width e.d. tellen niet).
+// Uitbreiding 30-10 (vrijdagreview, SEO-specialist; review SC):
+// R1+ ook fullwidth ＄ (U+FF04) en small ﹩ (U+FE69), met of zonder bedrag.
+// R2+ eenheid = elk blok tussen blokgrenzen (p, li, td, th, dd, dt, figcaption, div, section, article, aside, h1-h6, tr, br, …);
+//     inline elementen (span, strong, a, time) vallen in hun blok. Zo tellen prijzen in een <div> of <span> ook mee.
+// R5 Actie/korting (L4). Een zin met een bedrag of percentage én 'korting', 'tijdelijk', 'actie(prijs)', 'aanbieding', 'welkomstactie',
+//    'kortingscode', 'black friday' of 'sale' moet in dezelfde zin een einddatum noemen ('t/m 31-12-2026', 'tot en met 31 december 2026',
+//    'geldig tot …', 'loopt tot …'). Vaste kortingen bij jaarbetaling/jaarabonnement/onderwijs/non-profit tellen niet. Ligt de einddatum
+//    vóór PUSH_DATE (standaard vandaag, Europe/Amsterdam), dan is de actie verlopen en faalt de test ook; dat geldt voor elke zin met
+//    een bedrag en een einddatum ('Tot en met 31-10-2026 de eerste 12 maanden €2,75'), ook zonder actiewoord.
 //
 // BEKEND: overtredingen die al in de build stonden toen deze test kwam (26-10, op 45151e3). Ze staan hier expliciet zodat de
 // suite groen blijft, maar elke nieuwe overtreding faalt (R1: 79 bedragen/woorden op 18 pagina's; R2: geen).
@@ -77,7 +86,7 @@ const ldStrings = (h) => {
 };
 
 // R1
-const VALUTA = /\$\s?\d+(?:[.,]\d+)*|\$|\bUSD\b|\bdollars?\b/gi;
+const VALUTA = /[$＄﹩]\s?\d+(?:[.,]\d+)*|[$＄﹩]|\bUSD\b|\bdollars?\b/gi;
 export function valuta(h) {
   if (/<html[^>]*lang="en/i.test(h)) return [];
   const hits = [];
@@ -92,6 +101,13 @@ export function valuta(h) {
   return hits;
 }
 
+// Blokken (R2+, R5): splits de zichtbare body op blokgrenzen; inline tags (span, a, strong, time) blijven in hun blok.
+const BLOKGRENS = /<\/?(?:p|li|td|th|dd|dt|figcaption|div|section|article|aside|header|footer|main|nav|h[1-6]|tr|table|thead|tbody|ul|ol|dl|blockquote|br|hr|details|summary|caption|form|label|button|figure)\b[^>]*>/gi;
+export const blokken = (h) => {
+  const b = zonderCode((h.match(/<body\b[^>]*>([\s\S]*)<\/body>/i) || [, h])[1]);
+  return b.replace(BLOKGRENS, '\n¶\n').split('¶').map(tekst).filter(Boolean);
+};
+
 // R2
 const BEDRAG = /€\s?\d|\$\s?\d|\d\s?(euro|EUR)\b/;
 const GETALWOORD = '(\\d+|twee|drie|vier|vijf|zes|zeven|acht|negen|tien|elf|twaalf|achttien|vierentwintig|zesendertig|achtenveertig)';
@@ -100,8 +116,7 @@ const STANDAARDWOORD = /\b(standaard\w*|verleng\w*|regulier\w*|normaal|normale|d
 const KNIP = /[;()]|,\s/g; // grens tussen zinsdelen (een decimale komma heeft geen spatie erachter)
 const zinnen = (s) => s.split(/(?<=[.!?])\s+(?=[A-Z0-9"“(])/);
 export function volgorde(h) {
-  const units = [...zonderCode(h).matchAll(/<(p|li|td|th|dd|figcaption)\b[^>]*>([\s\S]*?)<\/\1>/gi)].map((m) => tekst(m[2]))
-    .concat(ldStrings(h).map((x) => x.v));
+  const units = blokken(h).concat(ldStrings(h).map((x) => x.v));
   const hits = [];
   for (const u of units) {
     const zs = zinnen(u);
@@ -115,6 +130,28 @@ export function volgorde(h) {
       if (vorige && BEDRAG.test(vorige) && !PROMO.test(vorige) && !/^Bij [A-Z]/.test(z)) return;
       hits.push(z.slice(0, 90));
     });
+  }
+  return [...new Set(hits)];
+}
+
+// R5 (L4)
+const ACTIE = /\b(korting\w*|tijdelijk\w*|actie(?:prijs|prijzen|periode)?|aanbieding\w*|welkomstactie|kortingscode|black friday|sale)\b/i;
+const VAST = /\b(jaarbetaling|jaarlijks betalen|jaarabonnement|bij een jaar|onderwijs|non-?profit|student\w*|vrijwilliger\w*)\b/i;
+const BEDRAG_OF_PCT = /€\s?\d|\$\s?\d|\d\s?(euro|EUR)\b|\d\s?%/;
+const MND = 'januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december';
+const EIND = new RegExp(`\\b(?:t\\/m|tot en met|tot|geldig tot|loopt tot|eindigt op|uiterlijk)\\s+(?:(\\d{1,2})[-/](\\d{1,2})[-/](\\d{4})|(\\d{1,2})\\s+(${MND})\\s+(\\d{4})|(\\d{4})-(\\d{2})-(\\d{2}))`, 'i');
+const p2 = (x) => String(x).padStart(2, '0');
+export const vandaag = () => process.env.PUSH_DATE || new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Amsterdam' }).format(new Date());
+export function acties(h, peil = vandaag()) {
+  const hits = [];
+  for (const u of blokken(h).concat(ldStrings(h).map((x) => x.v))) for (const z of zinnen(u)) {
+    const a = z.match(ACTIE);
+    // Elke zin met een bedrag en een einddatum ('Tot en met 31-10-2026 de eerste 12 maanden €2,75') telt als tijdelijke prijs.
+    if (!BEDRAG_OF_PCT.test(z) || (!a && !EIND.test(z)) || (a && /^korting/i.test(a[1]) && VAST.test(z))) continue;
+    const e = z.match(EIND);
+    if (!e) { if (a) hits.push(`zonder einddatum: ${z.slice(0, 90)}`); continue; }
+    const eind = e[1] ? `${e[3]}-${p2(e[2])}-${p2(e[1])}` : e[4] ? `${e[6]}-${p2(MND.split('|').indexOf(e[5].toLowerCase()) + 1)}-${p2(e[4])}` : `${e[7]}-${e[8]}-${e[9]}`;
+    if (eind < peil) hits.push(`verlopen ${eind}: ${z.slice(0, 90)}`);
   }
   return [...new Set(hits)];
 }
@@ -178,6 +215,24 @@ test('prijzen R3 (L3): (N × €X) klopt met het genoemde totaal', () => {
 
 test('prijzen R4: hoogstens één og:image per pagina', () => {
   for (const f of pages) assert.ok(ogImages(read(f)) <= 1, `${url(f)}: ${ogImages(read(f))} og:image`);
+});
+
+test('prijzen R5 (L4): actie/korting met bedrag noemt een einddatum die nog niet verlopen is', () => {
+  const fout = [];
+  for (const f of pages) for (const r of acties(read(f))) fout.push(`${url(f)}: ${r}`);
+  assert.deepEqual(fout, []);
+});
+
+test('prijzen R1+/R2+/R5: fullwidth ＄, prijzen in div/span en acties zonder einddatum vallen op (zelftest)', () => {
+  assert.ok(valuta('<html lang="nl"><body><div>Pro kost ＄12 per maand</div></body></html>').includes('＄12'));
+  assert.ok(valuta('<html lang="nl"><body><span>Pro: ﹩9</span></body></html>').includes('﹩9'));
+  assert.ok(volgorde('<body><div class="card"><span>Actieprijs €5 per maand</span>, daarna onbekend.</div></body>').length === 1, 'R2 in div/span');
+  assert.ok(volgorde('<body><div><span>Standaardprijs €10 per maand.</span> <span>Actieprijs €5 per maand.</span></div></body>').length === 0, 'R2 goed in div');
+  assert.equal(acties('<body><div>Tijdelijk 20% korting op Pro.</div></body>', '2026-11-02').length, 1);
+  assert.equal(acties('<body><p>Welkomstactie: €9,95 per maand.</p></body>', '2026-11-02').length, 1);
+  assert.equal(acties('<body><span>Actieprijs €15,60 bij aanschaf tot en met 31 december 2026.</span></body>', '2026-11-02').length, 0);
+  assert.match(acties('<body><p>Met de actie t/m 31-10-2026 betaal je €59,88.</p></body>', '2026-11-02')[0], /verlopen 2026-10-31/);
+  assert.equal(acties('<body><p>Bij jaarbetaling krijg je 20% korting: €96 per jaar.</p></body>', '2026-11-02').length, 0);
 });
 
 test('prijzen: inline JavaScript met $ telt niet als valuta', () => {

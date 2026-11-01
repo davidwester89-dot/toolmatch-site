@@ -110,7 +110,7 @@ CATS=[
 ('Data &amp; analyse','<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>','Je cijfers laten analyseren met AI of in een dashboard zetten, zonder dat je data-analist bent.',[('/ai-data-analyse/','je cijfers in een dashboard')],''),
 ]
 METH=[
-('Onafhankelijk','<path d="M12 3v18M5 7h14"/><path d="M5 7l-3 7a3.5 3.5 0 0 0 6 0zM19 7l-3 7a3.5 3.5 0 0 0 6 0z"/>','De volgorde volgt uit wat bij jouw situatie past. Een vergoeding van een aanbieder verandert daar niets aan. Komen er partnerlinks, dan worden die bij de knoppen vermeld.'),
+('Onafhankelijk','<path d="M12 3v18M5 7h14"/><path d="M5 7l-3 7a3.5 3.5 0 0 0 6 0zM19 7l-3 7a3.5 3.5 0 0 0 6 0z"/>','De volgorde volgt uit wat bij jouw situatie past. Een vergoeding van een aanbieder verandert daar niets aan. Partnerlinks worden bij de knoppen vermeld.'),
 ('Privacy en AVG','<path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="m9 12 2 2 4-4"/>','We kijken waar een tool je gegevens opslaat (in de EU of daarbuiten), of er een verwerkersovereenkomst is en of je invoer wordt gebruikt om AI te trainen. Dat kan net zo zwaar wegen als de prijs.'),
 ('Echte kosten per maand','<rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20M6 15h4"/>','We rekenen met wat je echt betaalt: per maand, inclusief of exclusief btw zoals de aanbieder het vermeldt, en met de beperkingen van een gratis versie. Bij elke prijs staat de bron en de datum waarop we keken.'),
 ]
@@ -125,13 +125,13 @@ FAQ=[
 ('Wat is ToolMatch?','ToolMatch is een Nederlandse site die ondernemers helpt om de juiste (AI-)tools te kiezen: voor tekst, offertes, facturatie, planning, klantbeheer, notuleren, ontwerp en automatisering. We kijken naar wat je werk vraagt, wat een tool echt per maand kost en hoe er met je gegevens wordt omgegaan.'),
 ('Voor wie is ToolMatch bedoeld?','Voor ondernemers die zelf hun tools kiezen: van zzp\'ers en freelancers tot kleine bedrijven met een paar mensen. Je hebt geen technische kennis nodig.'),
 ('Kost ToolMatch iets?','Nee. ToolMatch is gratis te gebruiken en je hebt geen account nodig.'),
-('Verdient ToolMatch aan de tools die jullie noemen?','Er kunnen partnerlinks op de site komen. Klik je daarop en neem je een abonnement, dan kan ToolMatch een vergoeding krijgen. Zo\'n link wordt bij de knoppen vermeld, en een vergoeding bepaalt nooit de volgorde of de uitkomst van een vergelijking.'),
+('Verdient ToolMatch aan de tools die jullie noemen?','Soms. Bij een deel van de knoppen staat een partnerlink, bijvoorbeeld de knop naar Hostinger op <a href="/ai-website-maken/">AI website maken</a>. Klik je daarop en neem je een abonnement, dan kan ToolMatch een vergoeding krijgen; voor jou verandert de prijs daardoor niet. Bij zo\'n knop staat een korte vermelding, en een vergoeding bepaalt nooit de volgorde of de uitkomst van een vergelijking. De keuzehulp gebruikt de partnerlinks niet. Meer uitleg staat op <a href="/partnerlinks/">partnerlinks</a>.'),
 ('Mag ik gegevens van klanten in een AI-tool zetten?','Dat hangt af van de tool en van wat je erin zet. Gaat het om persoonsgegevens, dan geldt de AVG en ben jij verantwoordelijk voor wat ermee gebeurt. Kijk daarom of de aanbieder een verwerkersovereenkomst biedt, waar de gegevens worden opgeslagen en of je invoer wordt gebruikt om het AI-model te trainen. Twijfel je, laat persoonsgegevens dan weg.'),
 ]
 ld={"@context":"https://schema.org","@graph":[
 {"@type":"Organization","@id":D+"/#organization","name":"ToolMatch","alternateName":"Redactie ToolMatch","url":D+"/","logo":D+"/favicon.svg","email":"info@toolmatch.nl","description":"Onafhankelijke Nederlandse site die ondernemers helpt de juiste (AI-)tools te kiezen.","contactPoint":{"@type":"ContactPoint","email":"info@toolmatch.nl","contactType":"customer support","availableLanguage":"nl"}},
 {"@type":"WebSite","@id":D+"/#website","url":D+"/","name":"ToolMatch","description":"De juiste (AI-)tools voor ondernemers.","inLanguage":"nl-NL","publisher":{"@id":D+"/#organization"}},
-{"@type":"FAQPage","@id":D+"/#faq","inLanguage":"nl-NL","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in FAQ]}]}
+{"@type":"FAQPage","@id":D+"/#faq","inLanguage":"nl-NL","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":re.sub(r'<[^>]+>','',a)}} for q,a in FAQ]}]}
 LD='<script type="application/ld+json">\n'+json.dumps(ld,ensure_ascii=False,indent=1)+'\n</script>\n'
 CHECK='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#0f6e6e"/><path d="m7.5 12.5 3 3 6-6.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 ART=open('scripts/hero.svg').read()
@@ -221,7 +221,8 @@ idx=head('/',TITLE,DESC,"ToolMatch: de juiste (AI-)tools voor ondernemers",LD)+f
         <span class="eyebrow">Veelgestelde vragen</span>
         <h2 id="h-faq">Goed om te weten</h2>
       </div>
-{faq}    </div>
+{faq}      <p class="note">Redactie ToolMatch · bijgewerkt op 3 november 2026</p>
+    </div>
   </section>
 
   <section class="sec tint" id="contact" aria-labelledby="h-contact">
@@ -291,13 +292,15 @@ OVER='''      <h2>Wie we zijn</h2>
       <h2>Zo werken we</h2>
       <ul>
         <li><strong>Onafhankelijk.</strong> De volgorde in een vergelijking volgt uit wat bij jouw situatie past, nooit uit een vergoeding.</li>
-        <li><strong>Partnerlinks herkenbaar.</strong> Komen er partnerlinks, dan worden die bij de knoppen vermeld.</li>
+        <li><strong>Partnerlinks herkenbaar.</strong> Partnerlinks worden bij de knoppen vermeld. Hoe dat werkt, lees je op <a href="/partnerlinks/">partnerlinks</a>.</li>
         <li><strong>Alleen echte gegevens.</strong> Prijzen en functies halen we bij de aanbieder zelf, met de bron en de datum erbij. We verzinnen geen cijfers, beoordelingen of reviews.</li>
         <li><strong>Privacy telt mee.</strong> Waar je gegevens staan en wat een tool ermee doet, weegt mee in onze vergelijkingen.</li>
       </ul>
 
       <h2>Contact</h2>
-      <p>Een vraag, een tip of een fout gezien? Mail naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>.</p>'''
+      <p>Een vraag, een tip of een fout gezien? Mail naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>.</p>
+
+      <p class="note">Redactie ToolMatch · bijgewerkt op 3 november 2026</p>'''
 open('privacy/index.html','w').write(sub('/privacy/','Privacy en cookies | ToolMatch','Hoe ToolMatch met je gegevens omgaat: geen cookies zonder toestemming, en Google Analytics alleen als je op Accepteren klikt.','Privacy en cookies','Privacy en cookies','ToolMatch verzamelt zo min mogelijk. Zonder jouw toestemming plaatsen we geen cookies en meten we niets.',PRIV))
 open('over/index.html','w').write(sub('/over/','Over ToolMatch: wie we zijn en hoe we werken','ToolMatch helpt ondernemers de juiste (AI-)tools kiezen. Lees hoe Redactie ToolMatch werkt: onafhankelijk, met echte prijzen en privacy als criterium.','Over ToolMatch','Over ToolMatch','ToolMatch helpt ondernemers de juiste (AI-)tools te kiezen, zonder geld en tijd te verspillen aan abonnementen die niet bij hun werk passen.',OVER))
 exec(open('scripts/pages.py').read())
@@ -314,4 +317,5 @@ LASTMOD.update(NOTULY_UPD)  # Notuly op /ai-notuleren/ 30-10 (L7)
 LASTMOD.update(LOGO_UPD); LASTMOD['/keuzehulp/']='2026-10-30'  # logo's van aanbieders 30-10 (L7)
 LASTMOD.update(PRIJS_UPD)  # NL-IP-prijscheck 30-10 (L7)
 LASTMOD.update(HUB_UPD)  # hubs /gids/ en /vergelijken/ = nieuwste kind 2026-10-30 (L7-hubregel)
+LASTMOD.update({'/':'2026-11-03','/over/':'2026-11-03'})  # partner-FAQ en /over/ actueel: partnerlinks staan live (externe feedback nov, L7)
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')

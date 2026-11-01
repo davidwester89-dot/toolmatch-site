@@ -24,6 +24,7 @@ NOTULY_UPD={'/ai-notuleren/':'2026-10-30'}  # Notuly toegevoegd 30-10 (MM-OK): z
 LOGO_UPD={u:'2026-10-30' for u in ('/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/gids/wat-kosten-ai-abonnementen/','/vergelijken/chatgpt-vs-claude/','/vergelijken/chatgpt-vs-copilot/','/vergelijken/chatgpt-vs-gemini/','/vergelijken/zapier-vs-make-vs-n8n/')}  # logo's van aanbieders 30-10: zichtbare wijziging in de body, L7
 VERDER_GIDS=('/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')
 PRIJS_UPD={'/gids/ai-veilig-gebruiken/':'2026-10-30'}  # NL-IP-prijscheck 30-10: bronnen ChatGPT/Claude opnieuw bekeken (opt-out-claims nagelezen), L7
+HUB_UPD={'/vergelijken/':'2026-10-30','/gids/':'2026-10-30'}  # Hubdatum = datum van het nieuwste kind (L7-hubregel, SC 01-11): alleen datumcorrectie, geen bodywijziging
 ORG={"@id":D+"/#organization"}
 def ldscript(graph): return '<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":graph},ensure_ascii=False,indent=1)+'\n</script>\n'
 def crumbs_ld(items): return {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":D+u} for i,(n,u) in enumerate(items)]}
@@ -508,8 +509,8 @@ def hub(path,title,desc,crumb,h1,lead,intro,items,outro=''):
         <p>{E(t)}</p>
       </article>
 ''' for p,n,t in items)
-    body=intro+f'      <h2 id="overzicht">{"Kies een vergelijking" if path=="/vergelijken/" else "Alle gidsen"}</h2>\n      <div class="results">\n'+li+'      </div>\n'+outro+f'      <p class="note">Redactie ToolMatch · bijgewerkt op {GCN}</p>\n'
-    graph=[{"@type":"CollectionPage","@id":D+path,"url":D+path,"name":h1,"description":desc,"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG},
+    body=intro+f'      <h2 id="overzicht">{"Kies een vergelijking" if path=="/vergelijken/" else "Alle gidsen"}</h2>\n      <div class="results">\n'+li+'      </div>\n'+outro+f'      <p class="note">Redactie ToolMatch · bijgewerkt op {datum_nl(HUB_UPD[path]) if path in HUB_UPD else GCN}</p>\n'
+    graph=[{"@type":"CollectionPage","@id":D+path,"url":D+path,"name":h1,"description":desc,"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,**({"dateModified":HUB_UPD[path]} if path in HUB_UPD else {})},
       {"@type":"ItemList","name":h1,"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":nm,"url":D+p} for n,(p,nm,_) in enumerate(items)]},
       crumbs_ld([('Home','/'),(crumb,path)])]
     zet(path,title,desc,crumb,h1,lead,body,graph)

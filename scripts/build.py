@@ -313,4 +313,5 @@ LASTMOD.update({u:'2026-10-29' for u in ('/ai-afbeeldingen-en-ontwerp/','/ai-ass
 LASTMOD.update(NOTULY_UPD)  # Notuly op /ai-notuleren/ 30-10 (L7)
 LASTMOD.update(LOGO_UPD); LASTMOD['/keuzehulp/']='2026-10-30'  # logo's van aanbieders 30-10 (L7)
 LASTMOD.update(PRIJS_UPD)  # NL-IP-prijscheck 30-10 (L7)
+LASTMOD.update(HUB_UPD)  # hubs /gids/ en /vergelijken/ = nieuwste kind 2026-10-30 (L7-hubregel)
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')

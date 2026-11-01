@@ -97,3 +97,12 @@ test('zelftest l7check: datums, logo en footer tellen niet als bodywijziging; na
     assert.match(r, /package\.json/); assert.match(r, /logo-rechten\.js/); assert.doesNotMatch(r, /js\/lib\/a\.js/);
   } finally { rmSync(tmp, { recursive: true, force: true }); }
 });
+
+test('BEKEND-huisregel: elk BEKEND_HUB/BEKEND_L7-item is exact (alleen) en heeft een vervaldatum (tot); na tot weer rood', () => {
+  const volgendeDag = (d) => new Date(Date.parse(d + 'T12:00:00Z') + 864e5).toISOString().slice(0, 10);
+  for (const b of [...BEKEND_HUB, ...BEKEND_L7]) {
+    assert.match(b.tot || '', /^\d{4}-\d{2}-\d{2}$/, `${b.pad}: geen tot`);
+    assert.ok(b.alleen instanceof RegExp && b.alleen.source.startsWith('^') && b.alleen.source.endsWith('$'), `${b.pad}: alleen ontbreekt of is niet exact (^…$)`);
+    assert.ok(bekendActief(b, b.tot) && !bekendActief(b, volgendeDag(b.tot)), `${b.pad}: vervalt niet na ${b.tot}`);
+  }
+});

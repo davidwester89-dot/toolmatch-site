@@ -23,8 +23,14 @@ export const CFG = {
 // gevolgd door .com/@ en niet als deel van een e-mailadres.
 export const ALLOW_NAME = [{ file: /\.(html|js)$/, match: /^[^\w.@]?Gmail[^\w.@]?$/, reden: 'productnaam Gmail (hoofdletter G, geen adres)' }];
 export const BEKEND_ORPHAN = [];
-// Hub-audit: bestaande bevindingen op origin/main (30-10). Haal een regel weg zodra de hub is gefixt; dan bewaakt de test hem.
+// Hub-audit: bestaande bevindingen op origin/main (30-10). Elk item is exact (alleen = de volledige melding, incl. kinderen en
+// datums) en vervalt na 'tot' (Europe/Amsterdam): daarna is de melding weer rood (huisregel BEKEND: exact + vervaldatum, SC 01-11).
+// Haal een regel weg zodra de hub is gefixt (vrijdaglijst 06-11: 'TM hubs nog 20-10'); dan bewaakt de test hem.
 export const BEKEND_HUB = [
-  { pad: '/gids/', reden: 'gidsenhub: "bijgewerkt 20 oktober" en lastmod 2026-10-20, /gids/wat-kosten-ai-abonnementen/ 2026-10-30 (30-10, inhoudsfix niet in deze commit; SC/MM beslist)' },
-  { pad: '/vergelijken/', reden: 'vergelijkhub: "bijgewerkt 20 oktober" en lastmod 2026-10-20, 4 vergelijkingen 2026-10-30 (30-10, inhoudsfix niet in deze commit; SC/MM beslist)' },
+  { pad: '/gids/', tot: '2026-11-08',
+    alleen: /^\/gids\/: hub ouder dan nieuwste kind 2026-10-30 \(\/gids\/ai-veilig-gebruiken\/, \/gids\/wat-kosten-ai-abonnementen\/\): zichtbaar 2026-10-20, lastmod 2026-10-20$/,
+    reden: 'gidsenhub: "bijgewerkt 20 oktober" en lastmod 2026-10-20; kinderen /gids/ai-veilig-gebruiken/ en /gids/wat-kosten-ai-abonnementen/ 2026-10-30 (hubfix op de vrijdaglijst)' },
+  { pad: '/vergelijken/', tot: '2026-11-08',
+    alleen: /^\/vergelijken\/: hub ouder dan nieuwste kind 2026-10-30 \(\/vergelijken\/chatgpt-vs-copilot\/, \/vergelijken\/chatgpt-vs-gemini\/, \/vergelijken\/chatgpt-vs-claude\/, \/vergelijken\/zapier-vs-make-vs-n8n\/\): zichtbaar 2026-10-20, lastmod 2026-10-20$/,
+    reden: 'vergelijkhub: "bijgewerkt 20 oktober" en lastmod 2026-10-20; 4 vergelijkingen 2026-10-30 (hubfix op de vrijdaglijst)' },
 ];

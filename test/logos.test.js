@@ -85,9 +85,10 @@ test('logo: fallback is een neutrale letter in hetzelfde vak', () => {
   for (const id of ZONDER_LOGO) assert.match(logoImg(id, { naam: 'X' }), /^<span class="tlogo tlogo-f"/, id);
 });
 
-test('L7 30-10: de 19 pagina\'s met logo\'s en /keuzehulp/ hebben dateModified, sitemap-lastmod en zichtbaar bijgewerkt op 30 oktober 2026', () => {
+test('L7 30-10: de 18 pagina\'s met logo\'s en /keuzehulp/ hebben dateModified, sitemap-lastmod en zichtbaar bijgewerkt op 30 oktober 2026', () => {
   const sm = readFileSync(ROOT + 'sitemap.xml', 'utf8');
-  const P = ['ai-afbeeldingen-en-ontwerp', 'ai-assistenten', 'ai-chatbot-website', 'ai-data-analyse', 'ai-mail-en-offertes', 'ai-notuleren', 'ai-tekst-schrijven', 'ai-vertalen', 'automatiseren-zonder-code', 'crm-klein-bedrijf', 'online-afspraken-plannen', 'social-media-inplannen', 'gids/wat-kosten-ai-abonnementen', 'vergelijken/chatgpt-vs-claude', 'vergelijken/chatgpt-vs-copilot', 'vergelijken/chatgpt-vs-gemini', 'vergelijken/zapier-vs-make-vs-n8n', 'websitebezoekers-herkennen', 'keuzehulp'];
+  const P = ['ai-assistenten', 'ai-chatbot-website', 'ai-data-analyse', 'ai-mail-en-offertes', 'ai-notuleren', 'ai-tekst-schrijven', 'ai-vertalen', 'automatiseren-zonder-code', 'crm-klein-bedrijf', 'online-afspraken-plannen', 'social-media-inplannen', 'gids/wat-kosten-ai-abonnementen', 'vergelijken/chatgpt-vs-claude', 'vergelijken/chatgpt-vs-copilot', 'vergelijken/chatgpt-vs-gemini', 'vergelijken/zapier-vs-make-vs-n8n', 'websitebezoekers-herkennen', 'keuzehulp'];
+  // ai-afbeeldingen-en-ontwerp is op 3-11 opnieuw bijgewerkt (link naar /ai-presentatie-maken/); die datum test test/ai-presentatie-0311.test.js.
   // ai-website-maken is op 1-11 opnieuw bijgewerkt (JouwWeb-actie t/m 31-10 eraf); die datum test test/website-prijzen.test.js.
   for (const p of P) {
     const t = readFileSync(ROOT + p + '/index.html', 'utf8');

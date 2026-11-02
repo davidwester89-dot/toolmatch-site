@@ -50,6 +50,7 @@ def nagelezen(t):
     b=sorted({BRON_BEKEKEN[u] for _,u in t['bronnen'] if u in BRON_BEKEKEN and BRON_BEKEKEN[u]!=kaartdatum(t)})
     return (f'; Nederlandse prijspagina bekeken op {d[0]}' if len(d)==1 else '')+(f'; prijspagina bekeken op {b[0]}' if len(b)==1 and not d else '')
 def byline(slug=None):
+    if slug=='/ai-afbeeldingen-en-ontwerp/': return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 3 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # link naar /ai-presentatie-maken/ 3-11 (L7)
     if slug in LOGO_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 30 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug in NOTULY_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 30 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug in VERDER: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 29 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
@@ -236,6 +237,7 @@ cat('/ai-afbeeldingen-en-ontwerp/','AI voor afbeeldingen, logo’s en presentati
  'Afbeeldingen en ontwerp','AI voor afbeeldingen, logo’s en presentaties',
  'Een beeld voor je website, een eerste logo-idee of een presentatie voor een klant. Dit zijn de tools waarvan we de prijs konden controleren.',
  f'''      <p>Voor beeld heb je twee soorten tools: een <strong>AI-assistent die een afbeelding maakt</strong> op basis van een beschrijving, en een <strong>ontwerptool</strong> waarin je zelf bouwt, met AI als hulp. Voor presentaties is de tweede soort vaak handiger.</p>
+      <p>Wil je vooral een presentatie maken? Lees {L('/ai-presentatie-maken/','hoe je met AI een presentatie maakt')}, met Canva, Copilot en Gemini naast elkaar.</p>
       <p>Is je beeld klaar? Met een planner kun je {L('/social-media-inplannen/','je visuals als post inplannen')}.</p>
 ''',
  [('chatgpt','je af en toe een afbeelding wilt laten maken met een beschrijving; in de gratis versie kan dat beperkt.'),
@@ -352,7 +354,7 @@ for c in CAT:
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
     body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
     body+=verder_lezen(c['slug'])+faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
-    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":LOGO_UPD.get(c['slug']) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
+    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":({'/ai-afbeeldingen-en-ontwerp/':'2026-11-03'}.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
       crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
     zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)

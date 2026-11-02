@@ -17,3 +17,12 @@ test('partner-FAQ actueel op / en /over/', () => {
     assert.match(h, /bijgewerkt op 3 november 2026/, p);
   }
 });
+
+// SC-review de784e7: de keuzehulp gebruikt partnerlinks wel voor de knop onder een resultaat (js/keuzehulp.js uitgaand/metNoot),
+// maar match.js leest ze nooit. Dus: 'tellen niet mee in de uitkomst', niet 'gebruikt ze niet'.
+test('partner-FAQ: keuzehulp-zin klopt ook als PARTNERLINKS gevuld wordt', () => {
+  const home = readFileSync('index.html', 'utf8');
+  assert.doesNotMatch(home, /De keuzehulp gebruikt de partnerlinks niet/);
+  assert.equal(home.split('Partnerlinks tellen niet mee in de uitkomst van de keuzehulp.').length - 1, 2, 'zichtbaar + FAQPage');
+  assert.doesNotMatch(readFileSync('js/lib/match.js', 'utf8'), /^\s*import[^\n]*partnerlinks/m);
+});

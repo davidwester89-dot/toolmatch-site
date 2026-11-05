@@ -24,6 +24,7 @@ NOTULY_UPD={'/ai-notuleren/':'2026-10-30'}  # Notuly toegevoegd 30-10 (MM-OK): z
 LOGO_UPD={u:'2026-10-30' for u in ('/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/gids/wat-kosten-ai-abonnementen/','/vergelijken/chatgpt-vs-claude/','/vergelijken/chatgpt-vs-copilot/','/vergelijken/chatgpt-vs-gemini/','/vergelijken/zapier-vs-make-vs-n8n/')}  # logo's van aanbieders 30-10: zichtbare wijziging in de body, L7
 VERDER_GIDS=('/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')
 PRIJS_UPD={'/gids/ai-veilig-gebruiken/':'2026-10-30'}  # NL-IP-prijscheck 30-10: bronnen ChatGPT/Claude opnieuw bekeken (opt-out-claims nagelezen), L7
+INBOUND_UPD={'/ai-tekst-schrijven/':'2026-11-05'}  # Verder lezen + /ai-presentatie-maken/ (techronde 5-11): zichtbare wijziging, L7
 HUB_UPD={'/vergelijken/':'2026-10-30','/gids/':'2026-10-30'}  # Hubdatum = datum van het nieuwste kind (L7-hubregel, SC 01-11): alleen datumcorrectie, geen bodywijziging
 ORG={"@id":D+"/#organization"}
 def ldscript(graph): return '<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":graph},ensure_ascii=False,indent=1)+'\n</script>\n'
@@ -50,6 +51,7 @@ def nagelezen(t):
     b=sorted({BRON_BEKEKEN[u] for _,u in t['bronnen'] if u in BRON_BEKEKEN and BRON_BEKEKEN[u]!=kaartdatum(t)})
     return (f'; Nederlandse prijspagina bekeken op {d[0]}' if len(d)==1 else '')+(f'; prijspagina bekeken op {b[0]}' if len(b)==1 and not d else '')
 def byline(slug=None):
+    if slug in INBOUND_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 5 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug=='/ai-afbeeldingen-en-ontwerp/': return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 3 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # link naar /ai-presentatie-maken/ 3-11 (L7)
     if slug in LOGO_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 30 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug in NOTULY_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 30 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
@@ -327,9 +329,9 @@ VL_TXT={'/ai-assistenten/':'AI-assistenten: ChatGPT en de alternatieven','/ai-te
  '/ai-mail-en-offertes/':'AI voor offertes en zakelijke mail','/ai-notuleren/':'Een AI-notulist kiezen','/crm-klein-bedrijf/':'Een CRM voor een klein bedrijf',
  '/ai-vertalen/':'Teksten en mails vertalen met AI','/ai-afbeeldingen-en-ontwerp/':'AI voor afbeeldingen, logo’s en presentaties',
  '/ai-website-maken/':'Een website maken met AI','/websitebezoekers-herkennen/':'Zien welke bedrijven je website bezoeken',
- '/automatiseren-zonder-code/':'Automatiseren zonder code','/ai-chatbot-website/':'Een chatbot voor je website','/ai-data-analyse/':'AI voor data-analyse en dashboards'}
+ '/automatiseren-zonder-code/':'Automatiseren zonder code','/ai-chatbot-website/':'Een chatbot voor je website','/ai-data-analyse/':'AI voor data-analyse en dashboards','/ai-presentatie-maken/':'Een presentatie maken met AI'}
 VERDER={'/ai-assistenten/':['/ai-mail-en-offertes/','/ai-notuleren/','/ai-data-analyse/'],
- '/ai-tekst-schrijven/':['/ai-mail-en-offertes/','/ai-afbeeldingen-en-ontwerp/','/ai-website-maken/'],
+ '/ai-tekst-schrijven/':['/ai-mail-en-offertes/','/ai-afbeeldingen-en-ontwerp/','/ai-website-maken/','/ai-presentatie-maken/'],  # +presentatie: techronde 5-11 (inbound)
  '/ai-mail-en-offertes/':['/ai-tekst-schrijven/','/ai-notuleren/','/ai-vertalen/'],
  '/ai-notuleren/':['/ai-mail-en-offertes/','/ai-vertalen/','/ai-assistenten/'],
  '/crm-klein-bedrijf/':['/websitebezoekers-herkennen/','/ai-chatbot-website/','/ai-data-analyse/'],
@@ -354,7 +356,7 @@ for c in CAT:
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
     body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
     body+=verder_lezen(c['slug'])+faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
-    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":({'/ai-afbeeldingen-en-ontwerp/':'2026-11-03'}.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
+    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":(INBOUND_UPD.get(c['slug']) or {'/ai-afbeeldingen-en-ontwerp/':'2026-11-03'}.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
       crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
     zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)

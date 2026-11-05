@@ -38,12 +38,13 @@ test('ai-presentatie: bronnen alleen naam + link, zonder datum', () => {
   assert.doesNotMatch(b, /bekeken op|geraadpleegd|20\d\d/);
 });
 
-test('L7 3-11: nieuwe pagina en /ai-afbeeldingen-en-ontwerp/ op de pushdatum', () => {
+test('L7 3-11: nieuwe pagina /ai-presentatie-maken/; ontwerp-hub later 10-11 (Canva-gids)', () => {
   const sm = readFileSync('sitemap.xml', 'utf8');
-  for (const p of ['/ai-presentatie-maken/', '/ai-afbeeldingen-en-ontwerp/']) assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>2026-11-03</lastmod>`), p);
+  assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-presentatie-maken/</loc><lastmod>2026-11-03</lastmod>`));
+  assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-afbeeldingen-en-ontwerp/</loc><lastmod>2026-11-10</lastmod>`), 'hub opnieuw 10-11');
   assert.match(H, /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-03"/);
   assert.match(H, /bijgewerkt op <time datetime="2026-11-03">3 november 2026<\/time>/);
   const a = readFileSync('ai-afbeeldingen-en-ontwerp/index.html', 'utf8');
-  assert.match(a, /"dateModified": "2026-11-03"/);
-  assert.match(a, /<p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 3 november 2026/);
+  assert.match(a, /"dateModified": "2026-11-10"/);
+  assert.match(a, /bijgewerkt op 10 november 2026/);
 });

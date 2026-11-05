@@ -38,7 +38,8 @@ test('prijscheck: prijsMaand = europrijs bij maandelijks betalen (MM-besluit gro
   for (const [id, v] of [['chatgpt', 23], ['claude', 18], ['notta', 11.69], ['calendly', 12]]) {
     assert.equal(T[id].prijsMaand, v, id); assert.equal(T[id].prijsMaandBron, 'pagina', id);
   }
-  assert.equal(T.canva.prijsMaand, 12); assert.equal(T.canva.prijsMaandBron, 'intern');
+  assert.equal(T.canva.prijsMaand, 12); assert.equal(T.canva.prijsMaandBron, 'pagina'); // NL-prijspagina 2-11-2026, Canva-gids 10-11
+  assert.match(T.canva.prijs, /^Pro: €12 per maand; €110 per jaar voor één persoon$/);
   assert.equal(T.buffer.prijsMaand, 5); assert.equal(T.buffer.prijsMaandBron, 'intern');
   assert.match(T.calendly.prijs, /^Standard: €12 per gebruiker per maand bij maandelijks betalen, .*\(EUR gekozen op de prijspagina; btw niet vermeld\)$/);
   assert.match(T.notta.prijs, /^Pro: €11,69 per maand bij maandelijks betalen, €7 per maand bij jaarbetaling/);

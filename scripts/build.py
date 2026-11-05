@@ -312,6 +312,7 @@ exec(open('scripts/pages.py').read())
 exec(open('scripts/spokes.py').read())
 exec(open('scripts/website_leads.py').read())
 exec(open('scripts/ai_presentatie.py').read())
+exec(open('scripts/canva_ondernemers.py').read())
 URLS+=SPOKES
 # Pagina's met schema-update 26-10: Article image (vergelijken/gids) en BreadcrumbList (losse pagina's).
 LASTMOD={u:'2026-10-26' for u in URLS if u in BC_LOSSE or (u.startswith(('/vergelijken/','/gids/')) and u not in ('/vergelijken/','/gids/'))}
@@ -329,4 +330,5 @@ LASTMOD.update(PRES_PAD)  # nieuwe pagina /ai-presentatie-maken/ + link terug op
 LASTMOD.update(INBOUND_UPD)  # /ai-tekst-schrijven/ Verder lezen + /ai-presentatie-maken/ 5-11 (L7)
 LASTMOD.update(MAKE_UPD)  # Make-partnerlink 9-11, na LOGO_UPD (die de twee pagina's nog op 30-10 zet)
 LASTMOD['/privacy/']='2026-11-09'  # directe partnerlink naast Daisycon (L7, 9-11)
+LASTMOD.update(CANVA_PAD)  # /gids/canva-voor-ondernemers/ + hub + inbound ontwerp 10-11 (L7)
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')

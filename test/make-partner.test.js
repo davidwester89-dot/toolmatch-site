@@ -129,5 +129,5 @@ test('Make-partnerlink: volgorde en datums blijven', () => {
   assert.ok(sm.includes('<loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>2026-11-10</lastmod>'));
   assert.ok(sm.includes('<loc>https://toolmatch.nl/privacy/</loc><lastmod>2026-11-09</lastmod>'));
   assert.ok(sm.includes('<loc>https://toolmatch.nl/partnerlinks/</loc><lastmod>2026-10-28</lastmod>'));
-  assert.ok(sm.includes('<loc>https://toolmatch.nl/gids/</loc><lastmod>2026-10-30</lastmod>'));
+  assert.ok(sm.includes('<loc>https://toolmatch.nl/gids/</loc><lastmod>2026-11-10</lastmod>'));
 });

@@ -90,9 +90,9 @@ export const TOOLS = [
     bronnen: [['n8n Pricing', 'https://n8n.io/pricing/']] },
   { id: 'canva', naam: 'Canva', url: 'https://www.canva.com/', doelen: ['beeld'],
     wat: 'Ontwerpen voor social media, presentaties en drukwerk, met AI-functies.',
-    gratis: true, prijs: 'Pro, per jaar voor één persoon (het bedrag zie je op de prijspagina van Canva)', prijsMaand: 12, prijsMaandBron: 'intern', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig', // INTERN budgetgetal: alleen voor de budgetvraag, nooit tonen. Geen europrijs op een NL-pagina; getal van de prijspagina zoals eerder gecontroleerd, niet omgerekend.
+    gratis: true, prijs: 'Pro: €12 per maand; €110 per jaar voor één persoon', prijsMaand: 12, prijsMaandBron: 'pagina', prijsPer: 'gebruiker', team: true, instap: 'eenvoudig', // NL-prijspagina canva.com/nl_nl/abonnementen/ (capture 2-11-2026); maandprijs eerst (L1).
     eu: null, privacy: null,
-    bronnen: [['Canva Pricing', 'https://www.canva.com/pricing/']] },
+    bronnen: [['Canva: Abonnementen en prijzen', 'https://www.canva.com/nl_nl/abonnementen/']] },
   { id: 'lookerstudio', naam: 'Looker Studio', vendor: 'Google', url: 'https://lookerstudio.google.com/', doelen: ['data'],
     wat: 'Gratis dashboards en rapporten van Google, bijvoorbeeld op basis van Sheets of Analytics.',
     gratis: true, prijs: 'Pro, per gebruiker per project per maand (het bedrag zie je op de prijspagina van Google)', prijsMaand: 9, prijsMaandBron: 'intern', prijsPer: 'gebruiker', team: true, instap: 'gemiddeld', // INTERN budgetgetal: alleen voor de budgetvraag, nooit tonen. Geen europrijs op een NL-pagina; getal van de prijspagina zoals eerder gecontroleerd, niet omgerekend.

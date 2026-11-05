@@ -88,7 +88,7 @@ test('logo: fallback is een neutrale letter in hetzelfde vak', () => {
 test('L7 30-10: de pagina\'s met logo\'s van 30 oktober hebben dateModified, sitemap-lastmod en zichtbaar bijgewerkt op 30 oktober 2026', () => {
   const sm = readFileSync(ROOT + 'sitemap.xml', 'utf8');
   const P = ['ai-assistenten', 'ai-chatbot-website', 'ai-data-analyse', 'ai-mail-en-offertes', 'ai-notuleren', 'ai-vertalen', 'crm-klein-bedrijf', 'online-afspraken-plannen', 'social-media-inplannen', 'gids/wat-kosten-ai-abonnementen', 'vergelijken/chatgpt-vs-claude', 'vergelijken/chatgpt-vs-copilot', 'vergelijken/chatgpt-vs-gemini', 'websitebezoekers-herkennen'];
-  // ai-afbeeldingen-en-ontwerp is op 3-11 opnieuw bijgewerkt (link naar /ai-presentatie-maken/); die datum test test/ai-presentatie-0311.test.js.
+  // keuzehulp + ai-afbeeldingen-en-ontwerp: 10-11 (Canva); zie test/canva-ondernemers-1011.test.js.
   // ai-tekst-schrijven is op 5-11 opnieuw bijgewerkt (Verder lezen + /ai-presentatie-maken/); die datum test test/verder-lezen.test.js.
   // ai-website-maken is op 7-11 opnieuw bijgewerkt (Wix-partnerknop); die datum test test/website-prijzen.test.js.
   // automatiseren-zonder-code en zapier-vs-make-vs-n8n zijn op 9-11 opnieuw bijgewerkt (Make-partnerlink); die datum test test/make-partner.test.js.

@@ -3,7 +3,7 @@
 # met rel="sponsored nofollow noopener" en de partnerzin eronder; anders een gewone link (rel="noopener"). Bronnen blijven gewone links.
 WL_PUB='2026-10-27'
 # Inhoudelijk gewijzigd na publicatie (partnerlink Hostinger): dateModified, lastmod en zichtbare bijwerkdatum.
-WL_UPD={'/ai-website-maken/':'2026-11-01','/websitebezoekers-herkennen/':'2026-10-30'}  # 28-10 partnerlink Hostinger; 30-10 logo's van aanbieders; 1-11 JouwWeb-actie (t/m 31-10) eraf, prijzen Hostinger/JouwWeb opnieuw bekeken (L7)
+WL_UPD={'/ai-website-maken/':'2026-11-07','/websitebezoekers-herkennen/':'2026-10-30'}  # 28-10 partnerlink Hostinger; 30-10 logo's van aanbieders; 1-11 JouwWeb-actie (t/m 31-10) eraf, prijzen Hostinger/JouwWeb opnieuw bekeken; 7-11 Wix-partnerknop (L7)
 WL_CHECK='26 oktober 2026'
 # Opnieuw bekeken op NL-IP op 30-10-2026 (site-checks/2026-10-30/tm-website-prijzen-details.md).
 WL_BRON={'https://www.jouwweb.nl/prijzen':'30 oktober 2026','https://www.hostinger.com/nl/website-maken-met-ai':'30 oktober 2026','https://www.hostinger.com/nl/website-maken':'30 oktober 2026'}

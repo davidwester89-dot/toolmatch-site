@@ -44,12 +44,18 @@ test('canva-ondernemers: H2-volgorde SEO-pack en interne links', () => {
   }
 });
 
-test('canva-ondernemers: bronnen alleen naam + link, gewone Canva-link (geen partner)', () => {
+test('canva-ondernemers: alleen feitelijke Canva-bronlinks, geen commerciële CTA of aanbeveling', () => {
   const b = main.slice(main.indexOf('id="bronnen"'), main.indexOf('</ul>', main.indexOf('id="bronnen"')));
   assert.ok(b.includes('https://www.canva.com/nl_nl/abonnementen/'));
   assert.doesNotMatch(b, /bekeken op|geraadpleegd|20\d\d/);
   assert.doesNotMatch(main, /rel="sponsored/);
-  assert.ok(main.includes('href="https://www.canva.com/"'));
+  const canvaLinks = [...main.matchAll(/<a\b[^>]*href="(https:\/\/www\.canva\.com[^"]*)"[^>]*>/g)];
+  assert.deepEqual(canvaLinks.map((m) => m[1]), [
+    'https://www.canva.com/nl_nl/abonnementen/',
+    'https://www.canva.com/nl_nl/policies/privacy-policy/',
+  ]);
+  for (const [tag] of canvaLinks) assert.doesNotMatch(tag, /class=|role="button"|data-cta=|data-vendor=/);
+  assert.doesNotMatch(main, /Naar de site van Canva|data-vendor="canva"|Begin bij Gratis|Kies Pro|Kies Business|Gratis om te testen|dan is Canva de ontwerptool/);
 });
 
 test('L7 10-11: nieuwe gids, hub /gids/ en inbound ontwerp-hub', () => {

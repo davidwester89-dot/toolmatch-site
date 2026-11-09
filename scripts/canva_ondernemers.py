@@ -3,7 +3,7 @@
 # Bedragen letterlijk van canva.com/nl_nl/abonnementen/ (NL-IP-capture 2-11-2026, maand/jaar-schakelaar):
 # site-checks/2026-11-02/wk45/src/canva_maand.txt + canva_pricing.txt.
 # Pro €12/maand, €110/jaar; Business €17/maand, €170/jaar per persoon. Maandprijs eerst (L1). Geen actie zonder einddatum (L4).
-# Geen Canva-partnerlink in PARTNERLINKS: gewone canva.com-link. Kannibalisatie: /ai-presentatie-maken/ blijft multi-tool.
+# Geen betaald Canva-affiliate: informatieve gids zonder commerciële CTA; alleen feitelijke bronlinks. /ai-presentatie-maken/ blijft multi-tool.
 CANVA='/gids/canva-voor-ondernemers/'
 CANVA_UPD='2026-11-10'
 # nieuwe pagina + hub /gids/ (nieuw kind) + inbound op ontwerp-hub (zichtbare wijziging, L7)
@@ -25,7 +25,7 @@ def canva_bronnen(srcs):
 
 CANVA_FAQ=[
  ('Wat kost Canva Pro per maand?','Volgens de Nederlandse prijspagina van Canva kost Pro €12 per maand voor één persoon, of €110 per jaar bij jaarbetaling.'),
- ('Is Canva Gratis genoeg voor een zzp’er?','Voor af en toe een social post, een flyer of een eenvoudige presentatie wel: volgens Canva krijg je meer dan 1,6 miljoen sjablonen, 5 GB opslag en 1 merkmateriaal. Pro is volgens Canva bedoeld als je premium content, meer merkmaterialen, social planning en meer AI wilt.'),
+ ('Is Canva Gratis genoeg voor een zzp’er?','Gratis bevat volgens Canva meer dan 1,6 miljoen sjablonen, 5 GB opslag en 1 merkmateriaal. Pro bevat volgens Canva premium content, meer merkmaterialen, social planning en meer AI.'),
  ('Wat is het verschil tussen Canva Pro en Business?','Pro is voor één persoon. Business is per persoon en voegt volgens Canva teambeheer, 100 merkmaterialen met goedkeuringen, Flourish, 500 GB opslag en meer AI-gebruik toe.'),
 ]
 
@@ -33,7 +33,7 @@ CANVA_BODY=f'''      <h2 id="free-vs-pro">Free vs Pro: wat je als zzp’er merkt
       <p>Canva heeft drie relevante plannen voor ondernemers: <strong>Gratis</strong>, <strong>Pro</strong> (één persoon) en <strong>Business</strong> (per persoon, met teamfuncties). Enterprise is een apart traject via de salesafdeling van Canva; die prijzen staan niet op de prijspagina.</p>
       <p>Met <strong>Gratis</strong> krijg je volgens Canva een editor met sleepfunctie, meer dan 1.000 ontwerptypes, meer dan 1,6 miljoen sjablonen, meer dan 4,7 miljoen foto’s, video’s, afbeeldingen en audio, 1 merkmateriaal (alleen 3 kleuren), 5 GB cloudopslag en beperkte toegang tot standaard en premium AI.</p>
       <p>Met <strong>Pro</strong> ontgrendel je volgens Canva AI-tools zoals formaat wijzigen, vertalen en achtergrond verwijderen, meer dan 3,6 miljoen sjablonen (inclusief premium), meer dan 141 miljoen premium content-items, 5 merkmaterialen, content plannen voor social media, 100 GB cloudopslag en 10× meer AI dan met Canva Free.</p>
-      <p>Met <strong>Business</strong> krijg je volgens Canva alles wat je voor merkconsistentie in een klein team nodig hebt: samenwerkings- en teambeheertools, 100 merkmaterialen met goedkeuringen, toegang tot Flourish, 500 GB cloudopslag en 20× meer AI dan met Canva Free.</p>
+      <p>Met <strong>Business</strong> krijg je volgens Canva samenwerkings- en teambeheertools, 100 merkmaterialen met goedkeuringen, toegang tot Flourish, 500 GB cloudopslag en 20× meer AI dan met Canva Free.</p>
       <h2 id="klussen">Voor welke klussen</h2>
       <p>Canva is een ontwerptool: social posts, stories, flyers, voorstellen, factuurlayouts en presentaties. Je kiest een sjabloon, past kleuren en tekst aan en exporteert of deelt. Voor een <em>eerste opzet van een presentatie met AI</em> naast Copilot en Gemini staat de vergelijking op {L('/ai-presentatie-maken/','AI presentatie maken')}; die pagina blijft multi-tool. Dit stuk gaat over Canva zelf: Free versus Pro en wat het kost.</p>
       <p>Voor logo’s, beelden en andere ontwerpklussen naast Canva zie je het overzicht op {L('/ai-afbeeldingen-en-ontwerp/','AI voor afbeeldingen, logo’s en presentaties')}.</p>
@@ -55,16 +55,15 @@ CANVA_BODY=f'''      <h2 id="free-vs-pro">Free vs Pro: wat je als zzp’er merkt
       <p>In een ontwerp zetten zzp’ers vaak klantnamen, logo’s van opdrachtgevers of prijsvoorstellen. Canva heeft een privacybeleid; wat er precies met jouw bestanden gebeurt, lees je daar en in de voorwaarden van Canva. Zet persoonsgegevens of vertrouwelijke cijfers alleen in een tool als je weet wat de aanbieder ermee doet. Praktische stappen staan in {L('/gids/ai-veilig-gebruiken/','AI veilig gebruiken in je bedrijf')}.</p>
       <h2 id="copilot-gemini">Wanneer Copilot of Gemini genoeg is</h2>
       <p>Heb je vooral tekst, samenvattingen of dia’s in PowerPoint of Google Presentaties nodig, en geen social templates of merkkit? Dan kan Copilot in Microsoft 365 of Gemini in Google Workspace genoeg zijn — vooral als je die suite al betaalt. Twijfel je tussen de assistenten zelf, lees {L('/vergelijken/chatgpt-vs-copilot/','ChatGPT en Copilot naast elkaar')} en {L('/vergelijken/chatgpt-vs-gemini/','ChatGPT en Gemini naast elkaar')}.</p>
-      <p>Heb je juist sjablonen, merkmaterialen, social planning en snelle exports nodig, dan is Canva de ontwerptool — Gratis om te testen, Pro als je de limieten van Free raakt.</p>
+      <p>Canva is een ontwerptool met sjablonen, merkmaterialen, social planning en snelle exports; welke functies beschikbaar zijn, verschilt per abonnement.</p>
       <h2 id="zo-kies-je">Zo kies je</h2>
       <ul>
-        <li><strong>Begin bij Gratis</strong> als je af en toe een post of flyer maakt en 5 GB plus één merkmateriaal genoeg is.</li>
-        <li><strong>Kies Pro</strong> als je premium sjablonen, meer merkmaterialen, social planning of meer AI-gebruik nodig hebt — €12 per maand voor één persoon.</li>
-        <li><strong>Kies Business</strong> als je met collega’s dezelfde merkkit en goedkeuringen wilt — €17 per maand per persoon.</li>
+        <li><strong>Gratis</strong> bevat 5 GB opslag en één merkmateriaal voor onder meer posts en flyers.</li>
+        <li><strong>Pro</strong> bevat premium sjablonen, meer merkmaterialen, social planning en meer AI-gebruik — €12 per maand voor één persoon.</li>
+        <li><strong>Business</strong> bevat gedeelde merkmaterialen en goedkeuringen voor teams — €17 per maand per persoon.</li>
         <li><strong>Blijf bij Copilot of Gemini</strong> als je vooral in Office of Google Workspace werkt en geen aparte ontwerptool nodig hebt.</li>
       </ul>
       <p>Nog niet zeker welke tools bij jouw bedrijf passen? {L('/keuzehulp/','Doe de keuzehulp')}.</p>
-      <p class="go">{uit(T['canva'])}</p>
 '''
 
 _ct='Canva voor ondernemers: Free vs Pro en prijzen'

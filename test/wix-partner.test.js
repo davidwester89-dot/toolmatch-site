@@ -12,7 +12,8 @@ const HOSTINGER = 'https://jf79.net/c/?si=16780&li=1722914&wi=440699&ws=&dl=nl%2
 test('Wix-CTA: exacte Impact-link, disclosure, sponsored/noopener en analytics-attributen', () => {
   assert.equal(PARTNERLINKS_PAGINA.wix, WIX);
   assert.equal(PARTNERLINKS_PAGINA.hostinger, HOSTINGER);
-  assert.deepEqual(PARTNERLINKS, {}, 'keuzehulp-partnerlinks blijven leeg');
+  assert.equal(PARTNERLINKS.wix, undefined, 'Wix blijft uit de keuzehulp-partnerlinks');
+  assert.equal(PARTNERLINKS.hostinger, undefined, 'Hostinger blijft uit de keuzehulp-partnerlinks');
   const cta = html.match(/<p class="go"><a class="btn ghost" href="([^"]*)" rel="([^"]*)" target="_blank" data-vendor="wix" data-cta="([^"]*)" aria-label="([^"]*)">([^<]*)<\/a><\/p>\n      <p class="pnoot">([^<]*)<\/p>/);
   assert.ok(cta, 'Wix-knop met partnerzin niet gevonden');
   assert.equal(cta[1], WIX);

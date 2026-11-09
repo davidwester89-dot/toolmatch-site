@@ -33,13 +33,17 @@ test('match leest geen partnerlinks en tools.js bevat geen partnerlinks', () => 
 
 test('volgorde verandert niet door partnerlinks: match() met gevulde PARTNERLINKS geeft dezelfde volgorde', () => {
   const before = alle().map((a) => match(a).map((r) => [r.tool.id, r.score].join(':')).join());
+  const saved = { ...PARTNERLINKS };
   for (const t of TOOLS) PARTNERLINKS[t.id] = 'https://example.org/p/' + t.id;
   try {
     assert.equal(Object.keys(PARTNERLINKS).length, TOOLS.length);
     const after = alle().map((a) => match(a).map((r) => [r.tool.id, r.score].join(':')).join());
     assert.deepEqual(after, before);
     const o = uitgaand(TOOLS[0]); assert.equal(o.rel, 'sponsored nofollow noopener'); assert.equal(o.partner, true);
-  } finally { for (const k of Object.keys(PARTNERLINKS)) delete PARTNERLINKS[k]; }
+  } finally {
+    for (const k of Object.keys(PARTNERLINKS)) delete PARTNERLINKS[k];
+    Object.assign(PARTNERLINKS, saved);
+  }
   const g = uitgaand(TOOLS[0]); assert.equal(g.rel, 'noopener'); assert.equal(g.href, TOOLS[0].url); assert.equal(g.partner, false);
 });
 

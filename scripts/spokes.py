@@ -77,6 +77,11 @@ def uit(t):
     p=PL.get(t['id'])
     if p: return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{t["id"]}" data-cta="partner" aria-label="{E(knoplabel(t)[1])}">{E(knoplabel(t)[0])}</a>'
     return f'<a class="btn ghost" href="{E(t["url"])}" rel="noopener" target="_blank" data-vendor="{t["id"]}" data-cta="outbound" aria-label="{E(knoplabel(t)[1])}">{E(knoplabel(t)[0])}</a>'
+def partner_tekst(tid, txt):
+    """Lichte partnerlink in lopende tekst. De partnerzin komt via met_noot direct onder het blok."""
+    p=PL.get(tid)
+    if not p: return ''
+    return f'<a href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-cta="partner" aria-label="{E(txt)} (opent in een nieuw tabblad)">{E(txt)}</a>'
 PNOOT='      <p class="pnoot">Sommige links zijn partnerlinks; dat verandert de volgorde nooit.</p>\n'
 def met_noot(blok):
     """Precies één partnerzin direct na een blok waarin een partnerlink (rel sponsored) staat; anders niets."""
@@ -276,8 +281,8 @@ cat('/automatiseren-zonder-code/','Automatiseren zonder code: Zapier, Make en me
  'Automatiseren','Automatiseren zonder code',
  'Een formulier dat vanzelf in je CRM belandt, een mail die automatisch vertrekt. Zo koppel je apps zonder te programmeren, en dit kost het.',
  f'''      <p>Met een automatiseringstool zeg je: <em>als</em> dit gebeurt, doe <em>dan</em> dat. Een nieuw formulier op je site wordt een contact in je CRM. Een nieuwe afspraak levert een herinnering op. Zo hoef je niet steeds hetzelfde over te typen.</p>
-      <p>De kosten groeien mee met hoe vaak je automatiseringen draaien: Zapier telt taken, Make credits en n8n uitvoeringen. Make staat hier niet als kaart: de prijs konden we op de prijspagina niet controleren. Wel staat Make in de vergelijking. Welk merk het best past, lees je in {L('/vergelijken/zapier-vs-make-vs-n8n/','Zapier, Make en n8n vergeleken')}. En denk aan de {L('/gids/ai-veilig-gebruiken/','gegevens die door je koppelingen gaan')}: die gaan via een extra partij.</p>
-''',
+'''+met_noot(f'''      <p>De kosten groeien mee met hoe vaak je automatiseringen draaien: Zapier telt taken, Make credits en n8n uitvoeringen. Make staat hier niet als kaart: de prijs konden we op de prijspagina niet controleren. Wel staat Make in de vergelijking. Welk merk het best past, lees je in {L('/vergelijken/zapier-vs-make-vs-n8n/','Zapier, Make en n8n vergeleken')}. En denk aan de {L('/gids/ai-veilig-gebruiken/','gegevens die door je koppelingen gaan')}: die gaan via een extra partij. {partner_tekst('make','Naar Make')}</p>
+'''),
  [('powerautomate','je al in Microsoft 365 werkt en ook taken op je pc wilt automatiseren.'),
   ('n8n','je gegevens in de EU wilt of zelf wilt hosten, en het niet erg vindt om iets technischer te werken.'),
   ('zapier','je snel wilt beginnen en veel verschillende apps wilt koppelen.')],
@@ -477,7 +482,7 @@ vs('/vergelijken/zapier-vs-make-vs-n8n/','Zapier vs Make vs n8n: welke past bij 
         <li><strong>Kies n8n</strong> als je gegevens in de EU wilt houden of zelf wilt hosten, en technisch werk niet erg vindt.</li>
         <li>Lees ook {L('/automatiseren-zonder-code/','wat je allemaal kunt automatiseren')}, en meer over {L('/gids/ai-veilig-gebruiken/','EU-hosting en je gegevens')}.</li>
       </ul>
-''')],
+'''+met_noot(f'      <p class="go">{uit(T["make"])}</p>\n'))],
  [('Wat is goedkoper: Zapier of Make?','Dat hangt af van hoeveel taken je nodig hebt. Het bedrag van Zapier Professional (750 taken) zie je op de prijspagina van Zapier, dat van Make op de prijspagina van Make. Een taak bij Zapier en een credit bij Make zijn niet hetzelfde, dus reken met je eigen automatiseringen.'),
   ('Is n8n gratis?','De Community Edition kun je volgens n8n zelf hosten. De versie die n8n voor je host, begint bij Starter: €20 per maand bij jaarbetaling.'),
   ('Waar staan mijn gegevens?','Bij n8n Cloud volgens de aanbieder in de EU (Frankfurt). Bij Zapier en Make hebben we de locatie niet gecontroleerd.')],

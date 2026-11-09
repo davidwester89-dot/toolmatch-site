@@ -87,11 +87,12 @@ test('logo: fallback is een neutrale letter in hetzelfde vak', () => {
 
 test('L7 30-10: de pagina\'s met logo\'s van 30 oktober hebben dateModified, sitemap-lastmod en zichtbaar bijgewerkt op 30 oktober 2026', () => {
   const sm = readFileSync(ROOT + 'sitemap.xml', 'utf8');
-  const P = ['ai-assistenten', 'ai-chatbot-website', 'ai-data-analyse', 'ai-mail-en-offertes', 'ai-notuleren', 'ai-vertalen', 'automatiseren-zonder-code', 'crm-klein-bedrijf', 'online-afspraken-plannen', 'social-media-inplannen', 'gids/wat-kosten-ai-abonnementen', 'vergelijken/chatgpt-vs-claude', 'vergelijken/chatgpt-vs-copilot', 'vergelijken/chatgpt-vs-gemini', 'vergelijken/zapier-vs-make-vs-n8n', 'websitebezoekers-herkennen'];
+  const P = ['ai-assistenten', 'ai-chatbot-website', 'ai-data-analyse', 'ai-mail-en-offertes', 'ai-notuleren', 'ai-vertalen', 'crm-klein-bedrijf', 'online-afspraken-plannen', 'social-media-inplannen', 'gids/wat-kosten-ai-abonnementen', 'vergelijken/chatgpt-vs-claude', 'vergelijken/chatgpt-vs-copilot', 'vergelijken/chatgpt-vs-gemini', 'websitebezoekers-herkennen'];
   // ai-afbeeldingen-en-ontwerp is op 3-11 opnieuw bijgewerkt (link naar /ai-presentatie-maken/); die datum test test/ai-presentatie-0311.test.js.
   // ai-tekst-schrijven is op 5-11 opnieuw bijgewerkt (Verder lezen + /ai-presentatie-maken/); die datum test test/verder-lezen.test.js.
   // ai-website-maken is op 7-11 opnieuw bijgewerkt (Wix-partnerknop); die datum test test/website-prijzen.test.js.
-  // keuzehulp is op 7-11 opnieuw gedateerd (zelfde partnerlinks.js); die datum test test/wix-partner.test.js. De uitslag verandert niet.
+  // automatiseren-zonder-code en zapier-vs-make-vs-n8n zijn op 9-11 opnieuw bijgewerkt (Make-partnerlink); die datum test test/make-partner.test.js.
+  // keuzehulp is op 9-11 opnieuw gedateerd (partnerlinks.js met Make); die datum test test/wix-partner.test.js. De uitslag verandert niet.
   for (const p of P) {
     const t = readFileSync(ROOT + p + '/index.html', 'utf8');
     assert.match(t, /"dateModified": "2026-10-30"/, p);

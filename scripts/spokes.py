@@ -22,10 +22,11 @@ VALUTA_UPD={u:'2026-10-27' for u in ('/gids/wat-kosten-ai-abonnementen/','/ai-af
 VERDER_UPD='2026-10-29'  # Verder lezen + gidslinks: zichtbare wijziging, L7
 NOTULY_UPD={'/ai-notuleren/':'2026-10-30'}  # Notuly toegevoegd 30-10 (MM-OK): zichtbare wijziging, L7
 LOGO_UPD={u:'2026-10-30' for u in ('/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/gids/wat-kosten-ai-abonnementen/','/vergelijken/chatgpt-vs-claude/','/vergelijken/chatgpt-vs-copilot/','/vergelijken/chatgpt-vs-gemini/','/vergelijken/zapier-vs-make-vs-n8n/')}  # logo's van aanbieders 30-10: zichtbare wijziging in de body, L7
+MAKE_UPD={'/automatiseren-zonder-code/':'2026-11-09','/vergelijken/zapier-vs-make-vs-n8n/':'2026-11-09'}  # Make-partnerlink 9-11: zichtbare wijziging, L7. datePublished blijft 2026-10-20.
 VERDER_GIDS=('/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')
 PRIJS_UPD={'/gids/ai-veilig-gebruiken/':'2026-10-30'}  # NL-IP-prijscheck 30-10: bronnen ChatGPT/Claude opnieuw bekeken (opt-out-claims nagelezen), L7
 INBOUND_UPD={'/ai-tekst-schrijven/':'2026-11-05'}  # Verder lezen + /ai-presentatie-maken/ (techronde 5-11): zichtbare wijziging, L7
-HUB_UPD={'/vergelijken/':'2026-10-30','/gids/':'2026-10-30'}  # Hubdatum = datum van het nieuwste kind (L7-hubregel, SC 01-11): alleen datumcorrectie, geen bodywijziging
+HUB_UPD={'/vergelijken/':'2026-11-09','/gids/':'2026-10-30'}  # Hubdatum = datum van het nieuwste kind (L7-hubregel): /vergelijken/ volgt zapier-vs-make 9-11 (Make-partnerlink); /gids/ blijft 30-10
 ORG={"@id":D+"/#organization"}
 def ldscript(graph): return '<script type="application/ld+json">\n'+json.dumps({"@context":"https://schema.org","@graph":graph},ensure_ascii=False,indent=1)+'\n</script>\n'
 def crumbs_ld(items): return {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":D+u} for i,(n,u) in enumerate(items)]}
@@ -51,6 +52,7 @@ def nagelezen(t):
     b=sorted({BRON_BEKEKEN[u] for _,u in t['bronnen'] if u in BRON_BEKEKEN and BRON_BEKEKEN[u]!=kaartdatum(t)})
     return (f'; Nederlandse prijspagina bekeken op {d[0]}' if len(d)==1 else '')+(f'; prijspagina bekeken op {b[0]}' if len(b)==1 and not d else '')
 def byline(slug=None):
+    if slug in MAKE_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 9 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # Make-partnerlink 9-11 (L7)
     if slug in INBOUND_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 5 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
     if slug=='/ai-afbeeldingen-en-ontwerp/': return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 3 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # link naar /ai-presentatie-maken/ 3-11 (L7)
     if slug in LOGO_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 30 oktober 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
@@ -361,7 +363,7 @@ for c in CAT:
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
     body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
     body+=verder_lezen(c['slug'])+faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
-    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":(INBOUND_UPD.get(c['slug']) or {'/ai-afbeeldingen-en-ontwerp/':'2026-11-03'}.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
+    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":MAKE_UPD.get(c['slug']) or (INBOUND_UPD.get(c['slug']) or {'/ai-afbeeldingen-en-ontwerp/':'2026-11-03'}.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
       crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
     zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)
@@ -504,7 +506,7 @@ for v in VS:
 '''
     body=v['intro']+tbl+''.join(f'      <h2>{h}</h2>\n{b}' for h,b in v['secties'])+faq_html(v['faq'])+bronnen_html(v['src'])+byline(v['slug'])
     crumb=f'<a href="/vergelijken/">Vergelijken</a> › {v["crumb"]}'
-    graph=[{"@type":"Article","@id":D+v['slug']+"#artikel","headline":v['h1'],"description":v['desc'],"inLanguage":"nl-NL","url":D+v['slug'],"mainEntityOfPage":D+v['slug'],"datePublished":PUB,"dateModified":LOGO_UPD.get(v['slug']) or VALUTA_UPD.get(v['slug'],SCHEMA_UPD),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+    graph=[{"@type":"Article","@id":D+v['slug']+"#artikel","headline":v['h1'],"description":v['desc'],"inLanguage":"nl-NL","url":D+v['slug'],"mainEntityOfPage":D+v['slug'],"datePublished":PUB,"dateModified":MAKE_UPD.get(v['slug']) or LOGO_UPD.get(v['slug']) or VALUTA_UPD.get(v['slug'],SCHEMA_UPD),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),('Vergelijken','/vergelijken/'),(v['crumb'],v['slug'])]),faq_ld(v['slug'],v['faq'])]
     zet(v['slug'],v['title'],v['desc'],crumb,v['h1'],v['lead'],body,graph)
 

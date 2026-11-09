@@ -8,7 +8,12 @@ MARK='<svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" r
 BC_LOSSE={'/over/':'Over ToolMatch','/partnerlinks/':'Partnerlinks','/contact/':'Contact','/disclaimer/':'Disclaimer','/privacy/':'Privacy en cookies'}
 def bc_losse(path):
     if path not in BC_LOSSE: return ''
-    ld={"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":D+"/"},{"@type":"ListItem","position":2,"name":BC_LOSSE[path],"item":D+path}]}
+    crumb={"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":D+"/"},{"@type":"ListItem","position":2,"name":BC_LOSSE[path],"item":D+path}]}
+    # Privacy kreeg op 9-11 een zichtbare tekstwijziging (directe partnerlink). Andere losse pagina's blijven een kale BreadcrumbList.
+    if path=='/privacy/':
+        ld={"@context":"https://schema.org","@graph":[{"@type":"WebPage","url":D+path,"name":BC_LOSSE[path],"inLanguage":"nl-NL","dateModified":"2026-11-09"},crumb]}
+    else:
+        ld={"@context":"https://schema.org",**crumb}
     return '<script type="application/ld+json">\n'+json.dumps(ld,ensure_ascii=False,indent=1)+'\n</script>\n'
 def head(path,title,desc,ogt,extra=''):
     extra=bc_losse(path)+extra
@@ -274,7 +279,7 @@ PRIV='''      <h2 id="cookies">Cookies en statistieken</h2>
 
       <h2>Links naar aanbieders</h2>
       <p>Klik je door naar een aanbieder of neem je daar een abonnement, dan geldt de privacyverklaring van die aanbieder.</p>
-      <p>Partnerlinks worden bij de knoppen vermeld. Klik je erop, dan ga je via een affiliatenetwerk (Daisycon) naar de aanbieder. Dat netwerk plaatst op zijn eigen domein een cookie of klik-ID, om vast te leggen dat je via ToolMatch kwam. Sluit je iets af, dan kunnen wij daardoor een vergoeding krijgen. Het netwerk is zelf verantwoordelijk voor die gegevens; zie het privacybeleid van <a href="https://daisycon.com/en/legal-information/privacy-policy/" rel="noopener">Daisycon</a>.</p>
+      <p>Partnerlinks worden bij de knoppen vermeld. Sommige lopen via een affiliatenetwerk (Daisycon of Impact). Dat netwerk plaatst op zijn eigen domein een cookie of klik-ID, om vast te leggen dat je via ToolMatch kwam. Andere partnerlinks gaan rechtstreeks naar de aanbieder (nu Make, via een trackingcode in de link); dan kan de aanbieder zelf op make.com een cookie of klik-ID zetten. Sluit je iets af, dan kunnen wij daardoor een vergoeding krijgen. Het netwerk of de aanbieder is zelf verantwoordelijk voor die gegevens; zie het privacybeleid van <a href="https://daisycon.com/en/legal-information/privacy-policy/" rel="noopener">Daisycon</a>, <a href="https://impact.com/privacy-policy/" rel="noopener">Impact</a> en <a href="https://www.make.com/en/privacy-notice" rel="noopener">Make</a>.</p>
 
       <h2>Als je ons mailt</h2>
       <p>Mail je naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>, dan gebruiken we je mailadres en je bericht alleen om je te antwoorden. We delen ze met niemand.</p>
@@ -285,7 +290,7 @@ PRIV='''      <h2 id="cookies">Cookies en statistieken</h2>
       <h2>Je rechten</h2>
       <p>Je mag vragen welke gegevens we van je hebben en vragen om ze te laten verwijderen. Mail daarvoor naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>. Ben je het niet eens met hoe we met je gegevens omgaan, dan kun je een klacht indienen bij de <a href="https://www.autoriteitpersoonsgegevens.nl/" rel="noopener">Autoriteit Persoonsgegevens</a>.</p>
 
-      <p class="note">Redactie ToolMatch · bijgewerkt op 28 oktober 2026</p>'''
+      <p class="note">Redactie ToolMatch · bijgewerkt op 9 november 2026</p>'''
 OVER='''      <h2>Wie we zijn</h2>
       <p>ToolMatch wordt gemaakt door Redactie ToolMatch. We zoeken uit wat tools echt doen, wat ze per maand kosten en hoe ze met je gegevens omgaan. Dat zetten we in gewone taal op een rij, voor ondernemers die zelf hun tools kiezen: van zzp'ers tot kleine teams.</p>
 
@@ -316,10 +321,12 @@ LASTMOD['/partnerlinks/']='2026-10-28'; LASTMOD['/privacy/']='2026-10-28'  # par
 LASTMOD.update({u:'2026-10-29' for u in ('/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')})  # Verder lezen + gidslinks 29-10 (L7)
 LASTMOD.update(NOTULY_UPD)  # Notuly op /ai-notuleren/ 30-10 (L7)
 LASTMOD.update(LOGO_UPD); LASTMOD['/keuzehulp/']='2026-10-30'  # logo's van aanbieders 30-10 (L7)
-LASTMOD['/keuzehulp/']='2026-11-07'  # partnerlinks.js laadt hier; Wix-knop op /ai-website-maken/ (L7). PARTNERLINKS blijft leeg.
+LASTMOD['/keuzehulp/']='2026-11-09'  # Make in PARTNERLINKS: de uitslagknop is een partnerlink (L7, 9-11)
 LASTMOD.update(PRIJS_UPD)  # NL-IP-prijscheck 30-10 (L7)
 LASTMOD.update(HUB_UPD)  # hubs /gids/ en /vergelijken/ = nieuwste kind 2026-10-30 (L7-hubregel)
 LASTMOD.update({'/':'2026-11-03','/over/':'2026-11-03'})  # partner-FAQ en /over/ actueel: partnerlinks staan live (externe feedback nov, L7)
 LASTMOD.update(PRES_PAD)  # nieuwe pagina /ai-presentatie-maken/ + link terug op /ai-afbeeldingen-en-ontwerp/ 3-11 (L7)
 LASTMOD.update(INBOUND_UPD)  # /ai-tekst-schrijven/ Verder lezen + /ai-presentatie-maken/ 5-11 (L7)
+LASTMOD.update(MAKE_UPD)  # Make-partnerlink 9-11, na LOGO_UPD (die de twee pagina's nog op 30-10 zet)
+LASTMOD['/privacy/']='2026-11-09'  # directe partnerlink naast Daisycon (L7, 9-11)
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')

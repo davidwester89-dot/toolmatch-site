@@ -1,8 +1,8 @@
 // Goedgekeurde partnerlinks per tool-id.
 // De match (match.js) leest dit bestand NOOIT: geen invloed op score of volgorde.
-// Make: direct programma (geen affiliatenetwerk), tracking via ?pc=toolmatch. Geplaatst 9-11-2026.
+// Make: direct programma (geen affiliatenetwerk), tracking via /en/register?pc=toolmatch. Geplaatst 9-11-2026.
 export const PARTNERLINKS = {
-  make: 'https://www.make.com/?pc=toolmatch',
+  make: 'https://www.make.com/en/register?pc=toolmatch',
 };
 
 // Goedgekeurde partnerlinks voor aanbieders die geen tool in tools.js zijn (alleen knoppen op inhoudspagina's, bv. /ai-website-maken/).

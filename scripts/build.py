@@ -321,7 +321,7 @@ LASTMOD['/partnerlinks/']='2026-10-28'; LASTMOD['/privacy/']='2026-10-28'  # par
 LASTMOD.update({u:'2026-10-29' for u in ('/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')})  # Verder lezen + gidslinks 29-10 (L7)
 LASTMOD.update(NOTULY_UPD)  # Notuly op /ai-notuleren/ 30-10 (L7)
 LASTMOD.update(LOGO_UPD); LASTMOD['/keuzehulp/']='2026-10-30'  # logo's van aanbieders 30-10 (L7)
-LASTMOD['/keuzehulp/']='2026-11-09'  # Make in PARTNERLINKS: de uitslagknop is een partnerlink (L7, 9-11)
+LASTMOD['/keuzehulp/']='2026-11-10'  # register-URL in partnerlinks.js telt als client-side wijziging (L7, 10-11)
 LASTMOD.update(PRIJS_UPD)  # NL-IP-prijscheck 30-10 (L7)
 LASTMOD.update(HUB_UPD)  # hubs /gids/ en /vergelijken/ = nieuwste kind 2026-10-30 (L7-hubregel)
 LASTMOD.update({'/':'2026-11-03','/over/':'2026-11-03'})  # partner-FAQ en /over/ actueel: partnerlinks staan live (externe feedback nov, L7)

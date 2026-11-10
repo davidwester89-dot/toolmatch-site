@@ -354,3 +354,6 @@ write('blog/index.html', f'''<!DOCTYPE html>
 </body>
 </html>
 ''')
+
+# L7: stijlronde na de goedgekeurde affiliateketen; uitsluitend gewijzigde pagina's.
+exec(open('scripts/nuchter_datums.py').read())

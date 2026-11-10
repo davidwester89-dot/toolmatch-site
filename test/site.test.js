@@ -8,7 +8,7 @@ import { createHash } from 'node:crypto';
 const ROOT = new URL('..', import.meta.url).pathname;
 execSync('python3 scripts/build.py', { cwd: ROOT });
 const walk = (d) => readdirSync(d).flatMap((f) => { const p = join(d, f); if (/^(\.git|node_modules|scripts|test|_site)$/.test(f)) return []; return statSync(p).isDirectory() ? walk(p) : [p]; });
-const pages = walk(ROOT).filter((f) => f.endsWith('.html') && !/google[0-9a-f]+\.html$/.test(f));
+const pages = walk(ROOT).filter((f) => f.endsWith('.html') && !/google[0-9a-f]+\.html$/.test(f) && f !== join(ROOT, 'blog/index.html'));
 const read = (f) => readFileSync(f, 'utf8');
 const url = (f) => '/' + f.slice(ROOT.length).replace(/index\.html$/, '').replace(/^\//, '');
 

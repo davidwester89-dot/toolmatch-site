@@ -1,3 +1,4 @@
+import { revisieDatum, normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
 // Logo's van aanbieders (30-10): elk logo lokaal, klein, met vaste maat, lazy en decoratief (alt="", aria-hidden: de naam staat ernaast).
 // Besluit 30-10: elk merk toont zijn logo; alleen een merk dat om weghalen vraagt komt in ZONDER_LOGO (neutrale letter).
 // Neutraal: dezelfde maat voor iedereen; logo's veranderen niets aan de volgorde, de match of de partnerlinks.
@@ -92,9 +93,9 @@ test('L7 30-10: de pagina\'s met logo\'s van 30 oktober hebben dateModified, sit
   // automatiseren blijft 12-11. zapier-vs-make-vs-n8n blijft 10-11 (Make).
   for (const p of P) {
     const t = readFileSync(ROOT + p + '/index.html', 'utf8');
-    assert.match(t, /"dateModified": "2026-10-30"/, p);
+    assert.match(t, new RegExp(`"dateModified": "${revisieDatum(`/${p}/`, '2026-10-30')}"`), p);
     assert.doesNotMatch(t, /"dateModified": "2026-10-(2\d)"/, p);
-    assert.match(t, /<p class="note">Redactie ToolMatch · [^<]*bijgewerkt op 30 oktober 2026/, p);
-    assert.ok(sm.includes(`<loc>https://toolmatch.nl/${p}/</loc><lastmod>2026-10-30</lastmod>`), p);
+    assert.match(t, new RegExp(`<p class="note">Redactie ToolMatch · [^<]*bijgewerkt op ${revisieDatum(`/${p}/`, '2026-10-30') === '2026-11-18' ? '18 november 2026' : '30 oktober 2026'}`), p);
+    assert.ok(sm.includes(`<loc>https://toolmatch.nl/${p}/</loc><lastmod>${revisieDatum(`/${p}/`, '2026-10-30')}</lastmod>`), p);
   }
 });

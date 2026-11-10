@@ -331,4 +331,5 @@ LASTMOD.update(INBOUND_UPD)  # /ai-tekst-schrijven/ Verder lezen + /ai-presentat
 LASTMOD.update(MAKE_UPD)  # Make-partnerlink 9-11, na LOGO_UPD (die de twee pagina's nog op 30-10 zet)
 LASTMOD['/privacy/']='2026-11-09'  # directe partnerlink naast Daisycon (L7, 9-11)
 LASTMOD.update(CANVA_PAD)  # /gids/canva-voor-ondernemers/ + hub + inbound ontwerp 10-11 (L7)
+LASTMOD.update(CANVA_NEUTRAAL_PAD)  # Canva + Power Automate-CTA neutraal: ontwerp, presentatie, keuzehulp, automatiseren 12-11; /gids/ niet tillen
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')

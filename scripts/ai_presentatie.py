@@ -5,8 +5,9 @@
 # gw_pricing.txt + gw_pricing_maand.txt. Maandprijs eerst (L1). Geen actieprijzen: Copilot-korting en Workspace-introductieprijs weggelaten (L4).
 # Bronnen: alleen naam + link, zonder datum (huisregel briefing wk45). Geen partnerlinks (PARTNERLINKS heeft geen Canva/Copilot/Gemini).
 PRES='/ai-presentatie-maken/'
-PRES_UPD='2026-11-03'
-PRES_PAD={PRES:PRES_UPD,'/ai-afbeeldingen-en-ontwerp/':PRES_UPD}  # nieuwe pagina + link terug (zichtbare wijziging, L7)
+PRES_PUB='2026-11-03'
+PRES_UPD='2026-11-12'  # Canva-CTA → neutrale bronlink (L7); datePublished blijft 3-11
+PRES_PAD={PRES:PRES_UPD}  # ontwerp-hub lastmod volgt CANVA_NEUTRAAL_PAD in build.py
 P_CANVA=('Canva: Abonnementen en prijzen','https://www.canva.com/nl_nl/abonnementen/')
 P_CANVA_PRES=('Canva: Presentaties','https://www.canva.com/nl_nl/presentaties/')
 P_CANVA_HELP=('Canva Helpcentrum: Maak een presentatie met Canva AI','https://www.canva.com/nl_nl/help/using-magic-presentations/')
@@ -72,8 +73,8 @@ PRES_BODY=f'''      <h2 id="wat-ai-doet">Wat AI wel en niet doet bij een present
 _pt='AI presentatie maken: tools en prijzen voor ondernemers'
 _pd='Presentatie maken met AI? Canva, Copilot in PowerPoint en Gemini in Google Slides naast elkaar: wat gratis kan, wat het kost en of het Nederlands kan.'
 _ph1='AI presentatie maken: Canva, Copilot en Gemini vergeleken'
-_pb=PRES_BODY+faq_html(PRES_FAQ)+pres_bronnen(PRES_SRC)+'      <p class="note">Redactie ToolMatch · bijgewerkt op <time datetime="2026-11-03">3 november 2026</time></p>\n'
-_pg=[{"@type":"Article","@id":D+PRES+"#artikel","headline":_ph1,"description":_pd,"inLanguage":"nl-NL","url":D+PRES,"mainEntityOfPage":D+PRES,"datePublished":PRES_UPD,"dateModified":PRES_UPD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+_pb=PRES_BODY+faq_html(PRES_FAQ)+pres_bronnen(PRES_SRC)+'      <p class="note">Redactie ToolMatch · bijgewerkt op <time datetime="2026-11-12">12 november 2026</time></p>\n'
+_pg=[{"@type":"Article","@id":D+PRES+"#artikel","headline":_ph1,"description":_pd,"inLanguage":"nl-NL","url":D+PRES,"mainEntityOfPage":D+PRES,"datePublished":PRES_PUB,"dateModified":PRES_UPD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
   crumbs_ld([('Home','/'),('AI presentatie maken',PRES)]),faq_ld(PRES,PRES_FAQ)]
 write(PRES.strip('/')+'/index.html',page(PRES,_pt,_pd,'AI presentatie maken',_ph1,'Een eerste versie van je presentatie in een paar minuten. Hier staan Canva, Copilot en Gemini naast elkaar, met wat gratis kan, wat het per maand kost en hoe het met Nederlands zit.',_pb,wide=True,extra=ldscript(_pg)+WL_EXTRA))
 SPOKES.append(PRES)

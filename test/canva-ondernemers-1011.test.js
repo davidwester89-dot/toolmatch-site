@@ -58,14 +58,11 @@ test('canva-ondernemers: alleen feitelijke Canva-bronlinks, geen commerciële CT
   assert.doesNotMatch(main, /Naar de site van Canva|data-vendor="canva"|Begin bij Gratis|Kies Pro|Kies Business|Gratis om te testen|dan is Canva de ontwerptool/);
 });
 
-test('L7 10-11: nieuwe gids, hub /gids/ en inbound ontwerp-hub', () => {
+test('L7 10-11: nieuwe gids en hub /gids/ blijven 10-11; ontwerp-hub en keuzehulp later 12-11 (Canva-CTA neutraal)', () => {
   const sm = readFileSync('sitemap.xml', 'utf8');
-  for (const p of ['/gids/canva-voor-ondernemers/', '/gids/', '/ai-afbeeldingen-en-ontwerp/', '/keuzehulp/']) {
+  for (const p of ['/gids/canva-voor-ondernemers/', '/gids/']) {
     assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>2026-11-10</lastmod>`), p);
   }
-  const kh = readFileSync('keuzehulp/index.html', 'utf8');
-  assert.match(kh, /"dateModified": "2026-11-10"/);
-  assert.match(kh, /bijgewerkt op 10 november 2026/);
   assert.match(H, /"datePublished": "2026-11-10",\s*"dateModified": "2026-11-10"/);
   assert.match(H, /bijgewerkt op <time datetime="2026-11-10">10 november 2026<\/time>/);
   const hub = readFileSync('gids/index.html', 'utf8');
@@ -73,6 +70,4 @@ test('L7 10-11: nieuwe gids, hub /gids/ en inbound ontwerp-hub', () => {
   assert.match(hub, /"dateModified": "2026-11-10"/);
   const a = readFileSync('ai-afbeeldingen-en-ontwerp/index.html', 'utf8');
   assert.ok(a.includes('href="/gids/canva-voor-ondernemers/"'));
-  assert.match(a, /"dateModified": "2026-11-10"/);
-  assert.match(a, /bijgewerkt op 10 november 2026/);
 });

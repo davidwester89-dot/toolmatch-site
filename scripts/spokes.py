@@ -1,6 +1,8 @@
 # Fase 2: categoriepagina's, vergelijkingen, gidsen en hubs. Wordt uitgevoerd door build.py (na pages.py).
 PL=json.loads(subprocess.check_output(['node','--input-type=module','-e',
  "import {PARTNERLINKS} from './js/lib/partnerlinks.js'; console.log(JSON.stringify(PARTNERLINKS))"]))
+PL_ZELFDE=set(json.loads(subprocess.check_output(['node','--input-type=module','-e',
+ "import {PARTNERLINKS_ZELFDE_TAB} from './js/lib/partnerlinks.js'; console.log(JSON.stringify(PARTNERLINKS_ZELFDE_TAB))"])))
 T={t['id']:t for t in TL}
 LOGOS=json.loads(subprocess.check_output(['node','--input-type=module','-e',
  "import {LOGOS} from './js/lib/logos.js'; console.log(JSON.stringify(LOGOS))"]))
@@ -23,6 +25,8 @@ VERDER_UPD='2026-10-29'  # Verder lezen + gidslinks: zichtbare wijziging, L7
 NOTULY_UPD={'/ai-notuleren/':'2026-10-30'}  # Notuly toegevoegd 30-10 (MM-OK): zichtbare wijziging, L7
 LOGO_UPD={u:'2026-10-30' for u in ('/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/gids/wat-kosten-ai-abonnementen/','/vergelijken/chatgpt-vs-claude/','/vergelijken/chatgpt-vs-copilot/','/vergelijken/chatgpt-vs-gemini/','/vergelijken/zapier-vs-make-vs-n8n/')}  # logo's van aanbieders 30-10: zichtbare wijziging in de body, L7
 MAKE_UPD={'/automatiseren-zonder-code/':'2026-11-10','/vergelijken/zapier-vs-make-vs-n8n/':'2026-11-10'}  # register-URL 10-11 telt als bodywijziging (href in de vingerafdruk). datePublished blijft 2026-10-20.
+AFFILIATES_UPD='2026-11-17'
+AFFILIATES_PAD={'/online-afspraken-plannen/':AFFILIATES_UPD,'/social-media-inplannen/':AFFILIATES_UPD,'/ai-assistenten/':AFFILIATES_UPD,'/ai-mail-en-offertes/':AFFILIATES_UPD,'/ai-presentatie-maken/':AFFILIATES_UPD,'/keuzehulp/':AFFILIATES_UPD,'/privacy/':AFFILIATES_UPD}  # vier affiliate-CTA's 17-11 (L7); hubs niet tillen
 VERDER_GIDS=('/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')
 PRIJS_UPD={'/gids/ai-veilig-gebruiken/':'2026-10-30'}  # NL-IP-prijscheck 30-10: bronnen ChatGPT/Claude opnieuw bekeken (opt-out-claims nagelezen), L7
 INBOUND_UPD={'/ai-tekst-schrijven/':'2026-11-05'}  # Verder lezen + /ai-presentatie-maken/ (techronde 5-11): zichtbare wijziging, L7
@@ -52,7 +56,8 @@ def nagelezen(t):
     b=sorted({BRON_BEKEKEN[u] for _,u in t['bronnen'] if u in BRON_BEKEKEN and BRON_BEKEKEN[u]!=kaartdatum(t)})
     return (f'; Nederlandse prijspagina bekeken op {d[0]}' if len(d)==1 else '')+(f'; prijspagina bekeken op {b[0]}' if len(b)==1 and not d else '')
 def byline(slug=None):
-    if slug in ('/ai-afbeeldingen-en-ontwerp/', '/ai-assistenten/', '/ai-data-analyse/', '/ai-mail-en-offertes/', '/ai-vertalen/', '/ai-tekst-schrijven/', '/ai-chatbot-website/', '/online-afspraken-plannen/', '/ai-notuleren/'): return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 16 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # CTA neutraal 16-11 (12 vendors, L7)
+    if slug in AFFILIATES_PAD and slug not in ('/keuzehulp/','/privacy/','/ai-presentatie-maken/'): return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 17 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # affiliate-CTA 17-11 (L7)
+    if slug in ('/ai-afbeeldingen-en-ontwerp/', '/ai-data-analyse/', '/ai-vertalen/', '/ai-tekst-schrijven/', '/ai-chatbot-website/', '/ai-notuleren/'): return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 16 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # CTA neutraal 16-11 (12 vendors, L7)
     if slug in ('/automatiseren-zonder-code/',): return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 12 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # geen nieuwe bodywijziging 16-11; blijft 12-11 (PA-CTA)
     if slug in MAKE_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 10 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # register-URL 10-11 (L7)
     if slug in INBOUND_UPD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 5 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'
@@ -68,27 +73,37 @@ def dpa(t):
     if t.get('dpa'): return DPA[t['dpa']]
     if t.get('privacy') and re.search(r'verwerkersovereenkomst|DPA',t['privacy']): return 'Ja (volgens de aanbieder)'
     return 'Onbekend'
-def knoplabel(t):
+def knoplabel(t, nieuw_tabblad=True):
     v = t.get("vendor") or t["naam"]
     zicht = f"Naar de site van {v}"
     prod = t["naam"].replace(f" ({v})", "")
-    if prod.startswith(v + " "): return zicht, f"Naar de site van {prod} (opent in een nieuw tabblad)"
+    tab = " (opent in een nieuw tabblad)" if nieuw_tabblad else ""
+    if prod.startswith(v + " "): return zicht, f"Naar de site van {prod}{tab}"
     extra = f" ({prod})" if t.get("vendor") and prod != v else ""
-    return zicht, f"{zicht}{extra} (opent in een nieuw tabblad)"
+    return zicht, f"{zicht}{extra}{tab}"
 
 def uit(t):
     # Geen open affiliate: neutrale bronlink, geen knop/CTA/sponsored (12-11 Canva/PA/Copilot/Power BI; 16-11 twaalf vendors).
     # Zapier, n8n, HubSpot, Make en overige lopende/aanvraagbare merken blijven knoppen.
+    # Cal.com, Metricool, SimplyBook.me en Gemini: partnerlink (17-11). Gemini zonder target=_blank.
     if t['id'] in ('canva', 'powerautomate', 'copilot', 'powerbi', 'chatgpt', 'claude', 'lechat', 'deepl', 'lookerstudio', 'googlecloudtranslate', 'calendly', 'acuity', 'albacross', 'intercom', 'wordpress', 'notuly'):
         return f'<a href="{E(t["url"])}" rel="noopener">{E(t["naam"])}</a>'
     p=PL.get(t['id'])
-    if p: return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{t["id"]}" data-cta="partner" aria-label="{E(knoplabel(t)[1])}">{E(knoplabel(t)[0])}</a>'
-    return f'<a class="btn ghost" href="{E(t["url"])}" rel="noopener" target="_blank" data-vendor="{t["id"]}" data-cta="outbound" aria-label="{E(knoplabel(t)[1])}">{E(knoplabel(t)[0])}</a>'
+    if p:
+        zelfde=t['id'] in PL_ZELFDE
+        tgt='' if zelfde else ' target="_blank"'
+        zicht,aria=knoplabel(t, nieuw_tabblad=not zelfde)
+        return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener"{tgt} data-vendor="{t["id"]}" data-cta="partner" aria-label="{E(aria)}">{E(zicht)}</a>'
+    zicht,aria=knoplabel(t)
+    return f'<a class="btn ghost" href="{E(t["url"])}" rel="noopener" target="_blank" data-vendor="{t["id"]}" data-cta="outbound" aria-label="{E(aria)}">{E(zicht)}</a>'
 def partner_tekst(tid, txt):
     """Lichte partnerlink in lopende tekst. De partnerzin komt via met_noot direct onder het blok."""
     p=PL.get(tid)
     if not p: return ''
-    return f'<a href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-cta="partner" aria-label="{E(txt)} (opent in een nieuw tabblad)">{E(txt)}</a>'
+    zelfde=tid in PL_ZELFDE
+    tgt='' if zelfde else ' target="_blank"'
+    tab='' if zelfde else ' (opent in een nieuw tabblad)'
+    return f'<a href="{E(p)}" rel="sponsored nofollow noopener"{tgt} data-cta="partner" aria-label="{E(txt)}{tab}">{E(txt)}</a>'
 PNOOT='      <p class="pnoot">Sommige links zijn partnerlinks; dat verandert de volgorde nooit.</p>\n'
 def met_noot(blok):
     """Precies één partnerzin direct na een blok waarin een partnerlink (rel sponsored) staat; anders niets."""
@@ -368,7 +383,7 @@ for c in CAT:
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
     body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
     body+=verder_lezen(c['slug'])+faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
-    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":{'/automatiseren-zonder-code/':'2026-11-12','/ai-afbeeldingen-en-ontwerp/':'2026-11-16','/ai-assistenten/':'2026-11-16','/ai-data-analyse/':'2026-11-16','/ai-mail-en-offertes/':'2026-11-16','/ai-vertalen/':'2026-11-16','/ai-tekst-schrijven/':'2026-11-16','/ai-chatbot-website/':'2026-11-16','/online-afspraken-plannen/':'2026-11-16','/ai-notuleren/':'2026-11-16'}.get(c['slug']) or MAKE_UPD.get(c['slug']) or (INBOUND_UPD.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
+    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":{'/automatiseren-zonder-code/':'2026-11-12','/ai-afbeeldingen-en-ontwerp/':'2026-11-16','/ai-assistenten/':'2026-11-17','/ai-data-analyse/':'2026-11-16','/ai-mail-en-offertes/':'2026-11-17','/ai-vertalen/':'2026-11-16','/ai-tekst-schrijven/':'2026-11-16','/ai-chatbot-website/':'2026-11-16','/online-afspraken-plannen/':'2026-11-17','/social-media-inplannen/':'2026-11-17','/ai-notuleren/':'2026-11-16'}.get(c['slug']) or MAKE_UPD.get(c['slug']) or (INBOUND_UPD.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
       crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
     zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)

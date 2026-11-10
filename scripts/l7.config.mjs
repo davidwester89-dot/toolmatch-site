@@ -21,7 +21,12 @@ export const CFG = {
 };
 // 'Gmail' is hier een productnaam (koppelingen van tools), geen persoonlijk adres. Alleen het woord Gmail met hoofdletter, niet
 // gevolgd door .com/@ en niet als deel van een e-mailadres.
-export const ALLOW_NAME = [{ file: /\.(html|js)$/, match: /^[^\w.@]?Gmail[^\w.@]?$/, reden: 'productnaam Gmail (hoofdletter G, geen adres)' }];
+export const ALLOW_NAME = [
+  { file: /\.(html|js)$/, match: /^[^\w.@]?Gmail[^\w.@]?$/, reden: 'productnaam Gmail (hoofdletter G, geen adres)' },
+  // Officiële SimplyBook.me-reflink uit het partnerbestand (10-11); ctx = de volledige URL, zoals de Moza-ref-uitzondering.
+  // Dave-uitzondering 10-11 09:56: Dave bevestigde dat zijn naam in deze referralparameter publiek mag.
+  { file: /\.(html|js)$/, match: /^=dave_$/, ctx: /simplybook\.me\?ref=dave_west_fd136/, reden: 'officiële SimplyBook.me-affiliateparameter (Dave-uitzondering 10-11 09:56)' },
+];
 export const BEKEND_ORPHAN = [];
 // Hub-audit: bestaande bevindingen op origin/main (30-10). Elk item is exact (alleen = de volledige melding, incl. kinderen en
 // datums) en vervalt na 'tot' (Europe/Amsterdam): daarna is de melding weer rood (huisregel BEKEND: exact + vervaldatum, SC 01-11).

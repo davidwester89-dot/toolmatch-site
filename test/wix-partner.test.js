@@ -53,8 +53,8 @@ test('Wix-CTA: geen extra parameter of fragment op de trackinglink', () => {
 
 test('Wix-CTA L7: keuzehulp-datum mee, uitslagbestand ongemoeid', () => {
   const kh = readFileSync('keuzehulp/index.html', 'utf8');
-  assert.match(kh, /"dateModified": "2026-11-16"/);
-  assert.match(kh, /bijgewerkt op 16 november 2026/);
+  assert.match(kh, /"dateModified": "2026-11-17"/);
+  assert.match(kh, /bijgewerkt op 17 november 2026/);
   assert.match(kh, /gecontroleerd op 20 oktober 2026/);
-  assert.ok(readFileSync('sitemap.xml', 'utf8').includes('<loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>2026-11-16</lastmod>'));
+  assert.ok(readFileSync('sitemap.xml', 'utf8').includes('<loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>2026-11-17</lastmod>'));
 });

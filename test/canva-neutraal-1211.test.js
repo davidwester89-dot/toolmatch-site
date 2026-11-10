@@ -1,7 +1,7 @@
 // CTA-neutralisatie: Canva, Power Automate, Copilot en Power BI (12-11)
 // plus twaalf vendors zonder betaalde route (16-11). Knoppen worden gewone bronlinks.
 // Ranking, teksten en prijzen blijven gelijk. Lopende/aanvraagbare merken (o.a. Zapier, n8n,
-// HubSpot, Make, Gemini) blijven ongewijzigde knoppen.
+// HubSpot, Make) blijven knoppen. Cal.com, Metricool, SimplyBook.me en Gemini krijgen in 17-11 een partnerlink.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
@@ -256,15 +256,10 @@ test('Zapier- en n8n-knoppen blijven byte-gelijk (PartnerStack loopt); Make-part
 
 test('L7 12-11 blijft op pagina\'s zonder nieuwe bodywijziging; gids, /gids/ en vs-Make blijven 10-11', () => {
   const sm = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
-  for (const p of ['/ai-presentatie-maken/', '/automatiseren-zonder-code/']) {
-    assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>2026-11-12</lastmod>`), p);
-  }
+  assert.ok(sm.includes(`<loc>https://toolmatch.nl/automatiseren-zonder-code/</loc><lastmod>2026-11-12</lastmod>`));
   for (const p of ['/gids/canva-voor-ondernemers/', '/gids/', '/vergelijken/zapier-vs-make-vs-n8n/', '/vergelijken/']) {
     assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>2026-11-10</lastmod>`), p);
   }
-  const p = readFileSync(join(ROOT, 'ai-presentatie-maken/index.html'), 'utf8');
-  assert.match(p, /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-12"/);
-  assert.match(p, /bijgewerkt op <time datetime="2026-11-12">12 november 2026<\/time>/);
   const auto = readFileSync(join(ROOT, 'automatiseren-zonder-code/index.html'), 'utf8');
   assert.match(auto, /"dateModified": "2026-11-12"/);
   assert.match(auto, /bijgewerkt op 12 november 2026/);
@@ -274,17 +269,14 @@ test('L7 12-11 blijft op pagina\'s zonder nieuwe bodywijziging; gids, /gids/ en 
 
 test('L7 16-11: pagina\'s met nieuwe bodywijziging (12 vendors neutraal); hubs niet gelift', () => {
   const sm = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
-  const pages = ['/ai-afbeeldingen-en-ontwerp/', '/keuzehulp/', '/ai-assistenten/', '/ai-data-analyse/', '/ai-mail-en-offertes/', '/ai-vertalen/', '/ai-tekst-schrijven/', '/ai-chatbot-website/', '/online-afspraken-plannen/', '/ai-notuleren/', '/ai-website-maken/', '/websitebezoekers-herkennen/'];
+  const pages = ['/ai-afbeeldingen-en-ontwerp/', '/ai-data-analyse/', '/ai-vertalen/', '/ai-tekst-schrijven/', '/ai-chatbot-website/', '/ai-notuleren/', '/ai-website-maken/', '/websitebezoekers-herkennen/'];
   for (const p of pages) {
     assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>2026-11-16</lastmod>`), p);
   }
-  const kh = readFileSync(join(ROOT, 'keuzehulp/index.html'), 'utf8');
-  assert.match(kh, /"dateModified": "2026-11-16"/);
-  assert.match(kh, /bijgewerkt op 16 november 2026/);
   const a = readFileSync(join(ROOT, 'ai-afbeeldingen-en-ontwerp/index.html'), 'utf8');
   assert.match(a, /"dateModified": "2026-11-16"/);
   assert.match(a, /bijgewerkt op 16 november 2026/);
-  for (const f of ['ai-assistenten/index.html', 'ai-data-analyse/index.html', 'ai-mail-en-offertes/index.html', 'ai-vertalen/index.html', 'ai-tekst-schrijven/index.html', 'ai-chatbot-website/index.html', 'online-afspraken-plannen/index.html', 'ai-notuleren/index.html']) {
+  for (const f of ['ai-data-analyse/index.html', 'ai-vertalen/index.html', 'ai-tekst-schrijven/index.html', 'ai-chatbot-website/index.html', 'ai-notuleren/index.html']) {
     const h = readFileSync(join(ROOT, f), 'utf8');
     assert.match(h, /"dateModified": "2026-11-16"/, f);
     assert.match(h, /bijgewerkt op 16 november 2026/, f);
@@ -339,7 +331,7 @@ test('twaalf vendors 16-11: keuzehulp en kaarten zijn neutrale bronlinks, geen C
   assert.equal(fout.join('\n'), '', fout.join('\n'));
 });
 
-const KEEP_VENDORS = ['zapier', 'n8n', 'make', 'hubspot', 'pipedrive', 'tidio', 'tldv', 'notta', 'jouwweb', 'zoho', 'amberscript', 'fireflies', 'trengo', 'buffer', 'simplybook', 'calcom', 'hootsuite', 'metricool', 'pitch', 'leadinfo', 'leadfeeder', 'gemini', 'otter', 'hostinger', 'wix'];
+const KEEP_VENDORS = ['zapier', 'n8n', 'make', 'hubspot', 'pipedrive', 'tidio', 'tldv', 'notta', 'jouwweb', 'zoho', 'amberscript', 'fireflies', 'trengo', 'buffer', 'hootsuite', 'pitch', 'leadinfo', 'leadfeeder', 'otter', 'hostinger', 'wix'];
 
 test('lopende en aanvraagbare vendors: knoppen byte-gelijk aan parent; Make/Hostinger/Wix onaangeraakt', () => {
   const files = walk(ROOT).filter((f) => f.endsWith('index.html'));
@@ -361,16 +353,10 @@ test('lopende en aanvraagbare vendors: knoppen byte-gelijk aan parent; Make/Host
   assert.equal(PARTNERLINKS_PAGINA.wix, 'https://wix.pxf.io/c/7989613/2152480/25616?trafcat=wsb');
   const parentPl = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:js/lib/partnerlinks.js`], { cwd: ROOT, encoding: 'utf8' });
   const nowPl = readFileSync(join(ROOT, 'js/lib/partnerlinks.js'), 'utf8');
-  const blok = (s) => {
-    const m1 = s.match(/export const PARTNERLINKS = \{[\s\S]*?\};/);
-    const m2 = s.match(/export const PARTNERLINKS_PAGINA = \{[\s\S]*?\};/);
-    return (m1 && m1[0]) + '\n' + (m2 && m2[0]);
-  };
-  assert.equal(blok(nowPl), blok(parentPl));
+  const pagina = (s) => (s.match(/export const PARTNERLINKS_PAGINA = \{[\s\S]*?\};/) || [])[0];
+  assert.equal(pagina(nowPl), pagina(parentPl), 'PARTNERLINKS_PAGINA (Hostinger/Wix) ongewijzigd');
+  assert.match(parentPl, /make: 'https:\/\/www\.make\.com\/en\/register\?pc=toolmatch'/);
   const auto = readFileSync(join(ROOT, 'automatiseren-zonder-code/index.html'), 'utf8');
   const parentAuto = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:automatiseren-zonder-code/index.html`], { cwd: ROOT, encoding: 'utf8' });
   assert.equal(auto, parentAuto);
-  const pres = readFileSync(join(ROOT, 'ai-presentatie-maken/index.html'), 'utf8');
-  const parentPres = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:ai-presentatie-maken/index.html`], { cwd: ROOT, encoding: 'utf8' });
-  assert.equal(pres, parentPres);
 });

@@ -124,10 +124,13 @@ test('external tool buttons carry an aria-label with vendor, product and new-tab
     const h = readFileSync(join(ROOT, f), 'utf8');
     for (const m of h.matchAll(/<a [^>]*data-vendor="([^"]+)"[^>]*>/g)) {
       const t = byId[m[1]]; if (!t) continue;
-      assert.match(m[0], /target="_blank"/, f + ' ' + m[1]);
+      const zelfdeTab = m[1] === 'gemini';
+      if (zelfdeTab) assert.doesNotMatch(m[0], /target="/, f + ' ' + m[1]);
+      else assert.match(m[0], /target="_blank"/, f + ' ' + m[1]);
       const v = t.vendor || t.naam;
       const prod = t.naam.replace(` (${v})`, '');
-      const want = prod.startsWith(v + ' ') ? `Naar de site van ${prod} (opent in een nieuw tabblad)` : `Naar de site van ${v}${t.vendor && prod !== v ? ` (${prod})` : ''} (opent in een nieuw tabblad)`;
+      const tab = zelfdeTab ? '' : ' (opent in een nieuw tabblad)';
+      const want = (prod.startsWith(v + ' ') ? `Naar de site van ${prod}` : `Naar de site van ${v}${t.vendor && prod !== v ? ` (${prod})` : ''}`) + tab;
       const zicht = m[0] && h.slice(h.indexOf(m[0]) + m[0].length).split('<')[0];
       assert.ok(want.startsWith(zicht), 'label-in-name: ' + zicht + ' / ' + want);
       assert.ok(!/\([^)]*\(/.test(want), 'nested parentheses: ' + want);
@@ -137,7 +140,7 @@ test('external tool buttons carry an aria-label with vendor, product and new-tab
   }
   assert.ok(n >= 20, "te weinig resterende vendor-knoppen: " + n);
   const kh = readFileSync(join(ROOT, 'js/keuzehulp.js'), 'utf8');
-  assert.match(kh, /aria-label="\$\{esc\(knopLabel\(t\)\)\}"/);
+  assert.match(kh, /aria-label="\$\{esc\(knopLabel\(t, \{ nieuwTabblad: Boolean\(o\.target\) \}\)\)\}"/);
   assert.match(kh, /target="_blank" aria-label="\$\{esc\(n2\)\} \(opent in een nieuw tabblad\)"/);
   // powerbi/copilot/canva/powerautomate + de 12 vendors van 16-11 zijn neutrale bronlinks, geen knop met aria-label
   const lbl = { hubspot: 'Naar de site van HubSpot CRM (opent in een nieuw tabblad)', zoho: 'Naar de site van Zoho CRM (opent in een nieuw tabblad)' };

@@ -77,16 +77,18 @@ test('externe links: noopener; partnerlinks nooit zonder sponsored', () => {
   }
 });
 
-test('partnerlinks: rel exact "sponsored nofollow noopener" en direct daarna p.pnoot', () => {
+test('partnerlinks: rel exact "sponsored nofollow noopener" en p.pnoot direct na het blok', () => {
   let n = 0;
   for (const f of pages) {
     const h = read(f);
     for (const m of h.matchAll(/<a\s[^>]*rel="([^"]*\bsponsored\b[^"]*)"[^>]*>/g)) {
       n++;
       assert.equal(m[1], 'sponsored nofollow noopener', f + ' ' + m[0]);
-      const rest = h.slice(h.indexOf('</a>', m.index) + 4);
-      const volgend = rest.match(/<(?!\/)[a-z][^>]*>/i);
-      assert.ok(volgend && /^<p\s+class="pnoot">$/.test(volgend[0]), f + ': na partnerlink volgt ' + (volgend && volgend[0]));
+      const afterA = h.indexOf('</a>', m.index) + 4;
+      const rest = h.slice(afterA);
+      const noot = rest.search(/<p class="pnoot">/);
+      const nextH2 = rest.search(/<h2\b/);
+      assert.ok(noot >= 0 && (nextH2 < 0 || noot < nextH2), f + ': pnoot ontbreekt vóór de volgende kop na de partnerlink');
     }
   }
   assert.ok(n >= 1, 'geen enkele partnerlink gevonden');

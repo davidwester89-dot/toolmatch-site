@@ -29,7 +29,10 @@ test('ai-presentatie: H2-volgorde uit de briefing en interne links', () => {
   assert.deepEqual(h2, ['Wat AI wel en niet doet bij een presentatie', 'Tools naast elkaar', 'Gratis of betaald', 'In het Nederlands', 'Bedrijfsdata en privacy', 'Zo kies je', 'Veelgestelde vragen', 'Bronnen']);
   for (const l of ['/keuzehulp/', '/ai-afbeeldingen-en-ontwerp/', '/ai-assistenten/', '/vergelijken/chatgpt-vs-copilot/', '/vergelijken/chatgpt-vs-gemini/', '/gids/wat-kosten-ai-abonnementen/', '/gids/ai-veilig-gebruiken/']) assert.ok(main.includes(`href="${l}"`), l);
   assert.ok(readFileSync('ai-afbeeldingen-en-ontwerp/index.html', 'utf8').includes('href="/ai-presentatie-maken/"'), 'link terug');
-  assert.doesNotMatch(main, /sponsored/);
+  const sponsored = [...main.matchAll(/rel="([^"]*sponsored[^"]*)"/g)].map((m) => m[1]);
+  assert.deepEqual(sponsored, ['sponsored nofollow noopener']);
+  assert.match(main, /data-vendor="gemini"[^>]*data-cta="partner"|data-cta="partner"[^>]*data-vendor="gemini"/);
+  assert.doesNotMatch(main, /data-vendor="canva"[^>]*sponsored|data-vendor="copilot"[^>]*sponsored/);
 });
 
 test('ai-presentatie: bronnen alleen naam + link, zonder datum', () => {
@@ -38,12 +41,12 @@ test('ai-presentatie: bronnen alleen naam + link, zonder datum', () => {
   assert.doesNotMatch(b, /bekeken op|geraadpleegd|20\d\d/);
 });
 
-test('L7: /ai-presentatie-maken/ datePublished 3-11, dateModified 12-11 (Canva-CTA neutraal); ontwerp-hub 12-11', () => {
+test('L7: /ai-presentatie-maken/ datePublished 3-11, dateModified 17-11 (Gemini-partnerlink); ontwerp-hub blijft 16-11', () => {
   const sm = readFileSync('sitemap.xml', 'utf8');
-  assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-presentatie-maken/</loc><lastmod>2026-11-12</lastmod>`));
+  assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-presentatie-maken/</loc><lastmod>2026-11-17</lastmod>`));
   assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-afbeeldingen-en-ontwerp/</loc><lastmod>2026-11-16</lastmod>`), 'hub 16-11');
-  assert.match(H, /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-12"/);
-  assert.match(H, /bijgewerkt op <time datetime="2026-11-12">12 november 2026<\/time>/);
+  assert.match(H, /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-17"/);
+  assert.match(H, /bijgewerkt op <time datetime="2026-11-17">17 november 2026<\/time>/);
   const a = readFileSync('ai-afbeeldingen-en-ontwerp/index.html', 'utf8');
   assert.match(a, /"dateModified": "2026-11-16"/);
   assert.match(a, /bijgewerkt op 16 november 2026/);

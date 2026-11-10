@@ -11,7 +11,7 @@ def bc_losse(path):
     crumb={"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":D+"/"},{"@type":"ListItem","position":2,"name":BC_LOSSE[path],"item":D+path}]}
     # Privacy kreeg op 9-11 een zichtbare tekstwijziging (directe partnerlink). Andere losse pagina's blijven een kale BreadcrumbList.
     if path=='/privacy/':
-        ld={"@context":"https://schema.org","@graph":[{"@type":"WebPage","url":D+path,"name":BC_LOSSE[path],"inLanguage":"nl-NL","dateModified":"2026-11-09"},crumb]}
+        ld={"@context":"https://schema.org","@graph":[{"@type":"WebPage","url":D+path,"name":BC_LOSSE[path],"inLanguage":"nl-NL","dateModified":"2026-11-17"},crumb]}
     else:
         ld={"@context":"https://schema.org",**crumb}
     return '<script type="application/ld+json">\n'+json.dumps(ld,ensure_ascii=False,indent=1)+'\n</script>\n'
@@ -279,7 +279,7 @@ PRIV='''      <h2 id="cookies">Cookies en statistieken</h2>
 
       <h2>Links naar aanbieders</h2>
       <p>Klik je door naar een aanbieder of neem je daar een abonnement, dan geldt de privacyverklaring van die aanbieder.</p>
-      <p>Partnerlinks worden bij de knoppen vermeld. Sommige lopen via een affiliatenetwerk (Daisycon of Impact). Dat netwerk plaatst op zijn eigen domein een cookie of klik-ID, om vast te leggen dat je via ToolMatch kwam. Andere partnerlinks gaan rechtstreeks naar de aanbieder (nu Make, via een trackingcode in de link); dan kan de aanbieder zelf op make.com een cookie of klik-ID zetten. Sluit je iets af, dan kunnen wij daardoor een vergoeding krijgen. Het netwerk of de aanbieder is zelf verantwoordelijk voor die gegevens; zie het privacybeleid van <a href="https://daisycon.com/en/legal-information/privacy-policy/" rel="noopener">Daisycon</a>, <a href="https://impact.com/privacy-policy/" rel="noopener">Impact</a> en <a href="https://www.make.com/en/privacy-notice" rel="noopener">Make</a>.</p>
+      <p>Partnerlinks worden bij de knoppen vermeld. Sommige lopen via een affiliatenetwerk (Daisycon of Impact). Dat netwerk plaatst op zijn eigen domein een cookie of klik-ID, om vast te leggen dat je via ToolMatch kwam. Andere partnerlinks gaan rechtstreeks naar de aanbieder (nu Make, Cal.com, Metricool en SimplyBook.me, via een trackingcode in de link); dan kan de aanbieder zelf op het eigen domein een cookie of klik-ID zetten. Sluit je iets af, dan kunnen wij daardoor een vergoeding krijgen. Het netwerk of de aanbieder is zelf verantwoordelijk voor die gegevens; zie het privacybeleid van <a href="https://daisycon.com/en/legal-information/privacy-policy/" rel="noopener">Daisycon</a>, <a href="https://impact.com/privacy-policy/" rel="noopener">Impact</a>, <a href="https://www.make.com/en/privacy-notice" rel="noopener">Make</a>, <a href="https://cal.com/privacy" rel="noopener">Cal.com</a>, <a href="https://metricool.com/privacy-policy/" rel="noopener">Metricool</a> en <a href="https://simplybook.me/en/policy" rel="noopener">SimplyBook.me</a>.</p>
 
       <h2>Als je ons mailt</h2>
       <p>Mail je naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>, dan gebruiken we je mailadres en je bericht alleen om je te antwoorden. We delen ze met niemand.</p>
@@ -290,7 +290,7 @@ PRIV='''      <h2 id="cookies">Cookies en statistieken</h2>
       <h2>Je rechten</h2>
       <p>Je mag vragen welke gegevens we van je hebben en vragen om ze te laten verwijderen. Mail daarvoor naar <a href="mailto:info@toolmatch.nl">info@toolmatch.nl</a>. Ben je het niet eens met hoe we met je gegevens omgaan, dan kun je een klacht indienen bij de <a href="https://www.autoriteitpersoonsgegevens.nl/" rel="noopener">Autoriteit Persoonsgegevens</a>.</p>
 
-      <p class="note">Redactie ToolMatch · bijgewerkt op 9 november 2026</p>'''
+      <p class="note">Redactie ToolMatch · bijgewerkt op 17 november 2026</p>'''
 OVER='''      <h2>Wie we zijn</h2>
       <p>ToolMatch wordt gemaakt door Redactie ToolMatch. We zoeken uit wat tools echt doen, wat ze per maand kosten en hoe ze met je gegevens omgaan. Dat zetten we in gewone taal op een rij, voor ondernemers die zelf hun tools kiezen: van zzp'ers tot kleine teams.</p>
 
@@ -332,4 +332,5 @@ LASTMOD.update(MAKE_UPD)  # Make-partnerlink 9-11, na LOGO_UPD (die de twee pagi
 LASTMOD['/privacy/']='2026-11-09'  # directe partnerlink naast Daisycon (L7, 9-11)
 LASTMOD.update(CANVA_PAD)  # /gids/canva-voor-ondernemers/ + hub + inbound ontwerp 10-11 (L7)
 LASTMOD.update(CANVA_NEUTRAAL_PAD)  # Canva + Power Automate-CTA neutraal: ontwerp, presentatie, keuzehulp, automatiseren 12-11; /gids/ niet tillen
+LASTMOD.update(AFFILIATES_PAD)  # vier affiliate-CTA's 17-11 (Cal.com, Metricool, SimplyBook.me, Gemini); hubs niet tillen
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')

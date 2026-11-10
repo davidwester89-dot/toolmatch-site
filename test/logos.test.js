@@ -87,8 +87,8 @@ test('logo: fallback is een neutrale letter in hetzelfde vak', () => {
 
 test('L7 30-10: de pagina\'s met logo\'s van 30 oktober hebben dateModified, sitemap-lastmod en zichtbaar bijgewerkt op 30 oktober 2026', () => {
   const sm = readFileSync(ROOT + 'sitemap.xml', 'utf8');
-  const P = ['ai-assistenten', 'ai-chatbot-website', 'ai-data-analyse', 'ai-mail-en-offertes', 'ai-notuleren', 'ai-vertalen', 'crm-klein-bedrijf', 'online-afspraken-plannen', 'social-media-inplannen', 'gids/wat-kosten-ai-abonnementen', 'vergelijken/chatgpt-vs-claude', 'vergelijken/chatgpt-vs-copilot', 'vergelijken/chatgpt-vs-gemini', 'websitebezoekers-herkennen'];
-  // keuzehulp + ai-afbeeldingen-en-ontwerp: 12-11 (Canva-CTA neutraal); zie test/canva-neutraal-1211.test.js.
+  const P = ['ai-chatbot-website', 'ai-notuleren', 'ai-vertalen', 'crm-klein-bedrijf', 'online-afspraken-plannen', 'social-media-inplannen', 'gids/wat-kosten-ai-abonnementen', 'vergelijken/chatgpt-vs-claude', 'vergelijken/chatgpt-vs-copilot', 'vergelijken/chatgpt-vs-gemini', 'websitebezoekers-herkennen'];
+  // keuzehulp, ontwerp, automatiseren, assistenten, data-analyse, mail-en-offertes: 12-11 (CTA neutraal); zie test/canva-neutraal-1211.test.js.
   // ai-tekst-schrijven is op 5-11 opnieuw bijgewerkt (Verder lezen + /ai-presentatie-maken/); die datum test test/verder-lezen.test.js.
   // ai-website-maken is op 7-11 opnieuw bijgewerkt (Wix-partnerknop); die datum test test/website-prijzen.test.js.
   // automatiseren-zonder-code is op 12-11 opnieuw gedateerd (Power Automate-CTA neutraal); zapier-vs-make-vs-n8n blijft 10-11 (Make). Zie test/make-partner.test.js en test/canva-neutraal-1211.test.js.

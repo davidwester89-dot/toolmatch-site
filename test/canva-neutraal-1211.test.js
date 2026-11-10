@@ -1,7 +1,7 @@
-// CTA-neutralisatie (12-11-2026): Canva (geen open affiliate, Canvassador gesloten) en
-// Power Automate (evenmin een betaalde route). Knoppen worden gewone bronlinks.
+// CTA-neutralisatie (12-11-2026): Canva, Power Automate, Copilot en Power BI
+// (geen open affiliate). Knoppen worden gewone bronlinks.
 // Ranking, teksten en prijzen blijven gelijk. Zapier en n8n blijven ongewijzigde knoppen
-// (PartnerStack-aanvraag loopt).
+// (PartnerStack-aanvraag loopt). Make-partnerlink blijft.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
@@ -27,33 +27,45 @@ function anchors(src, re) {
 
 const CANVA_A = /<a\b[^>]*href="(https:\/\/(?:www\.)?canva\.com[^"]*)"[^>]*>/gi;
 const PA_A = /<a\b[^>]*href="(https:\/\/www\.microsoft\.com\/nl-nl\/power-platform\/products\/power-automate[^"]*)"[^>]*>/gi;
+const COPILOT_A = /<a\b[^>]*href="(https:\/\/www\.microsoft\.com\/nl-nl\/microsoft-365\/copilot\/business[^"]*)"[^>]*>/gi;
+const POWERBI_A = /<a\b[^>]*href="(https:\/\/www\.microsoft\.com\/nl-nl\/power-platform\/products\/power-bi[^"]*)"[^>]*>/gi;
+const PARENT_NEUTRAAL = '5e3e1e5851569898a15a6e410ddd38521187bafd';
 
 const ZAPIER_GO = '<p class="go"><a class="btn ghost" href="https://zapier.com/" rel="noopener" target="_blank" data-vendor="zapier" data-cta="outbound" aria-label="Naar de site van Zapier (opent in een nieuw tabblad)">Naar de site van Zapier</a></p>';
 const N8N_GO = '<p class="go"><a class="btn ghost" href="https://n8n.io/" rel="noopener" target="_blank" data-vendor="n8n" data-cta="outbound" aria-label="Naar de site van n8n (opent in een nieuw tabblad)">Naar de site van n8n</a></p>';
 
-test('Canva en Power Automate staan niet in PARTNERLINKS en krijgen geen partner-uitgang', () => {
-  assert.equal(PARTNERLINKS.canva, undefined);
-  assert.equal(PARTNERLINKS.powerautomate, undefined);
-  assert.equal(PARTNERLINKS_PAGINA.canva, undefined);
-  assert.equal(PARTNERLINKS_PAGINA.powerautomate, undefined);
+test('Canva, Power Automate, Copilot en Power BI staan niet in PARTNERLINKS en krijgen geen partner-uitgang', () => {
+  const ids = ['canva', 'powerautomate', 'copilot', 'powerbi'];
+  for (const id of ids) {
+    assert.equal(PARTNERLINKS[id], undefined, id);
+    assert.equal(PARTNERLINKS_PAGINA[id], undefined, id);
+  }
   const canva = TOOLS.find((t) => t.id === 'canva');
   const pa = TOOLS.find((t) => t.id === 'powerautomate');
+  const copilot = TOOLS.find((t) => t.id === 'copilot');
+  const powerbi = TOOLS.find((t) => t.id === 'powerbi');
   assert.equal(canva.url, 'https://www.canva.com/');
   assert.equal(canva.prijs, 'Pro: €12 per maand; €110 per jaar voor één persoon');
   assert.equal(pa.naam, 'Power Automate');
   assert.equal(pa.url, 'https://www.microsoft.com/nl-nl/power-platform/products/power-automate');
   assert.equal(pa.prijs, 'Premium: €13,00 per gebruiker per maand bij jaarbetaling (excl. btw)');
-  for (const t of [canva, pa]) {
+  assert.equal(copilot.naam, 'Copilot Business');
+  assert.equal(copilot.url, 'https://www.microsoft.com/nl-nl/microsoft-365/copilot/business');
+  assert.equal(powerbi.naam, 'Power BI');
+  assert.equal(powerbi.url, 'https://www.microsoft.com/nl-nl/power-platform/products/power-bi');
+  for (const t of [canva, pa, copilot, powerbi]) {
     const o = uitgaand(t);
-    assert.equal(o.partner, false);
-    assert.equal(o.href, t.url);
-    assert.equal(o.rel, 'noopener');
+    assert.equal(o.partner, false, t.id);
+    assert.equal(o.href, t.url, t.id);
+    assert.equal(o.rel, 'noopener', t.id);
   }
 });
 
-test('ranking ongewijzigd: beeld Canva #1; automatiseren Zapier, Make, n8n, Power Automate', () => {
+test('ranking ongewijzigd: beeld, automatiseren, schrijven en data', () => {
   assert.deepEqual(match({ doel: 'beeld' }).map((r) => r.tool.id), ['canva', 'pitch', 'chatgpt', 'lechat']);
   assert.deepEqual(match({ doel: 'automatiseren' }).map((r) => r.tool.id), ['zapier', 'make', 'n8n', 'powerautomate']);
+  assert.deepEqual(match({ doel: 'schrijven' }).map((r) => r.tool.id), ['chatgpt', 'claude', 'deepl', 'lechat', 'copilot', 'gemini']);
+  assert.deepEqual(match({ doel: 'data' }).map((r) => r.tool.id), ['lookerstudio', 'powerbi', 'chatgpt', 'copilot']);
   const alle = [];
   const ks = Object.keys(VRAGEN);
   (function rec(i, a) {
@@ -101,10 +113,11 @@ test('sitewide: geen Canva-CTA of sponsored Canva-link, wel neutrale bronlinks',
   assert.match(canvaKart, /<p class="go"><a href="https:\/\/www\.canva\.com\/" rel="noopener">Canva<\/a><\/p>/);
   assert.doesNotMatch(canvaKart, /Naar de site van Canva|data-vendor="canva"|data-cta=|class="btn/);
   assert.match(presentatie, /<a href="https:\/\/www\.canva\.com\/" rel="noopener">Canva<\/a>/);
-  assert.match(presentatie, /class="btn ghost"[^>]*data-vendor="copilot"/);
+  assert.match(presentatie, /<a href="https:\/\/www\.microsoft\.com\/nl-nl\/microsoft-365\/copilot\/business" rel="noopener">Copilot Business<\/a>/);
+  assert.doesNotMatch(presentatie, /data-vendor="copilot"/);
   assert.match(presentatie, /class="btn ghost"[^>]*data-vendor="gemini"/);
   assert.doesNotMatch(presentatie.match(/<a href="https:\/\/www\.canva\.com\/"[^>]*>/)[0], /btn|data-vendor|data-cta|sponsored/);
-  assert.match(khJs, /\['canva', 'powerautomate'\]\.includes\(t\.id\) \? `<p class="go"><a href="\$\{esc\(t\.url\)\}" rel="noopener">\$\{esc\(t\.naam\)\}<\/a><\/p>`/);
+  assert.match(khJs, /\['canva', 'powerautomate', 'copilot', 'powerbi'\]\.includes\(t\.id\) \? `<p class="go"><a href="\$\{esc\(t\.url\)\}" rel="noopener">\$\{esc\(t\.naam\)\}<\/a><\/p>`/);
   assert.match(khJs, /Naar de site van \$\{esc\(t\.vendor \|\| t\.naam\)\}/);
 });
 
@@ -133,12 +146,63 @@ test('Power Automate: keuzehulp-uitslag en categoriepagina zijn neutrale bronlin
   assert.match(paKart, /href="https:\/\/www\.microsoft\.com\/nl-nl\/power-platform\/products\/power-automate\/pricing" rel="noopener"/);
 });
 
+
+test('Copilot en Power BI: keuzehulp en kaarten zijn neutrale bronlinks, geen CTA/sponsored', () => {
+  const files = walk(ROOT).filter((f) => /\.(html|js)$/.test(f));
+  const fout = [];
+  const gevondenC = [];
+  const gevondenB = [];
+  for (const f of files) {
+    const src = readFileSync(f, 'utf8');
+    const cTags = anchors(src, COPILOT_A);
+    if (cTags.length) {
+      gevondenC.push(rel(f));
+      for (const tag of cTags) {
+        if (CTA_ATTR.test(tag) || /Naar de site van Microsoft/i.test(tag)) fout.push(`${rel(f)}: ${tag}`);
+      }
+    }
+    const bTags = anchors(src, POWERBI_A);
+    if (bTags.length) {
+      gevondenB.push(rel(f));
+      for (const tag of bTags) {
+        if (CTA_ATTR.test(tag) || /Naar de site van Microsoft/i.test(tag)) fout.push(`${rel(f)}: ${tag}`);
+      }
+    }
+  }
+  assert.equal(fout.join('\n'), '', fout.join('\n'));
+  for (const verplicht of [
+    'ai-assistenten/index.html',
+    'ai-data-analyse/index.html',
+    'ai-mail-en-offertes/index.html',
+    'ai-presentatie-maken/index.html',
+    'keuzehulp/index.html',
+  ]) assert.ok(gevondenC.includes(verplicht), 'Copilot-bronlink ontbreekt in ' + verplicht);
+  assert.ok(gevondenB.includes('ai-data-analyse/index.html'), 'Power BI-bronlink ontbreekt op data-analyse');
+  assert.ok(gevondenB.includes('keuzehulp/index.html'), 'Power BI-bronlink ontbreekt in keuzehulp-tabel');
+
+  const kaart = (html, id) => html.slice(html.indexOf(`<article class="res tool" id="${id}">`), html.indexOf('</article>', html.indexOf(`id="${id}"`)));
+  const assistenten = readFileSync(join(ROOT, 'ai-assistenten/index.html'), 'utf8');
+  const mail = readFileSync(join(ROOT, 'ai-mail-en-offertes/index.html'), 'utf8');
+  const data = readFileSync(join(ROOT, 'ai-data-analyse/index.html'), 'utf8');
+  const presentatie = readFileSync(join(ROOT, 'ai-presentatie-maken/index.html'), 'utf8');
+  const copilotGo = /<p class="go"><a href="https:\/\/www\.microsoft\.com\/nl-nl\/microsoft-365\/copilot\/business" rel="noopener">Copilot Business<\/a><\/p>/;
+  assert.match(kaart(assistenten, 'copilot'), copilotGo);
+  assert.match(kaart(mail, 'copilot'), copilotGo);
+  assert.match(kaart(data, 'copilot'), copilotGo);
+  assert.doesNotMatch(kaart(assistenten, 'copilot'), /Naar de site van Microsoft|data-vendor="copilot"|data-cta=|class="btn/);
+  assert.match(kaart(data, 'powerbi'), /<p class="go"><a href="https:\/\/www\.microsoft\.com\/nl-nl\/power-platform\/products\/power-bi" rel="noopener">Power BI<\/a><\/p>/);
+  assert.doesNotMatch(kaart(data, 'powerbi'), /Naar de site van Microsoft|data-vendor="powerbi"|data-cta=|class="btn/);
+  assert.match(kaart(data, 'powerbi'), /href="https:\/\/www\.microsoft\.com\/nl-nl\/power-platform\/products\/power-bi\/pricing" rel="noopener"/);
+  assert.match(presentatie, /<a href="https:\/\/www\.microsoft\.com\/nl-nl\/microsoft-365\/copilot\/business" rel="noopener">Copilot Business<\/a>/);
+  assert.match(presentatie, /class="btn ghost"[^>]*data-vendor="gemini"/);
+});
+
 test('Zapier- en n8n-knoppen blijven byte-gelijk (PartnerStack loopt); Make-partnerlink blijft', () => {
   const auto = readFileSync(join(ROOT, 'automatiseren-zonder-code/index.html'), 'utf8');
   const vs = readFileSync(join(ROOT, 'vergelijken/zapier-vs-make-vs-n8n/index.html'), 'utf8');
   const khJs = readFileSync(join(ROOT, 'js/keuzehulp.js'), 'utf8');
-  const parentVs = execFileSync('git', ['show', 'HEAD:vergelijken/zapier-vs-make-vs-n8n/index.html'], { cwd: ROOT, encoding: 'utf8' });
-  const parentAuto = execFileSync('git', ['show', 'HEAD:automatiseren-zonder-code/index.html'], { cwd: ROOT, encoding: 'utf8' });
+  const parentVs = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:vergelijken/zapier-vs-make-vs-n8n/index.html`], { cwd: ROOT, encoding: 'utf8' });
+  const parentAuto = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:automatiseren-zonder-code/index.html`], { cwd: ROOT, encoding: 'utf8' });
   const zapierParent = (parentAuto.match(/<p class="go"><a class="btn ghost" href="https:\/\/zapier\.com\/"[^<]+<\/a><\/p>/) || [])[0];
   const n8nParent = (parentAuto.match(/<p class="go"><a class="btn ghost" href="https:\/\/n8n\.io\/"[^<]+<\/a><\/p>/) || [])[0];
   assert.equal(zapierParent, ZAPIER_GO);
@@ -158,9 +222,9 @@ test('Zapier- en n8n-knoppen blijven byte-gelijk (PartnerStack loopt); Make-part
   assert.equal(PARTNERLINKS.make, 'https://www.make.com/en/register?pc=toolmatch');
 });
 
-test('L7 12-11: keuzehulp, ontwerp, presentatie en automatiseren tillen; gids en /gids/ blijven 10-11; vs-Make blijft 10-11', () => {
+test('L7 12-11: nieuwe en eerdere neutraal-pagina\'s; gids, /gids/ en vs-Make blijven 10-11', () => {
   const sm = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
-  for (const p of ['/ai-afbeeldingen-en-ontwerp/', '/ai-presentatie-maken/', '/keuzehulp/', '/automatiseren-zonder-code/']) {
+  for (const p of ['/ai-afbeeldingen-en-ontwerp/', '/ai-presentatie-maken/', '/keuzehulp/', '/automatiseren-zonder-code/', '/ai-assistenten/', '/ai-data-analyse/', '/ai-mail-en-offertes/']) {
     assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>2026-11-12</lastmod>`), p);
   }
   for (const p of ['/gids/canva-voor-ondernemers/', '/gids/', '/vergelijken/zapier-vs-make-vs-n8n/', '/vergelijken/']) {
@@ -178,6 +242,11 @@ test('L7 12-11: keuzehulp, ontwerp, presentatie en automatiseren tillen; gids en
   const auto = readFileSync(join(ROOT, 'automatiseren-zonder-code/index.html'), 'utf8');
   assert.match(auto, /"dateModified": "2026-11-12"/);
   assert.match(auto, /bijgewerkt op 12 november 2026/);
+  for (const f of ['ai-assistenten/index.html', 'ai-data-analyse/index.html', 'ai-mail-en-offertes/index.html']) {
+    const h = readFileSync(join(ROOT, f), 'utf8');
+    assert.match(h, /"dateModified": "2026-11-12"/, f);
+    assert.match(h, /bijgewerkt op 12 november 2026/, f);
+  }
   const gids = readFileSync(join(ROOT, 'gids/canva-voor-ondernemers/index.html'), 'utf8');
   assert.match(gids, /"datePublished": "2026-11-10",\s*"dateModified": "2026-11-10"/);
 });

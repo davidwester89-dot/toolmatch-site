@@ -1,7 +1,7 @@
 // Goedgekeurde partnerlinks per tool-id.
 // De match (match.js) leest dit bestand NOOIT: geen invloed op score of volgorde.
 // Make: direct programma (geen affiliatenetwerk), tracking via /en/register?pc=toolmatch. Geplaatst 9-11-2026.
-// Canva en Power Automate staan er bewust niet in: geen open affiliate (Canvassador is gesloten; Power Automate evenmin); links blijven neutraal (12-11-2026). Zapier en n8n blijven buiten deze lijst zolang PartnerStack loopt; hun bestaande knoppen wijzigen we nu niet.
+// Canva, Power Automate, Copilot en Power BI staan er bewust niet in: geen open affiliate; links blijven neutraal (12-11-2026). Zapier en n8n blijven buiten deze lijst zolang PartnerStack loopt; hun bestaande knoppen wijzigen we nu niet.
 export const PARTNERLINKS = {
   make: 'https://www.make.com/en/register?pc=toolmatch',
 };

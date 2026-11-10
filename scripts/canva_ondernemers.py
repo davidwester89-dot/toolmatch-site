@@ -8,9 +8,9 @@ CANVA='/gids/canva-voor-ondernemers/'
 CANVA_UPD='2026-11-10'
 # nieuwe pagina + hub /gids/ (nieuw kind) + inbound op ontwerp-hub (zichtbare wijziging, L7)
 CANVA_PAD={CANVA:CANVA_UPD,'/gids/':CANVA_UPD,'/ai-afbeeldingen-en-ontwerp/':CANVA_UPD,'/keuzehulp/':CANVA_UPD}
-# CTA-neutralisatie 12-11 (Canva + Power Automate): alleen pagina's met bodywijziging. Hub /gids/ en de gids zelf blijven 10-11.
+# CTA-neutralisatie 12-11 (Canva, Power Automate, Copilot, Power BI): alleen pagina's met bodywijziging. Hubs niet tillen.
 CANVA_NEUTRAAL_UPD='2026-11-12'
-CANVA_NEUTRAAL_PAD={'/ai-afbeeldingen-en-ontwerp/':CANVA_NEUTRAAL_UPD,'/ai-presentatie-maken/':CANVA_NEUTRAAL_UPD,'/keuzehulp/':CANVA_NEUTRAAL_UPD,'/automatiseren-zonder-code/':CANVA_NEUTRAAL_UPD}
+CANVA_NEUTRAAL_PAD={'/ai-afbeeldingen-en-ontwerp/':CANVA_NEUTRAAL_UPD,'/ai-presentatie-maken/':CANVA_NEUTRAAL_UPD,'/keuzehulp/':CANVA_NEUTRAAL_UPD,'/automatiseren-zonder-code/':CANVA_NEUTRAAL_UPD,'/ai-assistenten/':CANVA_NEUTRAAL_UPD,'/ai-data-analyse/':CANVA_NEUTRAAL_UPD,'/ai-mail-en-offertes/':CANVA_NEUTRAAL_UPD}
 P_CANVA=('Canva: Abonnementen en prijzen','https://www.canva.com/nl_nl/abonnementen/')
 P_CANVA_HELP=('Canva Help: Abonnementen vergelijken','https://www.canva.com/help/about-canva/')
 P_CANVA_PRIV=('Canva: Privacybeleid','https://www.canva.com/nl_nl/policies/privacy-policy/')

@@ -1,7 +1,7 @@
 // Goedgekeurde partnerlinks per tool-id.
 // De match (match.js) leest dit bestand NOOIT: geen invloed op score of volgorde.
 // Make: direct programma (geen affiliatenetwerk), tracking via /en/register?pc=toolmatch. Geplaatst 9-11-2026.
-// Canva, Power Automate, Copilot en Power BI staan er bewust niet in: geen open affiliate; links blijven neutraal (12-11-2026). Zapier en n8n blijven buiten deze lijst zolang PartnerStack loopt; hun bestaande knoppen wijzigen we nu niet.
+// Canva, Power Automate, Copilot, Power BI en de twaalf vendors van 16-11 (ChatGPT, Claude, Le Chat, DeepL, Looker Studio, Google Cloud Translation, Calendly, Acuity, Albacross, Intercom, WordPress.org, Notuly) staan er bewust niet in: geen open affiliate; links blijven neutraal. Zapier, n8n en overige lopende/aanvraagbare merken blijven buiten deze lijst; hun bestaande knoppen wijzigen we nu niet.
 export const PARTNERLINKS = {
   make: 'https://www.make.com/en/register?pc=toolmatch',
 };

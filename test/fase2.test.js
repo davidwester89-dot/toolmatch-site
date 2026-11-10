@@ -112,7 +112,7 @@ test('vendor buttons use the vendor name (vendor field, else product name)', asy
       assert.equal(m[2], want, f + ' ' + m[1]); n++;
     }
   }
-  assert.ok(n > 30);
+  assert.ok(n >= 20, "te weinig resterende vendor-knoppen: " + n);
 });
 
 test('external tool buttons carry an aria-label with vendor, product and new-tab notice', async () => {
@@ -135,12 +135,12 @@ test('external tool buttons carry an aria-label with vendor, product and new-tab
       n++;
     }
   }
-  assert.ok(n > 30);
+  assert.ok(n >= 20, "te weinig resterende vendor-knoppen: " + n);
   const kh = readFileSync(join(ROOT, 'js/keuzehulp.js'), 'utf8');
   assert.match(kh, /aria-label="\$\{esc\(knopLabel\(t\)\)\}"/);
   assert.match(kh, /target="_blank" aria-label="\$\{esc\(n2\)\} \(opent in een nieuw tabblad\)"/);
-  // powerbi/copilot/canva/powerautomate zijn neutrale bronlinks, geen knop met aria-label
-  const lbl = { hubspot: 'Naar de site van HubSpot CRM (opent in een nieuw tabblad)', zoho: 'Naar de site van Zoho CRM (opent in een nieuw tabblad)', googlecloudtranslate: 'Naar de site van Google Cloud Translation (opent in een nieuw tabblad)' };
+  // powerbi/copilot/canva/powerautomate + de 12 vendors van 16-11 zijn neutrale bronlinks, geen knop met aria-label
+  const lbl = { hubspot: 'Naar de site van HubSpot CRM (opent in een nieuw tabblad)', zoho: 'Naar de site van Zoho CRM (opent in een nieuw tabblad)' };
   const all = readdirSync(ROOT, { recursive: true }).filter(f => f.endsWith('index.html') && !/^(node_modules|\.git|_site)/.test(f)).map(f => readFileSync(join(ROOT, f), 'utf8')).join('');
   for (const [id, l] of Object.entries(lbl)) assert.ok(all.includes(`data-vendor="${id}"`) && all.includes(`aria-label="${l}"`), id);
 });

@@ -9,8 +9,24 @@ CANVA_UPD='2026-11-10'
 # nieuwe pagina + hub /gids/ (nieuw kind) + inbound op ontwerp-hub (zichtbare wijziging, L7)
 CANVA_PAD={CANVA:CANVA_UPD,'/gids/':CANVA_UPD,'/ai-afbeeldingen-en-ontwerp/':CANVA_UPD,'/keuzehulp/':CANVA_UPD}
 # CTA-neutralisatie 12-11 (Canva, Power Automate, Copilot, Power BI): alleen pagina's met bodywijziging. Hubs niet tillen.
-CANVA_NEUTRAAL_UPD='2026-11-12'
-CANVA_NEUTRAAL_PAD={'/ai-afbeeldingen-en-ontwerp/':CANVA_NEUTRAAL_UPD,'/ai-presentatie-maken/':CANVA_NEUTRAAL_UPD,'/keuzehulp/':CANVA_NEUTRAAL_UPD,'/automatiseren-zonder-code/':CANVA_NEUTRAAL_UPD,'/ai-assistenten/':CANVA_NEUTRAAL_UPD,'/ai-data-analyse/':CANVA_NEUTRAAL_UPD,'/ai-mail-en-offertes/':CANVA_NEUTRAAL_UPD}
+CANVA_NEUTRAAL_UPD='2026-11-12'  # pagina's zonder nieuwe bodywijziging in de 16-11-commit
+VENDORS_NEUTRAAL_UPD='2026-11-16'
+CANVA_NEUTRAAL_PAD={
+  '/ai-presentatie-maken/':CANVA_NEUTRAAL_UPD,
+  '/automatiseren-zonder-code/':CANVA_NEUTRAAL_UPD,
+  '/ai-afbeeldingen-en-ontwerp/':VENDORS_NEUTRAAL_UPD,
+  '/keuzehulp/':VENDORS_NEUTRAAL_UPD,
+  '/ai-assistenten/':VENDORS_NEUTRAAL_UPD,
+  '/ai-data-analyse/':VENDORS_NEUTRAAL_UPD,
+  '/ai-mail-en-offertes/':VENDORS_NEUTRAAL_UPD,
+  '/ai-vertalen/':VENDORS_NEUTRAAL_UPD,
+  '/ai-tekst-schrijven/':VENDORS_NEUTRAAL_UPD,
+  '/ai-chatbot-website/':VENDORS_NEUTRAAL_UPD,
+  '/online-afspraken-plannen/':VENDORS_NEUTRAAL_UPD,
+  '/ai-notuleren/':VENDORS_NEUTRAAL_UPD,
+  '/ai-website-maken/':VENDORS_NEUTRAAL_UPD,
+  '/websitebezoekers-herkennen/':VENDORS_NEUTRAAL_UPD,
+}
 P_CANVA=('Canva: Abonnementen en prijzen','https://www.canva.com/nl_nl/abonnementen/')
 P_CANVA_HELP=('Canva Help: Abonnementen vergelijken','https://www.canva.com/help/about-canva/')
 P_CANVA_PRIV=('Canva: Privacybeleid','https://www.canva.com/nl_nl/policies/privacy-policy/')
@@ -109,14 +125,16 @@ if '/gids/canva-voor-ondernemers/' not in _af:
         'Wil je vooral een presentatie maken? Lees <a href="/ai-presentatie-maken/">hoe je met AI een presentatie maakt</a>, met Canva, Copilot en Gemini naast elkaar. Twijfel je tussen Canva Free en Pro voor social en merkwerk, lees <a href="/gids/canva-voor-ondernemers/">Canva voor ondernemers</a>.</p>',
         1)
 # L7 byline + dateModified: Canva-CTA neutraal 12-11 (spokes schrijft dit al; vangnet voor oudere tussenwaarden)
-for _oud, _nieuw in (('bijgewerkt op 3 november 2026','bijgewerkt op 12 november 2026'),('bijgewerkt op 10 november 2026','bijgewerkt op 12 november 2026')):
+for _oud, _nieuw in (('bijgewerkt op 3 november 2026','bijgewerkt op 16 november 2026'),('bijgewerkt op 10 november 2026','bijgewerkt op 16 november 2026'),('bijgewerkt op 12 november 2026','bijgewerkt op 16 november 2026')):
     _af=_af.replace(_oud, _nieuw)
-for _oud in ('"dateModified": "2026-11-03"','"dateModified": "2026-11-10"'):
-    _af=_af.replace(_oud, '"dateModified": "2026-11-12"', 1)
+for _oud in ('"dateModified": "2026-11-03"','"dateModified": "2026-11-10"','"dateModified": "2026-11-12"'):
+    _af=_af.replace(_oud, '"dateModified": "2026-11-16"', 1)
 open('ai-afbeeldingen-en-ontwerp/index.html','w',encoding='utf-8').write(_af)
 
 # L7: keuzehulp.js wijzigt de Canva-uitslagknop → dateModified/zichtbaar = 12-11. Hub /gids/ blijft 10-11.
 _kh=open('keuzehulp/index.html',encoding='utf-8').read()
-_kh=_kh.replace('"dateModified": "2026-11-10"','"dateModified": "2026-11-12"',1)
-_kh=_kh.replace('bijgewerkt op 10 november 2026. De keuzehulp','bijgewerkt op 12 november 2026. De keuzehulp',1)
+_kh=_kh.replace('"dateModified": "2026-11-10"','"dateModified": "2026-11-16"',1)
+_kh=_kh.replace('"dateModified": "2026-11-12"','"dateModified": "2026-11-16"',1)
+_kh=_kh.replace('bijgewerkt op 10 november 2026. De keuzehulp','bijgewerkt op 16 november 2026. De keuzehulp',1)
+_kh=_kh.replace('bijgewerkt op 12 november 2026. De keuzehulp','bijgewerkt op 16 november 2026. De keuzehulp',1)
 open('keuzehulp/index.html','w',encoding='utf-8').write(_kh)

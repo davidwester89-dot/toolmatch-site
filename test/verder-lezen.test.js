@@ -42,10 +42,10 @@ test('L7 29-10: de 13 gewijzigde pagina\'s hebben dateModified, sitemap-lastmod 
   }
 });
 
-test('techronde 5-11: /ai-tekst-schrijven/ Verder lezen linkt naar /ai-presentatie-maken/, L7 op 5 november 2026', () => {
+test('techronde 5-11: /ai-tekst-schrijven/ Verder lezen linkt naar /ai-presentatie-maken/, L7 nu 16 november 2026 (CTA neutraal)', () => {
   const t = readFileSync('ai-tekst-schrijven/index.html', 'utf8');
   assert.match(t, /<li><a href="\/ai-presentatie-maken\/">Een presentatie maken met AI<\/a><\/li>/);
-  assert.match(t, /"dateModified": "2026-11-05"/);
-  assert.match(t, /bijgewerkt op 5 november 2026/);
-  assert.match(readFileSync('sitemap.xml', 'utf8'), /ai-tekst-schrijven\/<\/loc><lastmod>2026-11-05</);
+  assert.match(t, /"dateModified": "2026-11-16"/);
+  assert.match(t, /bijgewerkt op 16 november 2026/);
+  assert.match(readFileSync('sitemap.xml', 'utf8'), /ai-tekst-schrijven\/<\/loc><lastmod>2026-11-16</);
 });

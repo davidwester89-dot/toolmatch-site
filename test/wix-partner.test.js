@@ -35,7 +35,8 @@ test('Wix-CTA: trackinglink alleen op die knop; overige links en de volgorde bli
   assert.doesNotMatch(html, /href="https:\/\/www\.wix\.com\/"/);
   assert.match(html, /href="https:\/\/jf79\.net\/c\/\?si=16780&amp;li=1722914&amp;wi=440699&amp;ws=&amp;dl=nl%2Fwebsite-maken-met-ai" rel="sponsored nofollow noopener" target="_blank" data-vendor="hostinger" data-cta="partner"/);
   assert.match(html, /href="https:\/\/www\.jouwweb\.nl\/" rel="noopener" target="_blank" data-vendor="jouwweb" data-cta="outbound"/);
-  assert.match(html, /href="https:\/\/nl\.wordpress\.org\/" rel="noopener" target="_blank" data-vendor="wordpress" data-cta="outbound"/);
+  assert.match(html, /<p class="go"><a href="https:\/\/nl\.wordpress\.org\/" rel="noopener">WordPress.org<\/a><\/p>/);
+  assert.doesNotMatch(html, /data-vendor="wordpress"/);
   const ids = [...html.matchAll(/<h3 id="(hostinger|jouwweb|wix|wordpress)">/g)].map((m) => m[1]);
   assert.deepEqual(ids, ['hostinger', 'jouwweb', 'wix', 'wordpress']);
   assert.doesNotMatch(readFileSync('keuzehulp/index.html', 'utf8'), /wix\.pxf\.io/);
@@ -52,8 +53,8 @@ test('Wix-CTA: geen extra parameter of fragment op de trackinglink', () => {
 
 test('Wix-CTA L7: keuzehulp-datum mee, uitslagbestand ongemoeid', () => {
   const kh = readFileSync('keuzehulp/index.html', 'utf8');
-  assert.match(kh, /"dateModified": "2026-11-12"/);
-  assert.match(kh, /bijgewerkt op 12 november 2026/);
+  assert.match(kh, /"dateModified": "2026-11-16"/);
+  assert.match(kh, /bijgewerkt op 16 november 2026/);
   assert.match(kh, /gecontroleerd op 20 oktober 2026/);
-  assert.ok(readFileSync('sitemap.xml', 'utf8').includes('<loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>2026-11-12</lastmod>'));
+  assert.ok(readFileSync('sitemap.xml', 'utf8').includes('<loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>2026-11-16</lastmod>'));
 });

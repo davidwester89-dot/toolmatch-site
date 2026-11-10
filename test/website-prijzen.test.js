@@ -40,11 +40,11 @@ test('website-prijzen: standaard-/verlengprijs eerst (L1), bedragen zoals op de 
   assert.match(t, /Bij JouwWeb Pro is de standaardprijs €10 per maand, dus €120 per jaar \(onze rekensom\)\./);
 });
 
-test('website-prijzen L7: dateModified, zichtbaar bijgewerkt en lastmod = 2026-11-07; bronnen JouwWeb/Hostinger bekeken op 30 oktober 2026', () => {
-  assert.match(t, /"dateModified": "2026-11-07"/);
+test('website-prijzen L7: dateModified, zichtbaar bijgewerkt en lastmod = 2026-11-16 (WordPress.org-CTA neutraal); bronnen JouwWeb/Hostinger bekeken op 30 oktober 2026', () => {
+  assert.match(t, /"dateModified": "2026-11-16"/);
   assert.match(t, /"datePublished": "2026-10-27"/);
-  assert.match(t, /<p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026, bijgewerkt op 7 november 2026, bronnen bekeken op 26 oktober 2026, Hostinger en JouwWeb op 30 oktober 2026\./);
-  assert.ok(read('sitemap.xml').includes('<loc>https://toolmatch.nl/ai-website-maken/</loc><lastmod>2026-11-07</lastmod>'));
+  assert.match(t, /<p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026, bijgewerkt op 16 november 2026, bronnen bekeken op 26 oktober 2026, Hostinger en JouwWeb op 30 oktober 2026\./);
+  assert.ok(read('sitemap.xml').includes('<loc>https://toolmatch.nl/ai-website-maken/</loc><lastmod>2026-11-16</lastmod>'));
   for (const u of ['https://www.jouwweb.nl/prijzen', 'https://www.hostinger.com/nl/website-maken-met-ai', 'https://www.hostinger.com/nl/website-maken']) {
     assert.ok(t.includes(`<a href="${u}" rel="noopener">`) && new RegExp(u.replace(/[./]/g, '\\$&') + '" rel="noopener">[^<]+</a>, bekeken op 30 oktober 2026').test(t), u);
   }

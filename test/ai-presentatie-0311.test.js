@@ -41,10 +41,10 @@ test('ai-presentatie: bronnen alleen naam + link, zonder datum', () => {
 test('L7: /ai-presentatie-maken/ datePublished 3-11, dateModified 12-11 (Canva-CTA neutraal); ontwerp-hub 12-11', () => {
   const sm = readFileSync('sitemap.xml', 'utf8');
   assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-presentatie-maken/</loc><lastmod>2026-11-12</lastmod>`));
-  assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-afbeeldingen-en-ontwerp/</loc><lastmod>2026-11-12</lastmod>`), 'hub 12-11');
+  assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-afbeeldingen-en-ontwerp/</loc><lastmod>2026-11-16</lastmod>`), 'hub 16-11');
   assert.match(H, /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-12"/);
   assert.match(H, /bijgewerkt op <time datetime="2026-11-12">12 november 2026<\/time>/);
   const a = readFileSync('ai-afbeeldingen-en-ontwerp/index.html', 'utf8');
-  assert.match(a, /"dateModified": "2026-11-12"/);
-  assert.match(a, /bijgewerkt op 12 november 2026/);
+  assert.match(a, /"dateModified": "2026-11-16"/);
+  assert.match(a, /bijgewerkt op 16 november 2026/);
 });

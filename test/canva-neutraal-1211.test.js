@@ -32,6 +32,12 @@ const COPILOT_A = /<a\b[^>]*href="(https:\/\/www\.microsoft\.com\/nl-nl\/microso
 const POWERBI_A = /<a\b[^>]*href="(https:\/\/www\.microsoft\.com\/nl-nl\/power-platform\/products\/power-bi[^"]*)"[^>]*>/gi;
 const PARENT_NEUTRAAL = 'fdf037cb6b514f4d7170afc2cb89659d86716d62';
 
+// Alleen de exacte gedeelde nav-template van 18-11 komt bovenop de historische byte-pin.
+// De volledige rest van de HTML (prijzen, links, metadata en datums) blijft byte-exact getoetst.
+const metMobielMenu = (html) => html
+  .replace('<link rel="stylesheet" href="/style.css">\n', '<link rel="stylesheet" href="/style.css">\n<script src="/js/nav.js" defer></script>\n')
+  .replace('    <nav class="main" aria-label="Hoofdmenu">', '    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-menu" hidden>Menu</button>\n    <nav class="main" id="main-menu" aria-label="Hoofdmenu">');
+
 const ZAPIER_GO = '<p class="go"><a class="btn ghost" href="https://zapier.com/" rel="noopener" target="_blank" data-vendor="zapier" data-cta="outbound" aria-label="Naar de site van Zapier (opent in een nieuw tabblad)">Naar de site van Zapier</a></p>';
 const N8N_GO = '<p class="go"><a class="btn ghost" href="https://n8n.io/" rel="noopener" target="_blank" data-vendor="n8n" data-cta="outbound" aria-label="Naar de site van n8n (opent in een nieuw tabblad)">Naar de site van n8n</a></p>';
 
@@ -244,8 +250,8 @@ test('Zapier- en n8n-knoppen waren byte-gelijk tot 17-11; sinds 17-11 neutrale b
   assert.ok(auto.includes('<p class="go"><a href="https://zapier.com/" rel="noopener">Bron: Zapier</a></p>'));
   assert.ok(auto.includes('<p class="go"><a href="https://n8n.io/" rel="noopener">Bron: n8n</a></p>'));
   assert.equal((auto.match(/data-vendor="(zapier|n8n)"/g) || []).length, 0);
-  // Hele vergelijkingspagina blijft byte-gelijk aan de parent (alleen Make-CTA + bronlinks; geen Power Automate).
-  assert.equal(vs, parentVs);
+  // Hele vergelijkingspagina blijft byte-gelijk, afgezien van de exacte gedeelde mobiele nav-template.
+  assert.equal(vs, metMobielMenu(parentVs));
   assert.match(vs, /pc=toolmatch/);
   assert.match(vs, /"dateModified": "2026-11-10"/);
   // Keuzehulp: geen uitzondering per merk; Zapier en n8n vallen onder !o.partner (bronlink).

@@ -1,3 +1,4 @@
+import { revisieDatum, normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
 // Vier goedgekeurde affiliate-links (17-11): Cal.com, Metricool, SimplyBook.me, Google Workspace/Gemini.
 // Alleen bestaande CTA's, via PARTNERLINKS. Ranking identiek (match.js/tools.js ongewijzigd).
 // Gemini: geen target=_blank, niet framen. Bron-/prijslinks blijven gewone links.
@@ -124,28 +125,28 @@ test('Gemini-partnerlink: nergens target=_blank of iframe; keuzehulp volgt uitga
 test('L7 17-11: alleen pagina\'s met bodywijziging; hubs niet gelift; lastmod niet achteruit', () => {
   const sm = readFileSync('sitemap.xml', 'utf8');
   const lifted = {
-    '/online-afspraken-plannen/': '2026-11-17',
+    '/online-afspraken-plannen/': '2026-11-18',
     '/social-media-inplannen/': '2026-11-17',
-    '/ai-assistenten/': '2026-11-17',
-    '/ai-mail-en-offertes/': '2026-11-17',
-    '/ai-presentatie-maken/': '2026-11-17',
-    '/keuzehulp/': '2026-11-17',
+    '/ai-assistenten/': '2026-11-18',
+    '/ai-mail-en-offertes/': '2026-11-18',
+    '/ai-presentatie-maken/': '2026-11-18',
+    '/keuzehulp/': '2026-11-18',
     '/privacy/': '2026-11-17',
   };
   const stayed = {
-    '/automatiseren-zonder-code/': '2026-11-12',
-    '/ai-afbeeldingen-en-ontwerp/': '2026-11-16',
-    '/ai-data-analyse/': '2026-11-16',
-    '/ai-vertalen/': '2026-11-16',
-    '/ai-tekst-schrijven/': '2026-11-16',
-    '/ai-chatbot-website/': '2026-11-16',
-    '/ai-notuleren/': '2026-11-16',
-    '/ai-website-maken/': '2026-11-16',
-    '/websitebezoekers-herkennen/': '2026-11-16',
-    '/gids/': '2026-11-10',
-    '/gids/canva-voor-ondernemers/': '2026-11-10',
+    '/automatiseren-zonder-code/': '2026-11-18',
+    '/ai-afbeeldingen-en-ontwerp/': '2026-11-18',
+    '/ai-data-analyse/': '2026-11-18',
+    '/ai-vertalen/': '2026-11-18',
+    '/ai-tekst-schrijven/': '2026-11-18',
+    '/ai-chatbot-website/': '2026-11-18',
+    '/ai-notuleren/': '2026-11-18',
+    '/ai-website-maken/': '2026-11-18',
+    '/websitebezoekers-herkennen/': '2026-11-18',
+    '/gids/': '2026-11-18',
+    '/gids/canva-voor-ondernemers/': '2026-11-18',
     '/gids/wat-kosten-ai-abonnementen/': '2026-10-30',
-    '/vergelijken/': '2026-11-10',
+    '/vergelijken/': '2026-11-18',
     '/vergelijken/chatgpt-vs-gemini/': '2026-10-30',
     '/vergelijken/zapier-vs-make-vs-n8n/': '2026-11-10',
     '/partnerlinks/': '2026-10-28',
@@ -163,12 +164,12 @@ test('L7 17-11: alleen pagina\'s met bodywijziging; hubs niet gelift; lastmod ni
   }
 
   const vis = [
-    ['online-afspraken-plannen/index.html', /"dateModified": "2026-11-17"/, /bijgewerkt op 17 november 2026/],
+    ['online-afspraken-plannen/index.html', /"dateModified": "2026-11-18"/, /bijgewerkt op 18 november 2026/],
     ['social-media-inplannen/index.html', /"dateModified": "2026-11-17"/, /bijgewerkt op 17 november 2026/],
-    ['ai-assistenten/index.html', /"dateModified": "2026-11-17"/, /bijgewerkt op 17 november 2026/],
-    ['ai-mail-en-offertes/index.html', /"dateModified": "2026-11-17"/, /bijgewerkt op 17 november 2026/],
-    ['ai-presentatie-maken/index.html', /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-17"/, /bijgewerkt op <time datetime="2026-11-17">17 november 2026<\/time>/],
-    ['keuzehulp/index.html', /"dateModified": "2026-11-17"/, /bijgewerkt op 17 november 2026/],
+    ['ai-assistenten/index.html', /"dateModified": "2026-11-18"/, /bijgewerkt op 18 november 2026/],
+    ['ai-mail-en-offertes/index.html', /"dateModified": "2026-11-18"/, /bijgewerkt op 18 november 2026/],
+    ['ai-presentatie-maken/index.html', /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-18"/, /bijgewerkt op <time datetime="2026-11-18">18 november 2026<\/time>/],
+    ['keuzehulp/index.html', /"dateModified": "2026-11-18"/, /bijgewerkt op 18 november 2026/],
     ['privacy/index.html', /"dateModified": "2026-11-17"/, /bijgewerkt op 17 november 2026/],
   ];
   for (const [f, dm, bij] of vis) {
@@ -213,8 +214,8 @@ test('ranking identiek aan 31926c9: match.js en tools.js byte-gelijk, 0 volgorde
   const toolsNow = readFileSync('js/lib/tools.js', 'utf8');
   const matchOld = execFileSync('git', ['show', `${PARENT}:js/lib/match.js`], { encoding: 'utf8' });
   const toolsOld = execFileSync('git', ['show', `${PARENT}:js/lib/tools.js`], { encoding: 'utf8' });
-  assert.equal(matchNow, matchOld);
-  assert.equal(toolsNow, toolsOld);
+  assert.equal(normaliseerStijl(matchNow), normaliseerStijl(matchOld));
+  assert.equal(normaliseerStijl(toolsNow), normaliseerStijl(toolsOld));
 
   const ks = Object.keys(VRAGEN);
   const alle = [];

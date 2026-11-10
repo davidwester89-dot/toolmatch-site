@@ -334,3 +334,6 @@ LASTMOD.update(CANVA_PAD)  # /gids/canva-voor-ondernemers/ + hub + inbound ontwe
 LASTMOD.update(CANVA_NEUTRAAL_PAD)  # Canva + Power Automate-CTA neutraal: ontwerp, presentatie, keuzehulp, automatiseren 12-11; /gids/ niet tillen
 LASTMOD.update(AFFILIATES_PAD)  # vier affiliate-CTA's 17-11 (Cal.com, Metricool, SimplyBook.me, Gemini); hubs niet tillen
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')
+
+# L7: stijlronde na de goedgekeurde affiliateketen; uitsluitend gewijzigde pagina's.
+exec(open('scripts/nuchter_datums.py').read())

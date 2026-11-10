@@ -1,3 +1,4 @@
+import { revisieDatum, normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
 // /ai-website-maken/ na 31-10-2026: JouwWeb-actie (t/m 31-10, eerste 12 maanden 50%, Lite €2,75) eraf; prijzen Hostinger en JouwWeb
 // op 30-10 opnieuw bekeken op NL-IP (site-checks/2026-10-30/tm-website-prijzen-details.md). L1, L4, L7 (paginadatum 2026-11-07 na de Wix-partnerknop).
 import { test } from 'node:test';
@@ -41,10 +42,10 @@ test('website-prijzen: standaard-/verlengprijs eerst (L1), bedragen zoals op de 
 });
 
 test('website-prijzen L7: dateModified, zichtbaar bijgewerkt en lastmod = 2026-11-16 (WordPress.org-CTA neutraal); bronnen JouwWeb/Hostinger bekeken op 30 oktober 2026', () => {
-  assert.match(t, /"dateModified": "2026-11-16"/);
+  assert.match(t, /"dateModified": "2026-11-18"/);
   assert.match(t, /"datePublished": "2026-10-27"/);
-  assert.match(t, /<p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026, bijgewerkt op 16 november 2026, bronnen bekeken op 26 oktober 2026, Hostinger en JouwWeb op 30 oktober 2026\./);
-  assert.ok(read('sitemap.xml').includes('<loc>https://toolmatch.nl/ai-website-maken/</loc><lastmod>2026-11-16</lastmod>'));
+  assert.match(t, /<p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026, bijgewerkt op 18 november 2026, bronnen bekeken op 26 oktober 2026, Hostinger en JouwWeb op 30 oktober 2026\./);
+  assert.ok(read('sitemap.xml').includes('<loc>https://toolmatch.nl/ai-website-maken/</loc><lastmod>2026-11-18</lastmod>'));
   for (const u of ['https://www.jouwweb.nl/prijzen', 'https://www.hostinger.com/nl/website-maken-met-ai', 'https://www.hostinger.com/nl/website-maken']) {
     assert.ok(t.includes(`<a href="${u}" rel="noopener">`) && new RegExp(u.replace(/[./]/g, '\\$&') + '" rel="noopener">[^<]+</a>, bekeken op 30 oktober 2026').test(t), u);
   }

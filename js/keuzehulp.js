@@ -17,7 +17,7 @@ const CATEGORIE = {
   beeld: ['/ai-afbeeldingen-en-ontwerp/', 'Alle tools voor beeld en ontwerp vergeleken'],
   data: ['/ai-data-analyse/', 'Alle tools voor data en dashboards vergeleken'],
 };
-const EU = { ja: 'In de EU (volgens de aanbieder)', deels: 'Vooral in de EU (volgens de aanbieder)' };
+const EU = { ja: 'In de EU', deels: 'Vooral in de EU' };
 
 function lees() {
   const a = {};

@@ -1,3 +1,4 @@
+import { revisieDatum, normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
 // Notuly als 5e tool op /ai-notuleren/ (30-10, MM-OK): gewone link, alfabetische plek, datums L7, niet in de keuzehulp.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -40,9 +41,9 @@ test('Notuly: prijzen en hosting zoals op notuly.nl (30-10), standaardprijs eers
 });
 
 test('L7 16-11: ai-notuleren dateModified, sitemap-lastmod en zichtbaar bijgewerkt op 16 november 2026 (Notuly-CTA neutraal)', () => {
-  assert.match(html, /"dateModified": "2026-11-16"/);
-  assert.match(html, /<p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 16 november 2026/);
-  assert.ok(readFileSync('sitemap.xml', 'utf8').includes('<loc>https://toolmatch.nl/ai-notuleren/</loc><lastmod>2026-11-16</lastmod>'));
+  assert.match(html, /"dateModified": "2026-11-18"/);
+  assert.match(html, /<p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 18 november 2026/);
+  assert.ok(readFileSync('sitemap.xml', 'utf8').includes('<loc>https://toolmatch.nl/ai-notuleren/</loc><lastmod>2026-11-18</lastmod>'));
 });
 
 test('Notuly zit niet in de keuzehulp (doelen leeg): geen enkele uitkomst bevat notuly', () => {

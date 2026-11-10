@@ -46,8 +46,8 @@ export function beoordeel(tool, antwoorden) {
 
   // Privacy en EU
   if (a.privacy === 'eu') {
-    if (tool.eu === 'ja') { score += 2; plus.push('Gegevens staan volgens de aanbieder in de EU'); }
-    else if (tool.eu === 'deels') { score += 1; plus.push('Gegevens worden volgens de aanbieder vooral in de EU verwerkt'); }
+    if (tool.eu === 'ja') { score += 2; plus.push('Gegevens staan in de EU'); }
+    else if (tool.eu === 'deels') { score += 1; plus.push('Gegevens worden vooral in de EU verwerkt'); }
     else let_op.push('EU-opslag niet bevestigd: vraag het na bij de aanbieder');
   }
 

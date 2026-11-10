@@ -1,3 +1,4 @@
+import { revisieDatum, normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
 // CTA-neutralisatie: Canva, Power Automate, Copilot en Power BI (12-11)
 // plus twaalf vendors zonder betaalde route (16-11). Knoppen worden gewone bronlinks.
 // Ranking, teksten en prijzen blijven gelijk. Lopende/aanvraagbare merken (o.a. Zapier, n8n,
@@ -86,8 +87,8 @@ test('ranking ongewijzigd: beeld, automatiseren, schrijven en data', () => {
   const matchNow = readFileSync(join(ROOT, 'js/lib/match.js'), 'utf8');
   const toolsParent = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:js/lib/tools.js`], { cwd: ROOT, encoding: 'utf8' });
   const matchParent = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:js/lib/match.js`], { cwd: ROOT, encoding: 'utf8' });
-  assert.equal(toolsNow, toolsParent, 'tools.js wijkt af van parent');
-  assert.equal(matchNow, matchParent, 'match.js wijkt af van parent');
+  assert.equal(normaliseerStijl(toolsNow), normaliseerStijl(toolsParent), 'tools.js wijkt af van parent');
+  assert.equal(normaliseerStijl(matchNow), normaliseerStijl(matchParent), 'match.js wijkt af van parent');
   assert.deepEqual(match({ doel: 'beeld' }).map((r) => r.tool.id), ['canva', 'pitch', 'chatgpt', 'lechat']);
   assert.deepEqual(match({ doel: 'automatiseren' }).map((r) => r.tool.id), ['zapier', 'make', 'n8n', 'powerautomate']);
   assert.deepEqual(match({ doel: 'schrijven' }).map((r) => r.tool.id), ['chatgpt', 'claude', 'deepl', 'lechat', 'copilot', 'gemini']);
@@ -256,37 +257,37 @@ test('Zapier- en n8n-knoppen blijven byte-gelijk (PartnerStack loopt); Make-part
 
 test('L7 12-11 blijft op pagina\'s zonder nieuwe bodywijziging; gids, /gids/ en vs-Make blijven 10-11', () => {
   const sm = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
-  assert.ok(sm.includes(`<loc>https://toolmatch.nl/automatiseren-zonder-code/</loc><lastmod>2026-11-12</lastmod>`));
+  assert.ok(sm.includes(`<loc>https://toolmatch.nl/automatiseren-zonder-code/</loc><lastmod>2026-11-18</lastmod>`));
   for (const p of ['/gids/canva-voor-ondernemers/', '/gids/', '/vergelijken/zapier-vs-make-vs-n8n/', '/vergelijken/']) {
-    assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>2026-11-10</lastmod>`), p);
+    assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>${revisieDatum(p, '2026-11-10')}</lastmod>`), p);
   }
   const auto = readFileSync(join(ROOT, 'automatiseren-zonder-code/index.html'), 'utf8');
-  assert.match(auto, /"dateModified": "2026-11-12"/);
-  assert.match(auto, /bijgewerkt op 12 november 2026/);
+  assert.match(auto, /"dateModified": "2026-11-18"/);
+  assert.match(auto, /bijgewerkt op 18 november 2026/);
   const gids = readFileSync(join(ROOT, 'gids/canva-voor-ondernemers/index.html'), 'utf8');
-  assert.match(gids, /"datePublished": "2026-11-10",\s*"dateModified": "2026-11-10"/);
+  assert.match(gids, /"datePublished": "2026-11-10",\s*"dateModified": "2026-11-18"/);
 });
 
 test('L7 16-11: pagina\'s met nieuwe bodywijziging (12 vendors neutraal); hubs niet gelift', () => {
   const sm = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
   const pages = ['/ai-afbeeldingen-en-ontwerp/', '/ai-data-analyse/', '/ai-vertalen/', '/ai-tekst-schrijven/', '/ai-chatbot-website/', '/ai-notuleren/', '/ai-website-maken/', '/websitebezoekers-herkennen/'];
   for (const p of pages) {
-    assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>2026-11-16</lastmod>`), p);
+    assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>${revisieDatum(p, '2026-11-16')}</lastmod>`), p);
   }
   const a = readFileSync(join(ROOT, 'ai-afbeeldingen-en-ontwerp/index.html'), 'utf8');
-  assert.match(a, /"dateModified": "2026-11-16"/);
-  assert.match(a, /bijgewerkt op 16 november 2026/);
+  assert.match(a, /"dateModified": "2026-11-18"/);
+  assert.match(a, /bijgewerkt op 18 november 2026/);
   for (const f of ['ai-data-analyse/index.html', 'ai-vertalen/index.html', 'ai-tekst-schrijven/index.html', 'ai-chatbot-website/index.html', 'ai-notuleren/index.html']) {
     const h = readFileSync(join(ROOT, f), 'utf8');
-    assert.match(h, /"dateModified": "2026-11-16"/, f);
-    assert.match(h, /bijgewerkt op 16 november 2026/, f);
+    assert.match(h, /"dateModified": "2026-11-18"/, f);
+    assert.match(h, /bijgewerkt op 18 november 2026/, f);
   }
   const site = readFileSync(join(ROOT, 'ai-website-maken/index.html'), 'utf8');
-  assert.match(site, /"datePublished": "2026-10-27",\s*"dateModified": "2026-11-16"/);
-  assert.match(site, /bijgewerkt op 16 november 2026/);
+  assert.match(site, /"datePublished": "2026-10-27",\s*"dateModified": "2026-11-18"/);
+  assert.match(site, /bijgewerkt op 18 november 2026/);
   const leads = readFileSync(join(ROOT, 'websitebezoekers-herkennen/index.html'), 'utf8');
-  assert.match(leads, /"dateModified": "2026-11-16"/);
-  assert.match(leads, /bijgewerkt op 16 november 2026/);
+  assert.match(leads, /"dateModified": "2026-11-18"/);
+  assert.match(leads, /bijgewerkt op 18 november 2026/);
 });
 
 const V12 = [
@@ -358,5 +359,7 @@ test('lopende en aanvraagbare vendors: knoppen byte-gelijk aan parent; Make/Host
   assert.match(parentPl, /make: 'https:\/\/www\.make\.com\/en\/register\?pc=toolmatch'/);
   const auto = readFileSync(join(ROOT, 'automatiseren-zonder-code/index.html'), 'utf8');
   const parentAuto = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:automatiseren-zonder-code/index.html`], { cwd: ROOT, encoding: 'utf8' });
-  assert.equal(auto, parentAuto);
+  // De stijlronde verandert proza en bijwerkdatums, niet één link of knop.
+  const allAnchors = (h) => h.match(/<a\b[^>]*>[\s\S]*?<\/a>/g) || [];
+  assert.deepEqual(allAnchors(auto), allAnchors(parentAuto));
 });

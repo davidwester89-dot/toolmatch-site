@@ -45,13 +45,15 @@ def head(path,title,desc,ogt,extra=''):
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="/fonts/inter-800.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/style.css">
+<script src="/js/nav.js" defer></script>
 {extra}</head>
 <body>
 <a class="skip" href="#inhoud">Naar de inhoud</a>
 <header class="site">
   <div class="wrap">
     <a class="logo" href="/" aria-label="ToolMatch, naar de homepage">{MARK}<span>Tool<b>Match</b></span></a>
-    <nav class="main" aria-label="Hoofdmenu">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-menu" hidden>Menu</button>
+    <nav class="main" id="main-menu" aria-label="Hoofdmenu">
       <a href="/#categorieen">Categorieën</a>
       <a href="/vergelijken/">Vergelijken</a>
       <a href="/gids/">Gidsen</a>
@@ -334,3 +336,21 @@ LASTMOD.update(CANVA_PAD)  # /gids/canva-voor-ondernemers/ + hub + inbound ontwe
 LASTMOD.update(CANVA_NEUTRAAL_PAD)  # Canva + Power Automate-CTA neutraal: ontwerp, presentatie, keuzehulp, automatiseren 12-11; /gids/ niet tillen
 LASTMOD.update(AFFILIATES_PAD)  # vier affiliate-CTA's 17-11 (Cal.com, Metricool, SimplyBook.me, Gemini); hubs niet tillen
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')
+
+# GitHub Pages: vaste alias, geen artikel en niet in de sitemap.
+write('blog/index.html', f'''<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+{CSP}
+<title>Gidsen | ToolMatch</title>
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="{D}/gids/">
+<meta http-equiv="refresh" content="0; url=/gids/">
+</head>
+<body>
+<p>De blogs van ToolMatch staan bij <a href="/gids/">Gidsen</a>.</p>
+</body>
+</html>
+''')

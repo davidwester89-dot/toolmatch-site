@@ -2,14 +2,14 @@
 // De match (match.js) leest dit bestand NOOIT: geen invloed op score of volgorde.
 // Make: direct programma (geen affiliatenetwerk), tracking via /en/register?pc=toolmatch. Geplaatst 9-11-2026.
 // Cal.com, Metricool, SimplyBook.me: directe programma's, goedgekeurd 10-11-2026 (partnerbestand). Geplaatst 17-11-2026.
-// Google Workspace/Gemini: Impact Advocate, goedgekeurd 10-11-2026. Geen target=_blank, niet framen. Geplaatst 17-11-2026.
+// Google Workspace/Gemini: Impact Advocate, goedgekeurd 10-11-2026. Reflink mQZoWo9 (share-medium DIRECT). Geen target=_blank, niet framen. Geplaatst 17-11-2026.
 // Canva, Power Automate, Copilot, Power BI en de twaalf vendors van 16-11 (ChatGPT, Claude, Le Chat, DeepL, Looker Studio, Google Cloud Translation, Calendly, Acuity, Albacross, Intercom, WordPress.org, Notuly) staan er bewust niet in: geen open affiliate; links blijven neutraal. Zapier, n8n en overige lopende/aanvraagbare merken blijven buiten deze lijst; hun bestaande knoppen wijzigen we nu niet.
 export const PARTNERLINKS = {
   make: 'https://www.make.com/en/register?pc=toolmatch',
   calcom: 'https://refer.cal.com/toolmatch-egfa',
   metricool: 'https://i.mtr.cool/toolmatch',
   simplybook: 'https://simplybook.me?ref=dave_west_fd136',
-  gemini: 'https://sharegoogleworkspace.advocate.impact.com/mzZoWo9',
+  gemini: 'https://sharegoogleworkspace.advocate.impact.com/mQZoWo9',
 };
 
 // Partnerlinks die niet in een nieuw tabblad mogen openen en niet in een iframe horen (Google Workspace/Gemini, Impact Advocate).

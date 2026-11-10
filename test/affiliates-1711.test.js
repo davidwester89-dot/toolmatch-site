@@ -18,7 +18,7 @@ const URLS = {
   calcom: 'https://refer.cal.com/toolmatch-egfa',
   metricool: 'https://i.mtr.cool/toolmatch',
   simplybook: 'https://simplybook.me?ref=dave_west_fd136',
-  gemini: 'https://sharegoogleworkspace.advocate.impact.com/mzZoWo9',
+  gemini: 'https://sharegoogleworkspace.advocate.impact.com/mQZoWo9',
 };
 const skip = /^(\.git|node_modules|scripts|test|_site)$/;
 const walk = (d) => readdirSync(d).flatMap((f) => {
@@ -107,7 +107,7 @@ test('Gemini-partnerlink: nergens target=_blank of iframe; keuzehulp volgt uitga
   for (const f of htmlFiles()) {
     const src = readFileSync(f, 'utf8');
     assert.doesNotMatch(src, /<iframe\b[^>]*advocate\.impact\.com/i, rel(f));
-    assert.doesNotMatch(src, /href="https:\/\/sharegoogleworkspace\.advocate\.impact\.com\/mzZoWo9"[^>]*target=/i, rel(f));
+    assert.doesNotMatch(src, /href="https:\/\/sharegoogleworkspace\.advocate\.impact\.com\/mQZoWo9"[^>]*target=/i, rel(f));
     for (const m of src.matchAll(/<a[^>]*data-vendor="gemini"[^>]*>/g)) {
       assert.doesNotMatch(m[0], /target="/, rel(f) + ' ' + m[0]);
       assert.match(m[0], /rel="sponsored nofollow noopener"/);
@@ -175,6 +175,36 @@ test('L7 17-11: alleen pagina\'s met bodywijziging; hubs niet gelift; lastmod ni
     const h = readFileSync(f, 'utf8');
     assert.match(h, dm, f);
     assert.match(h, bij, f);
+  }
+});
+
+test('oude Google Workspace-ref komt nergens terug: alleen mQZoWo9', () => {
+  const oud = ['mzZo', 'Wo9'].join('');
+  const nieuw = 'https://sharegoogleworkspace.advocate.impact.com/mQZoWo9';
+  assert.equal(PARTNERLINKS.gemini, nieuw);
+  assert.equal(URLS.gemini, nieuw);
+  const skipOud = /^(\.git|node_modules|scripts|test|_site)$/;
+  const walkAll = (d) => readdirSync(d).flatMap((f) => {
+    const p = join(d, f);
+    if (skipOud.test(f)) return [];
+    return statSync(p).isDirectory() ? walkAll(p) : [p];
+  });
+  const treffers = [];
+  for (const f of walkAll(ROOT)) {
+    const src = readFileSync(f, 'utf8');
+    if (src.includes(oud)) treffers.push(rel(f));
+  }
+  assert.deepEqual(treffers, [], 'oude slug in: ' + treffers.join(', '));
+  // De drie bestaande CTA's en PARTNERLINKS gebruiken de nieuwe slug; nergens de oude.
+  for (const f of [
+    'js/lib/partnerlinks.js',
+    'ai-assistenten/index.html',
+    'ai-presentatie-maken/index.html',
+    'ai-mail-en-offertes/index.html',
+  ]) {
+    const src = readFileSync(f, 'utf8');
+    assert.equal(src.includes(nieuw), true, f);
+    assert.equal(src.includes(oud), false, f);
   }
 });
 

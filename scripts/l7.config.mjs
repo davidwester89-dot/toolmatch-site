@@ -23,9 +23,15 @@ export const CFG = {
 // gevolgd door .com/@ en niet als deel van een e-mailadres.
 export const ALLOW_NAME = [
   { file: /\.(html|js)$/, match: /^[^\w.@]?Gmail[^\w.@]?$/, reden: 'productnaam Gmail (hoofdletter G, geen adres)' },
-  // Officiële SimplyBook.me-reflink uit het partnerbestand (10-11); ctx = de volledige URL, zoals de Moza-ref-uitzondering.
-  // Dave-uitzondering 10-11 09:56: Dave bevestigde dat zijn naam in deze referralparameter publiek mag.
-  { file: /\.(html|js)$/, match: /^=dave_$/, ctx: /simplybook\.me\?ref=dave_west_fd136/, reden: 'officiële SimplyBook.me-affiliateparameter (Dave-uitzondering 10-11 09:56)' },
+  // Exacte volledige-URL-match, 0 tolerantie: alleen https://simplybook.me?ref=dave_west_fd136
+  // (exacte host simplybook.me, exacte ref dave_west_fd136). Een gewijzigde ref, andere hostname
+  // of een andere dave-treffer in de buurt wordt niet toegestaan. Tijdelijk: vervalt zodra de
+  // naamloze toolmatch-ref er is.
+  // Dave West, direct in chat met SEO-uitvoerbot, 10-11-2026 09:56 CET:
+  // "Mijn naam in de SimplyBook-link is prima, plaats hem zoals hij is."
+  // Dave West, direct in chat met Grok Bot, 10-11-2026 10:12 CET:
+  // "Ja, de SimplyBook-link met mijn naam mag live tot hij naar toolmatch gaat."
+  { file: /\.(html|js)$/, match: /^=dave_$/, ctx: /(?:^|[^A-Za-z0-9.-])https:\/\/simplybook\.me\?ref=dave_west_fd136(?![A-Za-z0-9._-])/, reden: 'officiële SimplyBook.me-affiliateparameter (tijdelijk tot naamloze toolmatch-ref; Dave 10-11-2026 09:56 CET in chat SEO-uitvoerbot: "Mijn naam in de SimplyBook-link is prima, plaats hem zoals hij is."; 10:12 CET in chat Grok Bot: "Ja, de SimplyBook-link met mijn naam mag live tot hij naar toolmatch gaat.")' },
 ];
 export const BEKEND_ORPHAN = [];
 // Hub-audit: bestaande bevindingen op origin/main (30-10). Elk item is exact (alleen = de volledige melding, incl. kinderen en

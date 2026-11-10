@@ -106,3 +106,25 @@ test('BEKEND-huisregel: elk BEKEND_HUB/BEKEND_L7-item is exact (alleen) en heeft
     assert.ok(bekendActief(b, b.tot) && !bekendActief(b, volgendeDag(b.tot)), `${b.pad}: vervalt niet na ${b.tot}`);
   }
 });
+
+test('ALLOW_NAME SimplyBook: alleen de exacte URL; andere ref, andere host en losse Dave falen', () => {
+  const EXACT = 'https://simplybook.me?ref=dave_west_fd136';
+  const tmp = mkdtempSync(join(tmpdir(), 'allow-sb-'));
+  const check = (name, body) => {
+    const dir = join(tmp, name);
+    mkdirSync(dir);
+    writeFileSync(join(dir, 'index.html'), body);
+    return nameGrep(dir, ALLOW_NAME);
+  };
+  try {
+    assert.deepEqual(check('exact', `<a href="${EXACT}">SimplyBook.me</a>`), [], 'exacte URL moet worden toegestaan');
+    const otherRef = check('ref137', '<a href="https://simplybook.me?ref=dave_west_fd137">SimplyBook.me</a>');
+    assert.ok(otherRef.length >= 1, `andere ref dave_west_fd137 moet falen, kreeg: ${JSON.stringify(otherRef)}`);
+    const hostCom = check('host-com', '<a href="https://simplybook.com?ref=dave_west_fd136">SimplyBook.me</a>');
+    assert.ok(hostCom.length >= 1, `host simplybook.com moet falen, kreeg: ${JSON.stringify(hostCom)}`);
+    const hostEvil = check('host-evil', '<a href="https://evil.example?ref=dave_west_fd136">SimplyBook.me</a>');
+    assert.ok(hostEvil.length >= 1, `host evil.example moet falen, kreeg: ${JSON.stringify(hostEvil)}`);
+    const looseDave = check('loose-dave', `<a href="${EXACT}">SimplyBook.me</a> Dave`);
+    assert.ok(looseDave.length >= 1, `losse Dave naast de link moet falen, kreeg: ${JSON.stringify(looseDave)}`);
+  } finally { rmSync(tmp, { recursive: true, force: true }); }
+});

@@ -66,7 +66,7 @@ A_BODY=f'''      <h2 id="wat-het-doet">Wat een AI-websitebouwer wel en niet voor
  ('E-mail','Premium: 2 mailboxen per website, 1 jaar gratis.','Pro: 1 mailbox; Business: 1 XL-mailbox.','Via een los Google Workspace-abonnement.','Niet gecontroleerd.'),
  ('Webshop','E-commerce bij Onbeperkt: €16,99 per maand; de eerste 48 maanden €2,99, excl. btw.','Pro: 10 producten; Business: onbeperkt.','Betalingen en eCommerce vanaf Core.','Met plugins, bijvoorbeeld een winkel.'),
  ('AI','Bouwen met AI (handmatig of Agentic), met AI-credits per plan.','AI-functies genoemd in de pakketvergelijking.','Site maken vanuit één prompt.','Niet genoemd op de pagina\'s die we bekeken.'),
- ('Nederlands','Nederlandstalige site; taal van de support niet gecontroleerd.','Nederlandstalige site, persoonlijke ondersteuning.','Nederlandstalige klantenservice, volgens de Nederlandse prijspagina.','Nederlandstalige site (nl.wordpress.org).')],slug='/ai-website-maken/')}      <p>Bij Wix noemen we geen bedragen: Wix toont prijzen per land, en de uiteindelijke prijs zie je op de aankooppagina.</p>
+ ('Nederlands','Nederlandstalige site; taal van de support niet gecontroleerd.','Nederlandstalige site, persoonlijke ondersteuning.','Wix biedt Nederlandstalige klantenservice.','Nederlandstalige site (nl.wordpress.org).')],slug='/ai-website-maken/')}      <p>Bij Wix noemen we geen bedragen: Wix toont prijzen per land, en de uiteindelijke prijs zie je op de aankooppagina.</p>
       <h2 id="opties">De opties</h2>
       <h3 id="hostinger">{LG('hostinger',32)}Hostinger Website Bouwer</h3>
       <p>Hostinger verkoopt de AI Bouwer als pakket met hosting, domein en e-mail. Je beschrijft je idee, de AI maakt een eerste versie en met "Ga live" staat hij online. Premium is voor maximaal 3 websites; voor een webshop noemt Hostinger Onbeperkt. Premium kost €9,99 per maand (verlengprijs); de eerste 48 maanden €1,99 per maand (€95,52 vooraf). Onbeperkt kost €16,99 per maand; de eerste 48 maanden €2,99. Alles excl. btw.</p>
@@ -124,9 +124,9 @@ AP_PG=('Autoriteit Persoonsgegevens: Wat zijn persoonsgegevens?','https://www.au
 AP_CK=('Autoriteit Persoonsgegevens: Cookies','https://autoriteitpersoonsgegevens.nl/themas/internet-slimme-apparaten/cookies')
 
 B_BODY=f'''      <h2 id="hoe-werkt-het">Hoe bedrijfsherkenning werkt</h2>
-      <p>Je zet een stukje trackingcode op je website. Bij Leadinfo ziet die code volgens de aanbieder het IP-adres van je bezoekers en vergelijkt dat met een database op basis van openbare bronnen, zoals het handelsregister. Zo wordt een bezoek gekoppeld aan een bedrijfsnaam, met de pagina's die er zijn bekeken.</p>
+      <p>Je zet een stukje trackingcode op je website. Leadinfo beschrijft hoe die code het IP-adres van je bezoekers ziet en vergelijkt met een database op basis van openbare bronnen, zoals het handelsregister. Zo wordt een bezoek gekoppeld aan een bedrijfsnaam, met de pagina's die er zijn bekeken.</p>
       <p>Je ziet dus bedrijven, geen namen van bezoekers. En lang niet elk bezoek: Leadinfo zegt ruwweg 30% van de bezoekers als bedrijf te herkennen, en telt bezoeken via internetproviders niet mee.</p>
-      <p>De prijs hangt bij alle drie de tools hieronder af van het aantal herkende bedrijven per maand. Komt hetzelfde bedrijf vaker langs, dan telt het bij Leadfeeder en Leadinfo één keer.</p>
+      <p>Albacross, Leadfeeder en Leadinfo baseren hun prijs op het aantal herkende bedrijven per maand. Een bedrijf dat vaker langskomt, tellen Leadfeeder en Leadinfo één keer.</p>
       <p>Sommige tools gaan verder dan het bedrijf. Leadinfo noemt LinkedIn-profielen, telefoonnummers en e-mailadressen van contactpersonen, Leadfeeder geverifieerde e-mailadressen en telefoonnummers vanaf Activate, en Albacross tegoeden voor geverifieerde mailadressen en telefoonnummers. Dat zijn gegevens van personen. Daarover hieronder meer.</p>
       <h2 id="avg">Mag dat? AVG, cookies en je privacyverklaring</h2>
       <p>Wat er mag, hangt af van hoe je zo'n tool gebruikt. Dit zegt de Autoriteit Persoonsgegevens (AP):</p>
@@ -135,12 +135,12 @@ B_BODY=f'''      <h2 id="hoe-werkt-het">Hoe bedrijfsherkenning werkt</h2>
         <li><strong>Een IP-adres</strong> kan een persoonsgegeven zijn.</li>
         <li><strong>Cookies:</strong> voor trackingcookies, die gedrag over meerdere websites volgen, is toestemming nodig. Functionele cookies mogen zonder toestemming, maar je moet bezoekers wel vertellen dat je ze plaatst, bijvoorbeeld in je privacyverklaring.</li>
       </ul>
-      <p>Leadinfo schrijft zelf dat IP-adressen onder de AVG als persoonsgegevens kunnen gelden en dat jij als website-eigenaar je bezoekers moet informeren, via je privacyverklaring en/of cookiebanner. Afhankelijk van de implementatie kan vooraf toestemming nodig zijn, en Leadinfo raadt aan om die te vragen voordat de trackingcode actief wordt. Op de tarievenpagina noemt Leadinfo daarnaast "gerechtvaardigd belang" als grondslag. De code plaatst volgens Leadinfo optioneel twee first-party cookies; er is ook een variant zonder cookies.</p>
+      <p>Leadinfo schrijft zelf dat IP-adressen onder de AVG als persoonsgegevens kunnen gelden en dat jij als website-eigenaar je bezoekers moet informeren, via je privacyverklaring en/of cookiebanner. Afhankelijk van de implementatie kan vooraf toestemming nodig zijn, en Leadinfo raadt aan om die te vragen voordat de trackingcode actief wordt. Op de tarievenpagina noemt Leadinfo daarnaast "gerechtvaardigd belang" als grondslag. Leadinfo noemt optioneel twee first-party cookies; er is ook een variant zonder cookies.</p>
       <p>Wat je in elk geval regelt:</p>
       <ul>
-        <li><strong>Noem de tool in je privacyverklaring:</strong> welke gegevens, waarvoor en hoe lang. Leadinfo heeft volgens eigen zeggen voorbeeldteksten.</li>
+        <li><strong>Noem de tool in je privacyverklaring:</strong> welke gegevens, waarvoor en hoe lang. Leadinfo heeft voorbeeldteksten.</li>
         <li><strong>Sluit een verwerkersovereenkomst.</strong> Leadinfo zegt verwerker te zijn en een verwerkersovereenkomst te leveren. Lees {L('/gids/ai-veilig-gebruiken/','wat een verwerkersovereenkomst regelt')}.</li>
-        <li><strong>Kijk waar de gegevens staan.</strong> Leadinfo host volgens de aanbieder in Ierland, bij AWS. Bij Leadfeeder en Albacross hebben we dat niet gecontroleerd.</li>
+        <li><strong>Kijk waar de gegevens staan.</strong> Leadinfo geeft hosting in Ierland, bij AWS, op. Bij Leadfeeder en Albacross hebben we dat niet gecontroleerd.</li>
         <li><strong>Twijfel je over de grondslag</strong> (toestemming of gerechtvaardigd belang)? Vraag dan advies aan een jurist.</li>
       </ul>
       <h2 id="naast-elkaar">Naast elkaar</h2>
@@ -152,9 +152,9 @@ B_BODY=f'''      <h2 id="hoe-werkt-het">Hoe bedrijfsherkenning werkt</h2>
  ('Gebruikers','Niet gecontroleerd.','Onbeperkt.','Starter 3, Scale 10, Pro onbeperkt.'),
  ('CRM-koppelingen','Pipedrive vanaf Starter, HubSpot vanaf Professional (€149), Salesforce bij Organisation.','HubSpot, Salesforce en Pipedrive.','Starter: handmatig naar je CRM. HubSpot en Microsoft Dynamics vanaf Scale (€159), Salesforce vanaf Pro (€359).'),
  ('Contactpersonen','Tegoeden voor geverifieerde e-mail (10) en telefoon (5) in Starter.','Geverifieerde e-mail en telefoon vanaf Activate (vanaf €369 per maand).','LinkedIn-profielen, telefoonnummers en e-mailadressen; mobiele nummers vanaf Pro.'),
- ('Opslag van gegevens','Niet gecontroleerd.','Niet gecontroleerd.','Ierland (AWS), volgens Leadinfo.')])}      <h2 id="tools">De tools</h2>
+ ('Opslag van gegevens','Niet gecontroleerd.','Niet gecontroleerd.','Leadinfo geeft Ierland (AWS) op.')])}      <h2 id="tools">De tools</h2>
       <h3 id="albacross">{LG('albacross',32)}Albacross</h3>
-      <p>Albacross herkent bedrijven op je site en combineert dat met opvolgen: automatische e-mail- en LinkedIn-reeksen met AI zitten volgens de prijspagina al in Starter. Starter kost €59 per maand bij jaarbetaling, Professional €149 per maand. Je kunt 14 dagen gratis proberen, zonder creditcard.</p>
+      <p>Albacross zet automatische e-mail- en LinkedIn-reeksen met AI al in Starter en combineert die opvolging met het herkennen van bedrijven op je site. Starter kost €59 per maand bij jaarbetaling, Professional €149 per maand. Je kunt 14 dagen gratis proberen, zonder creditcard.</p>
       <p><strong>Past als</strong> je herkennen en opvolgen in één tool wilt en met Pipedrive werkt.</p>
       {wl_knop('albacross','Albacross','https://www.albacross.com/')}
       <h3 id="leadfeeder">{LG('leadfeeder',32)}Leadfeeder (Dealfront)</h3>
@@ -162,7 +162,7 @@ B_BODY=f'''      <h2 id="hoe-werkt-het">Hoe bedrijfsherkenning werkt</h2>
       <p><strong>Past als</strong> je eerst gratis wilt zien welke bedrijven langskomen, met je hele team.</p>
       {wl_knop('leadfeeder','Leadfeeder','https://www.leadfeeder.com/')}
       <h3 id="leadinfo">{LG('leadinfo',32)}Leadinfo</h3>
-      <p>Leadinfo herkent volgens de aanbieder bedrijven in real time en toont bedrijfsinformatie, bezochte pagina's en contactpersonen. Starter kost €69 per maand bij jaarbetaling voor maximaal 50 bedrijven per maand, met 3 gebruikers. Scale (vanaf €159) koppelt ook met HubSpot en Microsoft Dynamics. Na de gratis proefperiode van 14 dagen, waarvoor je geen creditcard nodig hebt, krijg je een voorstel op maat. Leadinfo host in Ierland en is ISO 27001-gecertificeerd, volgens de aanbieder.</p>
+      <p>Leadinfo herkent bedrijven in real time en toont bedrijfsinformatie, bezochte pagina's en contactpersonen. Starter kost €69 per maand bij jaarbetaling voor maximaal 50 bedrijven per maand, met 3 gebruikers. Scale (vanaf €159) koppelt ook met HubSpot en Microsoft Dynamics. Na de gratis proefperiode van 14 dagen, waarvoor je geen creditcard nodig hebt, krijg je een voorstel op maat. Leadinfo geeft hosting in Ierland en ISO 27001-certificering op.</p>
       <p><strong>Past als</strong> je een Nederlandstalige tool zoekt met een verwerkersovereenkomst en hosting in de EU.</p>
       {wl_knop('leadinfo','Leadinfo','https://www.leadinfo.com/nl/')}
       <h2 id="opvolgen">Van bezoek naar lead</h2>

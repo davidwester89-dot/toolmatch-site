@@ -354,3 +354,9 @@ write('blog/index.html', f'''<!DOCTYPE html>
 </body>
 </html>
 ''')
+
+# L7: stijlronde na de goedgekeurde affiliateketen; uitsluitend gewijzigde pagina's.
+exec(open('scripts/nuchter_datums.py').read())
+# Reviewed source anchors on the actual claims; source lists and schema stay intact.
+from claim_sources import apply_plan
+apply_plan()

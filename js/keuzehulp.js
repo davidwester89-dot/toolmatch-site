@@ -4,6 +4,7 @@ import { DOELEN, GECONTROLEERD } from './lib/tools.js';
 import { uitgaand, metNoot } from './lib/partnerlinks.js';
 import { logoImg } from './lib/logos.js';
 import { track } from './consent.js';
+import { claimSource, reasonSource } from './lib/claim-source.js';
 
 const form = document.getElementById('form');
 const out = document.getElementById('resultaat');
@@ -17,7 +18,7 @@ const CATEGORIE = {
   beeld: ['/ai-afbeeldingen-en-ontwerp/', 'Alle tools voor beeld en ontwerp vergeleken'],
   data: ['/ai-data-analyse/', 'Alle tools voor data en dashboards vergeleken'],
 };
-const EU = { ja: 'In de EU (volgens de aanbieder)', deels: 'Vooral in de EU (volgens de aanbieder)' };
+const EU = { ja: 'In de EU', deels: 'Vooral in de EU' };
 
 function lees() {
   const a = {};
@@ -28,19 +29,20 @@ function lees() {
 function kaart(r, n) {
   const t = r.tool;
   const o = uitgaand(t);
-  const li = (xs, cls) => xs.length ? `<ul class="${cls}">${xs.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
+  const li = (xs, cls) => xs.length ? `<ul class="${cls}">${xs.map((x) => `<li>${reasonSource(t, x)}</li>`).join('')}</ul>` : '';
   return `<article class="res${n === 0 ? ' top' : ''}">
   <p class="rank">${n === 0 ? 'Beste match' : '#' + (n + 1)}</p>
   <h3>${logoImg(t.id, { px: 32, naam: t.naam })}${esc(t.naam)}</h3>
-  <p>${esc(t.wat)}</p>
+  <p>${claimSource(t, t.wat)}</p>
   ${li(r.plus, 'pros')}${li(r.let_op, 'cons')}
+  <p>Opslag is een opgave van de aanbieder.</p>
   <dl class="facts">
-    <div><dt>Gratis versie</dt><dd>${t.gratis === true ? 'Ja' : t.gratis === false ? 'Nee' : 'Niet gecontroleerd'}</dd></div>
-    <div><dt>Betaald vanaf</dt><dd>${t.prijs ? esc(t.prijs) : 'Niet gecontroleerd, zie de site'}</dd></div>
-    <div><dt>Gegevens</dt><dd>${EU[t.eu] || 'Locatie niet gecontroleerd'}</dd></div>
+    <div><dt>Gratis versie</dt><dd>${t.gratis === null ? 'Niet gecontroleerd' : claimSource(t, t.gratis === true ? 'Ja' : 'Nee')}</dd></div>
+    <div><dt>Betaald vanaf</dt><dd>${t.prijs ? claimSource(t, t.prijs) : 'Niet gecontroleerd, zie de site'}</dd></div>
+    <div><dt>Gegevens</dt><dd>${EU[t.eu] ? claimSource(t, EU[t.eu], true) : 'Locatie niet gecontroleerd'}</dd></div>
     <div><dt>Instap</dt><dd>${esc(t.instap[0].toUpperCase() + t.instap.slice(1))} <small>(onze indeling)</small></dd></div>
   </dl>
-  ${t.privacy ? `<p class="priv">${esc(t.privacy)}</p>` : ''}
+  ${t.privacy ? `<p class="priv">${claimSource(t, t.privacy, true)}</p>` : ''}
   <p class="src">Bron: ${t.bronnen.map(([n2, u]) => `<a href="${esc(u)}" rel="noopener" target="_blank" aria-label="${esc(n2)} (opent in een nieuw tabblad)">${esc(n2)}</a>`).join(', ')} · gecontroleerd op ${datum}</p>
   ${['canva', 'powerautomate', 'copilot', 'powerbi', 'chatgpt', 'claude', 'lechat', 'deepl', 'lookerstudio', 'googlecloudtranslate', 'calendly', 'acuity', 'albacross', 'intercom', 'wordpress', 'notuly'].includes(t.id) ? `<p class="go"><a href="${esc(t.url)}" rel="noopener">${esc(t.naam)}</a></p>` : `<p class="go"><a class="btn${n === 0 ? '' : ' ghost'}" href="${esc(o.href)}" rel="${o.rel}"${o.target ? ` target="${o.target}"` : ''} data-vendor="${esc(t.id)}" data-pos="${n + 1}" data-cta="${o.partner ? 'partner' : 'outbound'}" aria-label="${esc(knopLabel(t, { nieuwTabblad: Boolean(o.target) }))}">Naar de site van ${esc(t.vendor || t.naam)}</a></p>`}
 </article>`;

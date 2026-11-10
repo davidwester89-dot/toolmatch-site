@@ -1,3 +1,5 @@
+import { withoutClaimSources } from './claim-source-helper.mjs';
+import { revisieDatum, normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
 // Commerciële Wix-knop op /ai-website-maken/: officiële Impact Dutch WSB-link (ad 2152480).
 // Alleen die exit. Bronnen, prijspagina, tekst, volgorde en de keuzehulp-uitslag blijven zoals ze waren.
 import { test } from 'node:test';
@@ -28,7 +30,7 @@ test('Wix-CTA: trackinglink alleen op die knop; overige links en de volgorde bli
   assert.equal(html.split(WIX).length - 1, 1, 'trackinglink hoort één keer op de pagina');
   assert.doesNotMatch(html, /2049257/);
   assert.doesNotMatch(readFileSync('js/lib/partnerlinks.js', 'utf8'), /2049257/);
-  assert.equal(html.split('href="https://nl.wix.com/pricing"').length - 1, 3);
+  assert.equal(withoutClaimSources(html).split('href="https://nl.wix.com/pricing"').length - 1, 3);
   assert.match(html, /href="https:\/\/nl\.wix\.com\/pricing" target="_blank" rel="noopener">prijspagina van Wix<\/a>/);
   assert.match(html, /href="https:\/\/nl\.wix\.com\/pricing" rel="noopener">Wix: Premiumpakketten/);
   assert.match(html, /href="https:\/\/www\.wix\.com\/plans" rel="noopener">Wix: Plans<\/a>/);
@@ -53,8 +55,8 @@ test('Wix-CTA: geen extra parameter of fragment op de trackinglink', () => {
 
 test('Wix-CTA L7: keuzehulp-datum mee, uitslagbestand ongemoeid', () => {
   const kh = readFileSync('keuzehulp/index.html', 'utf8');
-  assert.match(kh, /"dateModified": "2026-11-17"/);
-  assert.match(kh, /bijgewerkt op 17 november 2026/);
+  assert.match(kh, /"dateModified": "2026-11-18"/);
+  assert.match(kh, /bijgewerkt op 18 november 2026/);
   assert.match(kh, /gecontroleerd op 20 oktober 2026/);
-  assert.ok(readFileSync('sitemap.xml', 'utf8').includes('<loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>2026-11-17</lastmod>'));
+  assert.ok(readFileSync('sitemap.xml', 'utf8').includes('<loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>2026-11-18</lastmod>'));
 });

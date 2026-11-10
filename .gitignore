@@ -2,3 +2,6 @@ PLAN-*.md
 HOTFIX-*.txt
 node_modules/
 _site/
+
+# Cache van de gecontroleerde Python-bronrenderer (geen publicatie-output).
+scripts/__pycache__/

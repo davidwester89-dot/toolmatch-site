@@ -1,3 +1,4 @@
+import { withoutClaimSources } from './claim-source-helper.mjs';
 // Testgat L11 (SC 28-10, review 3616ca7): mutaties in scripts/pages.py die het interne budgetgetal tonen
 // (S1 '(budget 20)', S2 '(€20)', S3 prijsMaandBron in de keuzehulp-tabel) gaven 0 fails. prijsMaand is een intern budgetgetal
 // voor de budgetvraag en wordt NOOIT getoond (js/lib/tools.js). Deze test bewaakt dat op de build:
@@ -42,7 +43,7 @@ test('intern budgetgetal: keuzehulp-tabel toont per tool precies tool.prijs in d
     const r = rows.find(([naam]) => naam === t.naam);
     if (!r) continue;
     const verwacht = t.prijs ? esc(t.prijs) : 'Niet gecontroleerd';
-    if (decode(r[1][2]) !== decode(verwacht)) fout.push(`${t.id}: prijscel '${tekst(r[1][2])}' ≠ tool.prijs`);
+    if (decode(withoutClaimSources(r[1][2])) !== decode(verwacht)) fout.push(`${t.id}: prijscel '${tekst(r[1][2])}' ≠ tool.prijs`);
   }
   assert.deepEqual(fout, []);
 });

@@ -17,7 +17,7 @@ const CATEGORIE = {
   beeld: ['/ai-afbeeldingen-en-ontwerp/', 'Alle tools voor beeld en ontwerp vergeleken'],
   data: ['/ai-data-analyse/', 'Alle tools voor data en dashboards vergeleken'],
 };
-const EU = { ja: 'In de EU (volgens de aanbieder)', deels: 'Vooral in de EU (volgens de aanbieder)' };
+const EU = { ja: 'In de EU', deels: 'Vooral in de EU' };
 
 function lees() {
   const a = {};
@@ -34,6 +34,7 @@ function kaart(r, n) {
   <h3>${logoImg(t.id, { px: 32, naam: t.naam })}${esc(t.naam)}</h3>
   <p>${esc(t.wat)}</p>
   ${li(r.plus, 'pros')}${li(r.let_op, 'cons')}
+  <p>Opslag is een opgave van de aanbieder.</p>
   <dl class="facts">
     <div><dt>Gratis versie</dt><dd>${t.gratis === true ? 'Ja' : t.gratis === false ? 'Nee' : 'Niet gecontroleerd'}</dd></div>
     <div><dt>Betaald vanaf</dt><dd>${t.prijs ? esc(t.prijs) : 'Niet gecontroleerd, zie de site'}</dd></div>

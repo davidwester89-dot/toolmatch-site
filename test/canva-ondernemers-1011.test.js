@@ -1,3 +1,4 @@
+import { revisieDatum } from './nuchter-datums-helper.mjs';
 // Nieuwe gids /gids/canva-voor-ondernemers/ (SEO-refresh wk46, pushdatum 10-11-2026).
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -61,10 +62,10 @@ test('canva-ondernemers: alleen feitelijke Canva-bronlinks, geen commerciële CT
 test('L7 10-11: nieuwe gids en hub /gids/ blijven 10-11; ontwerp-hub en keuzehulp later 12-11 (Canva-CTA neutraal)', () => {
   const sm = readFileSync('sitemap.xml', 'utf8');
   for (const p of ['/gids/canva-voor-ondernemers/', '/gids/']) {
-    assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>2026-11-10</lastmod>`), p);
+    assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>${revisieDatum(p, '2026-11-10')}</lastmod>`), p);
   }
-  assert.match(H, /"datePublished": "2026-11-10",\s*"dateModified": "2026-11-10"/);
-  assert.match(H, /bijgewerkt op <time datetime="2026-11-10">10 november 2026<\/time>/);
+  assert.match(H, /"datePublished": "2026-11-10",\s*"dateModified": "2026-11-18"/);
+  assert.match(H, /bijgewerkt op <time datetime="2026-11-18">18 november 2026<\/time>/);
   const hub = readFileSync('gids/index.html', 'utf8');
   assert.ok(hub.includes('href="/gids/canva-voor-ondernemers/"'));
   assert.match(hub, /"dateModified": "2026-11-10"/);

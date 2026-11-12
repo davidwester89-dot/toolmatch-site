@@ -112,7 +112,7 @@ test('vendor buttons use the vendor name (vendor field, else product name)', asy
       assert.equal(m[2], want, f + ' ' + m[1]); n++;
     }
   }
-  assert.ok(n >= 20, "te weinig resterende vendor-knoppen: " + n);
+  assert.ok(n >= 7, "te weinig resterende vendor-knoppen: " + n);  // sinds 17-11 alleen partnerknoppen (Make, Cal.com, Metricool, SimplyBook.me, Gemini 3×)
 });
 
 test('external tool buttons carry an aria-label with vendor, product and new-tab notice', async () => {
@@ -138,12 +138,14 @@ test('external tool buttons carry an aria-label with vendor, product and new-tab
       n++;
     }
   }
-  assert.ok(n >= 20, "te weinig resterende vendor-knoppen: " + n);
+  assert.ok(n >= 7, "te weinig resterende vendor-knoppen: " + n);  // sinds 17-11 alleen partnerknoppen (Make, Cal.com, Metricool, SimplyBook.me, Gemini 3×)
   const kh = readFileSync(join(ROOT, 'js/keuzehulp.js'), 'utf8');
   assert.match(kh, /aria-label="\$\{esc\(knopLabel\(t, \{ nieuwTabblad: Boolean\(o\.target\) \}\)\)\}"/);
   assert.match(kh, /target="_blank" aria-label="\$\{esc\(n2\)\} \(opent in een nieuw tabblad\)"/);
   // powerbi/copilot/canva/powerautomate + de 12 vendors van 16-11 zijn neutrale bronlinks, geen knop met aria-label
-  const lbl = { hubspot: 'Naar de site van HubSpot CRM (opent in een nieuw tabblad)', zoho: 'Naar de site van Zoho CRM (opent in een nieuw tabblad)' };
+  // 17-11: HubSpot en Zoho zijn neutrale bronlinks (geen goedgekeurde partnerlink); partnerknoppen houden hun aria-label.
+  const lbl = { calcom: 'Naar de site van Cal.com (opent in een nieuw tabblad)', metricool: 'Naar de site van Metricool (opent in een nieuw tabblad)' };
   const all = readdirSync(ROOT, { recursive: true }).filter(f => f.endsWith('index.html') && !/^(node_modules|\.git|_site)/.test(f)).map(f => readFileSync(join(ROOT, f), 'utf8')).join('');
   for (const [id, l] of Object.entries(lbl)) assert.ok(all.includes(`data-vendor="${id}"`) && all.includes(`aria-label="${l}"`), id);
+  for (const id of ['hubspot', 'zoho']) assert.ok(!all.includes(`data-vendor="${id}"`), id + ' is weer een knop');
 });

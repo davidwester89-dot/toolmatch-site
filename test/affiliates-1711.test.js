@@ -133,15 +133,15 @@ test('L7 17-11: alleen pagina\'s met bodywijziging; hubs niet gelift; lastmod ni
     '/privacy/': '2026-11-17',
   };
   const stayed = {
-    '/automatiseren-zonder-code/': '2026-11-12',
-    '/ai-afbeeldingen-en-ontwerp/': '2026-11-16',
-    '/ai-data-analyse/': '2026-11-16',
-    '/ai-vertalen/': '2026-11-16',
-    '/ai-tekst-schrijven/': '2026-11-16',
-    '/ai-chatbot-website/': '2026-11-16',
-    '/ai-notuleren/': '2026-11-16',
-    '/ai-website-maken/': '2026-11-16',
-    '/websitebezoekers-herkennen/': '2026-11-16',
+    '/automatiseren-zonder-code/': '2026-11-17',  // onbetaalde CTA's neutraal 17-11
+    '/ai-afbeeldingen-en-ontwerp/': '2026-11-17',  // onbetaalde CTA's neutraal 17-11
+    '/ai-data-analyse/': '2026-11-17',  // onbetaalde CTA's neutraal 17-11
+    '/ai-vertalen/': '2026-11-17',  // onbetaalde CTA's neutraal 17-11
+    '/ai-tekst-schrijven/': '2026-11-17',  // onbetaalde CTA's neutraal 17-11
+    '/ai-chatbot-website/': '2026-11-17',  // onbetaalde CTA's neutraal 17-11
+    '/ai-notuleren/': '2026-11-17',  // onbetaalde CTA's neutraal 17-11
+    '/ai-website-maken/': '2026-11-17',  // onbetaalde CTA's neutraal 17-11
+    '/websitebezoekers-herkennen/': '2026-11-17',  // onbetaalde CTA's neutraal 17-11
     '/gids/': '2026-11-10',
     '/gids/canva-voor-ondernemers/': '2026-11-10',
     '/gids/wat-kosten-ai-abonnementen/': '2026-10-30',

@@ -111,8 +111,8 @@ test('Make-partnerlink: volgorde en datums blijven', () => {
   assert.match(vs, /"datePublished": "2026-10-20"/);
   assert.match(vs, /"dateModified": "2026-11-10"/);
   assert.match(vs, /bijgewerkt op 10 november 2026/);
-  assert.match(auto, /"dateModified": "2026-11-12"/);
-  assert.match(auto, /bijgewerkt op 12 november 2026/);
+  assert.match(auto, /"dateModified": "2026-11-17"/);  // 17-11: Zapier/n8n-bronlink (eigen bodywijziging)
+  assert.match(auto, /bijgewerkt op 17 november 2026/);
   assert.match(kh, /"dateModified": "2026-11-17"/);
   assert.match(kh, /bijgewerkt op 17 november 2026/);
   const hub = readFileSync('vergelijken/index.html', 'utf8');
@@ -124,7 +124,7 @@ test('Make-partnerlink: volgorde en datums blijven', () => {
   assert.match(priv, /<h2>Links naar aanbieders<\/h2>\n      <p>Klik je door naar een aanbieder of neem je daar een abonnement, dan geldt de privacyverklaring van die aanbieder\.<\/p>\n      <p>Partnerlinks worden bij de knoppen vermeld\. Sommige lopen via een affiliatenetwerk \(Daisycon of Impact\)\. Dat netwerk plaatst op zijn eigen domein een cookie of klik-ID, om vast te leggen dat je via ToolMatch kwam\. Andere partnerlinks gaan rechtstreeks naar de aanbieder \(nu Make, Cal\.com, Metricool en SimplyBook\.me, via een trackingcode in de link\); dan kan de aanbieder zelf op het eigen domein een cookie of klik-ID zetten\. Sluit je iets af, dan kunnen wij daardoor een vergoeding krijgen\. Het netwerk of de aanbieder is zelf verantwoordelijk voor die gegevens; zie het privacybeleid van <a href="https:\/\/daisycon\.com\/en\/legal-information\/privacy-policy\/" rel="noopener">Daisycon<\/a>, <a href="https:\/\/impact\.com\/privacy-policy\/" rel="noopener">Impact<\/a>, <a href="https:\/\/www\.make\.com\/en\/privacy-notice" rel="noopener">Make<\/a>, <a href="https:\/\/cal\.com\/privacy" rel="noopener">Cal\.com<\/a>, <a href="https:\/\/metricool\.com\/privacy-policy\/" rel="noopener">Metricool<\/a> en <a href="https:\/\/simplybook\.me\/en\/policy" rel="noopener">SimplyBook\.me<\/a>\.<\/p>/);
   assert.doesNotMatch(priv, /pc=toolmatch/);
   assert.ok(sm.includes('<loc>https://toolmatch.nl/vergelijken/zapier-vs-make-vs-n8n/</loc><lastmod>2026-11-10</lastmod>'));
-  assert.ok(sm.includes('<loc>https://toolmatch.nl/automatiseren-zonder-code/</loc><lastmod>2026-11-12</lastmod>'));
+  assert.ok(sm.includes('<loc>https://toolmatch.nl/automatiseren-zonder-code/</loc><lastmod>2026-11-17</lastmod>'));
   assert.ok(sm.includes('<loc>https://toolmatch.nl/vergelijken/</loc><lastmod>2026-11-10</lastmod>'));
   assert.ok(sm.includes('<loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>2026-11-17</lastmod>'));
   assert.ok(sm.includes('<loc>https://toolmatch.nl/privacy/</loc><lastmod>2026-11-17</lastmod>'));

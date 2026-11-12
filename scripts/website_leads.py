@@ -3,7 +3,7 @@
 # met rel="sponsored nofollow noopener" en de partnerzin eronder; anders een gewone link (rel="noopener"). Bronnen blijven gewone links.
 WL_PUB='2026-10-27'
 # Inhoudelijk gewijzigd na publicatie (partnerlink Hostinger): dateModified, lastmod en zichtbare bijwerkdatum.
-WL_UPD={'/ai-website-maken/':'2026-11-16','/websitebezoekers-herkennen/':'2026-11-16'}  # 16-11 WordPress.org- en Albacross-CTA neutraal (L7); Hostinger/Wix/JouwWeb/Leadinfo/Leadfeeder-knoppen ongemoeid
+WL_UPD={'/ai-website-maken/':'2026-11-17','/websitebezoekers-herkennen/':'2026-11-17'}  # 16-11 WordPress.org- en Albacross-CTA neutraal; 17-11 JouwWeb/Leadinfo/Leadfeeder neutraal (L7). Hostinger/Wix blijven partnerknop
 WL_CHECK='26 oktober 2026'
 # Opnieuw bekeken op NL-IP op 30-10-2026 (site-checks/2026-10-30/tm-website-prijzen-details.md).
 WL_BRON={'https://www.jouwweb.nl/prijzen':'30 oktober 2026','https://www.hostinger.com/nl/website-maken-met-ai':'30 oktober 2026','https://www.hostinger.com/nl/website-maken':'30 oktober 2026'}
@@ -20,8 +20,9 @@ def wl_knop(vid,naam,url):
     if vid in ('wordpress', 'albacross'):
         return f'<p class="go"><a href="{E(url)}" rel="noopener">{E(naam)}</a></p>'
     p=PLP.get(vid)
-    if p: return met_noot(f'<p class="go"><a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{vid}" data-cta="partner" aria-label="Naar de site van {E(naam)} (opent in een nieuw tabblad)">Naar de site van {E(naam)}</a></p>\n').rstrip('\n')
-    return f'<p class="go"><a class="btn ghost" href="{E(url)}" rel="noopener" target="_blank" data-vendor="{vid}" data-cta="outbound" aria-label="Naar de site van {E(naam)} (opent in een nieuw tabblad)">Naar de site van {E(naam)}</a></p>'
+    # 17-11: JouwWeb, Leadinfo en Leadfeeder: aanvraag loopt of is geblokkeerd, geen goedgekeurde partnerlink. Neutrale bronlink 'Bron: Merk'.
+    if not p: return f'<p class="go"><a href="{E(url)}" rel="noopener">Bron: {E(naam)}</a></p>'
+    return met_noot(f'<p class="go"><a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{vid}" data-cta="partner" aria-label="Naar de site van {E(naam)} (opent in een nieuw tabblad)">Naar de site van {E(naam)}</a></p>\n').rstrip('\n')
 WLID={'Albacross':'albacross','Leadfeeder (Dealfront)':'leadfeeder','Leadinfo':'leadinfo','Hostinger':'hostinger','JouwWeb':'jouwweb','Wix':'wix','WordPress (zelf hosten)':'wordpress'}
 def wl_tabel(label,cols,rows,slug=None):
     th=''.join(f'<th scope="col">{LG(WLID[c])}{E(c)}</th>' for c in cols)

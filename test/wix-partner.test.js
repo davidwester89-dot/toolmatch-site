@@ -34,7 +34,8 @@ test('Wix-CTA: trackinglink alleen op die knop; overige links en de volgorde bli
   assert.match(html, /href="https:\/\/www\.wix\.com\/plans" rel="noopener">Wix: Plans<\/a>/);
   assert.doesNotMatch(html, /href="https:\/\/www\.wix\.com\/"/);
   assert.match(html, /href="https:\/\/jf79\.net\/c\/\?si=16780&amp;li=1722914&amp;wi=440699&amp;ws=&amp;dl=nl%2Fwebsite-maken-met-ai" rel="sponsored nofollow noopener" target="_blank" data-vendor="hostinger" data-cta="partner"/);
-  assert.match(html, /href="https:\/\/www\.jouwweb\.nl\/" rel="noopener" target="_blank" data-vendor="jouwweb" data-cta="outbound"/);
+  assert.match(html, /<p class="go"><a href="https:\/\/www\.jouwweb\.nl\/" rel="noopener">Bron: JouwWeb<\/a><\/p>/);  // 17-11: TT 21002 nog niet goedgekeurd
+  assert.doesNotMatch(html, /data-vendor="jouwweb"/);
   assert.match(html, /<p class="go"><a href="https:\/\/nl\.wordpress\.org\/" rel="noopener">WordPress.org<\/a><\/p>/);
   assert.doesNotMatch(html, /data-vendor="wordpress"/);
   const ids = [...html.matchAll(/<h3 id="(hostinger|jouwweb|wix|wordpress)">/g)].map((m) => m[1]);

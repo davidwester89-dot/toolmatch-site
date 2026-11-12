@@ -39,10 +39,10 @@ test('Notuly: prijzen en hosting zoals op notuly.nl (30-10), standaardprijs eers
   assert.doesNotMatch(kaart, /\$|USD|dollar/i);
 });
 
-test('L7 16-11: ai-notuleren dateModified, sitemap-lastmod en zichtbaar bijgewerkt op 16 november 2026 (Notuly-CTA neutraal)', () => {
-  assert.match(html, /"dateModified": "2026-11-16"/);
-  assert.match(html, /<p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 16 november 2026/);
-  assert.ok(readFileSync('sitemap.xml', 'utf8').includes('<loc>https://toolmatch.nl/ai-notuleren/</loc><lastmod>2026-11-16</lastmod>'));
+test('L7 17-11: ai-notuleren dateModified, sitemap-lastmod en zichtbaar bijgewerkt op 17 november 2026 (Notuly 16-11; Amberscript/Notta/Otter.ai/tl;dv-bronlink 17-11)', () => {
+  assert.match(html, /"dateModified": "2026-11-17"/);
+  assert.match(html, /<p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 17 november 2026/);
+  assert.ok(readFileSync('sitemap.xml', 'utf8').includes('<loc>https://toolmatch.nl/ai-notuleren/</loc><lastmod>2026-11-17</lastmod>'));
 });
 
 test('Notuly zit niet in de keuzehulp (doelen leeg): geen enkele uitkomst bevat notuly', () => {

@@ -87,9 +87,10 @@ test('logo: fallback is een neutrale letter in hetzelfde vak', () => {
 
 test('L7 30-10: de pagina\'s met logo\'s van 30 oktober hebben dateModified, sitemap-lastmod en zichtbaar bijgewerkt op 30 oktober 2026', () => {
   const sm = readFileSync(ROOT + 'sitemap.xml', 'utf8');
-  const P = ['crm-klein-bedrijf', 'gids/wat-kosten-ai-abonnementen', 'vergelijken/chatgpt-vs-claude', 'vergelijken/chatgpt-vs-copilot', 'vergelijken/chatgpt-vs-gemini'];
+  // crm-klein-bedrijf: 17-11 (HubSpot/Pipedrive/Zoho-bronlink), zie test/onbetaald-neutraal-1711.test.js.
+  const P = ['gids/wat-kosten-ai-abonnementen', 'vergelijken/chatgpt-vs-claude', 'vergelijken/chatgpt-vs-copilot', 'vergelijken/chatgpt-vs-gemini'];
   // social-media-inplannen: 17-11 (Metricool-partnerlink). keuzehulp, assistenten, mail, afspraken, presentatie: 17-11; overige 16-11-pagina's: zie test/canva-neutraal-1211.test.js en test/affiliates-1711.test.js.
-  // automatiseren blijft 12-11. zapier-vs-make-vs-n8n blijft 10-11 (Make).
+  // automatiseren 17-11 (Zapier/n8n-bronlink). zapier-vs-make-vs-n8n blijft 10-11 (Make).
   for (const p of P) {
     const t = readFileSync(ROOT + p + '/index.html', 'utf8');
     assert.match(t, /"dateModified": "2026-10-30"/, p);

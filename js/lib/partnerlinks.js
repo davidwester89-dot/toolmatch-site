@@ -3,7 +3,10 @@
 // Make: direct programma (geen affiliatenetwerk), tracking via /en/register?pc=toolmatch. Geplaatst 9-11-2026.
 // Cal.com, Metricool, SimplyBook.me: directe programma's, goedgekeurd 10-11-2026 (partnerbestand). Geplaatst 17-11-2026.
 // Google Workspace/Gemini: Impact Advocate, goedgekeurd 10-11-2026. Reflink mQZoWo9 (share-medium DIRECT). Geen target=_blank, niet framen. Geplaatst 17-11-2026.
-// Canva, Power Automate, Copilot, Power BI en de twaalf vendors van 16-11 (ChatGPT, Claude, Le Chat, DeepL, Looker Studio, Google Cloud Translation, Calendly, Acuity, Albacross, Intercom, WordPress.org, Notuly) staan er bewust niet in: geen open affiliate; links blijven neutraal. Zapier, n8n en overige lopende/aanvraagbare merken blijven buiten deze lijst; hun bestaande knoppen wijzigen we nu niet.
+// Canva, Power Automate, Copilot, Power BI en de twaalf vendors van 16-11 (ChatGPT, Claude, Le Chat, DeepL, Looker Studio, Google Cloud Translation, Calendly, Acuity, Albacross, Intercom, WordPress.org, Notuly) staan er bewust niet in: geen open affiliate; links blijven neutraal.
+// 17-11: alles wat hier niet in staat, krijgt geen knop meer maar een neutrale bronlink (rel noopener, geen btn/data-cta/target/sponsored).
+// Dat geldt ook voor merken waarvan de aanvraag loopt of geblokkeerd is (o.a. Zapier, n8n, Tidio, tl;dv, Notta, Otter.ai, Trengo, Pitch, Fireflies, Amberscript);
+// zij krijgen pas weer een knop als hun partnerlink is goedgekeurd en hier staat (partnermanager-statuslog, 12-11-2026).
 export const PARTNERLINKS = {
   make: 'https://www.make.com/en/register?pc=toolmatch',
   calcom: 'https://refer.cal.com/toolmatch-egfa',
@@ -24,14 +27,19 @@ export const PARTNERLINKS_PAGINA = {
   wix: 'https://wix.pxf.io/c/7989613/2152480/25616?trafcat=wsb',
 };
 
-/** Uitgaande link: partnerlink (rel sponsored nofollow noopener, met label) als die er is, anders de officiële site.
- *  target is '_blank' behalve bij PARTNERLINKS_ZELFDE_TAB (leeg: geen target-attribuut, niet framen). */
+/** Uitgaande link: partnerlink (rel sponsored nofollow noopener, met label) als die er is, anders de officiële site als neutrale bronlink.
+ *  Partner: target is '_blank' behalve bij PARTNERLINKS_ZELFDE_TAB (leeg: geen target-attribuut, niet framen). Geen partner: nooit een target (17-11). */
 export function uitgaand(tool, partnerlinks = PARTNERLINKS) {
   const pl = partnerlinks[tool.id];
-  if (!pl) return { href: tool.url, rel: 'noopener', partner: false, target: '_blank' };
+  if (!pl) return { href: tool.url, rel: 'noopener', partner: false, target: '' };
   const zelfde = PARTNERLINKS_ZELFDE_TAB.includes(tool.id);
   return { href: pl, rel: 'sponsored nofollow noopener', partner: true, target: zelfde ? '' : '_blank' };
 }
+
+// Vóór 17-11 al neutraal (Canva t/m Notuly): de bronlink toont alleen de productnaam. Die weergave blijft byte-gelijk.
+export const NEUTRAAL_NAAM = ['canva', 'powerautomate', 'copilot', 'powerbi', 'chatgpt', 'claude', 'lechat', 'deepl', 'lookerstudio', 'googlecloudtranslate', 'calendly', 'acuity', 'albacross', 'intercom', 'wordpress', 'notuly'];
+/** Tekst van de neutrale bronlink voor een tool zonder goedgekeurde partnerlink (17-11: 'Bron: Merk'). */
+export const bronTekst = (tool) => (NEUTRAAL_NAAM.includes(tool.id) ? tool.naam : `Bron: ${tool.naam}`);
 
 // Partnerzin: geen label per knop, maar precies één korte zin direct na elk blok waarin een partnerlink staat
 // (rel sponsored). Werkt automatisch: staat er geen partnerlink in een blok, dan komt er ook geen zin.

@@ -1,7 +1,7 @@
-// Keuzehulp op /keuzehulp/. Logica in ./lib/match.js (getest); partnerlinks alleen voor de knop onder een resultaat.
+// Keuzehulp op /keuzehulp/. Logica in ./lib/match.js (getest); partnerlinks alleen voor de knop onder een resultaat; zonder goedgekeurde partnerlink een neutrale bronlink (17-11).
 import { match, normaliseer, VRAGEN } from './lib/match.js';
 import { DOELEN, GECONTROLEERD } from './lib/tools.js';
-import { uitgaand, metNoot } from './lib/partnerlinks.js';
+import { uitgaand, metNoot, bronTekst } from './lib/partnerlinks.js';
 import { logoImg } from './lib/logos.js';
 import { track } from './consent.js';
 
@@ -42,7 +42,7 @@ function kaart(r, n) {
   </dl>
   ${t.privacy ? `<p class="priv">${esc(t.privacy)}</p>` : ''}
   <p class="src">Bron: ${t.bronnen.map(([n2, u]) => `<a href="${esc(u)}" rel="noopener" target="_blank" aria-label="${esc(n2)} (opent in een nieuw tabblad)">${esc(n2)}</a>`).join(', ')} · gecontroleerd op ${datum}</p>
-  ${['canva', 'powerautomate', 'copilot', 'powerbi', 'chatgpt', 'claude', 'lechat', 'deepl', 'lookerstudio', 'googlecloudtranslate', 'calendly', 'acuity', 'albacross', 'intercom', 'wordpress', 'notuly'].includes(t.id) ? `<p class="go"><a href="${esc(t.url)}" rel="noopener">${esc(t.naam)}</a></p>` : `<p class="go"><a class="btn${n === 0 ? '' : ' ghost'}" href="${esc(o.href)}" rel="${o.rel}"${o.target ? ` target="${o.target}"` : ''} data-vendor="${esc(t.id)}" data-pos="${n + 1}" data-cta="${o.partner ? 'partner' : 'outbound'}" aria-label="${esc(knopLabel(t, { nieuwTabblad: Boolean(o.target) }))}">Naar de site van ${esc(t.vendor || t.naam)}</a></p>`}
+  ${!o.partner ? `<p class="go"><a href="${esc(t.url)}" rel="noopener">${esc(bronTekst(t))}</a></p>` : `<p class="go"><a class="btn${n === 0 ? '' : ' ghost'}" href="${esc(o.href)}" rel="${o.rel}"${o.target ? ` target="${o.target}"` : ''} data-vendor="${esc(t.id)}" data-pos="${n + 1}" data-cta="${o.partner ? 'partner' : 'outbound'}" aria-label="${esc(knopLabel(t, { nieuwTabblad: Boolean(o.target) }))}">Naar de site van ${esc(t.vendor || t.naam)}</a></p>`}
 </article>`;
 }
 

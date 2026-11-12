@@ -26,6 +26,11 @@ NOTULY_UPD={'/ai-notuleren/':'2026-10-30'}  # Notuly toegevoegd 30-10 (MM-OK): z
 LOGO_UPD={u:'2026-10-30' for u in ('/ai-afbeeldingen-en-ontwerp/','/ai-assistenten/','/ai-chatbot-website/','/ai-data-analyse/','/ai-mail-en-offertes/','/ai-notuleren/','/ai-tekst-schrijven/','/ai-vertalen/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/online-afspraken-plannen/','/social-media-inplannen/','/gids/wat-kosten-ai-abonnementen/','/vergelijken/chatgpt-vs-claude/','/vergelijken/chatgpt-vs-copilot/','/vergelijken/chatgpt-vs-gemini/','/vergelijken/zapier-vs-make-vs-n8n/')}  # logo's van aanbieders 30-10: zichtbare wijziging in de body, L7
 MAKE_UPD={'/automatiseren-zonder-code/':'2026-11-10','/vergelijken/zapier-vs-make-vs-n8n/':'2026-11-10'}  # register-URL 10-11 telt als bodywijziging (href in de vingerafdruk). datePublished blijft 2026-10-20.
 AFFILIATES_UPD='2026-11-17'
+# Onbetaalde CTA's neutraal 17-11 (alle merken zonder goedgekeurde partnerlink): pagina's met een bodywijziging in de 17-11-push.
+# /ai-data-analyse/, /ai-tekst-schrijven/ en /ai-vertalen/: bodywijziging uit 31926c9 gaat pas op 17-11 live (keten fdf037c→17-11), dus pushdatum.
+# Hubs (/vergelijken/, /gids/) niet tillen: geen kind gewijzigd.
+CTA_NEUTRAAL_UPD='2026-11-17'
+CTA_NEUTRAAL_PAD={u:CTA_NEUTRAAL_UPD for u in ('/ai-afbeeldingen-en-ontwerp/','/ai-chatbot-website/','/ai-notuleren/','/automatiseren-zonder-code/','/crm-klein-bedrijf/','/ai-data-analyse/','/ai-tekst-schrijven/','/ai-vertalen/')}
 AFFILIATES_PAD={'/online-afspraken-plannen/':AFFILIATES_UPD,'/social-media-inplannen/':AFFILIATES_UPD,'/ai-assistenten/':AFFILIATES_UPD,'/ai-mail-en-offertes/':AFFILIATES_UPD,'/ai-presentatie-maken/':AFFILIATES_UPD,'/keuzehulp/':AFFILIATES_UPD,'/privacy/':AFFILIATES_UPD}  # vier affiliate-CTA's 17-11 (L7); hubs niet tillen
 VERDER_GIDS=('/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')
 PRIJS_UPD={'/gids/ai-veilig-gebruiken/':'2026-10-30'}  # NL-IP-prijscheck 30-10: bronnen ChatGPT/Claude opnieuw bekeken (opt-out-claims nagelezen), L7
@@ -56,6 +61,7 @@ def nagelezen(t):
     b=sorted({BRON_BEKEKEN[u] for _,u in t['bronnen'] if u in BRON_BEKEKEN and BRON_BEKEKEN[u]!=kaartdatum(t)})
     return (f'; Nederlandse prijspagina bekeken op {d[0]}' if len(d)==1 else '')+(f'; prijspagina bekeken op {b[0]}' if len(b)==1 and not d else '')
 def byline(slug=None):
+    if slug in CTA_NEUTRAAL_PAD: return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 17 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # onbetaalde CTA's neutraal 17-11 (L7)
     if slug in AFFILIATES_PAD and slug not in ('/keuzehulp/','/privacy/','/ai-presentatie-maken/'): return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 17 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # affiliate-CTA 17-11 (L7)
     if slug in ('/ai-afbeeldingen-en-ontwerp/', '/ai-data-analyse/', '/ai-vertalen/', '/ai-tekst-schrijven/', '/ai-chatbot-website/', '/ai-notuleren/'): return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 16 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # CTA neutraal 16-11 (12 vendors, L7)
     if slug in ('/automatiseren-zonder-code/',): return '      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op 12 november 2026. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # geen nieuwe bodywijziging 16-11; blijft 12-11 (PA-CTA)
@@ -84,18 +90,19 @@ def knoplabel(t, nieuw_tabblad=True):
 
 def uit(t):
     # Geen open affiliate: neutrale bronlink, geen knop/CTA/sponsored (12-11 Canva/PA/Copilot/Power BI; 16-11 twaalf vendors).
-    # Zapier, n8n, HubSpot, Make en overige lopende/aanvraagbare merken blijven knoppen.
-    # Cal.com, Metricool, SimplyBook.me en Gemini: partnerlink (17-11). Gemini zonder target=_blank.
-    if t['id'] in ('canva', 'powerautomate', 'copilot', 'powerbi', 'chatgpt', 'claude', 'lechat', 'deepl', 'lookerstudio', 'googlecloudtranslate', 'calendly', 'acuity', 'albacross', 'intercom', 'wordpress', 'notuly'):
-        return f'<a href="{E(t["url"])}" rel="noopener">{E(t["naam"])}</a>'
+    # 17-11: elke tool zonder goedgekeurde partnerlink (PL) krijgt een neutrale bronlink 'Bron: Merk', ook lopende/aanvraagbare
+    # merken (Zapier, n8n, HubSpot, Pipedrive, Zoho, Tidio, Trengo, tl;dv, Notta, Otter.ai, Amberscript, Pitch, Buffer, Hootsuite).
+    # De 16 merken van 12-11/16-11 houden hun bestaande weergave (alleen de productnaam).
+    # Cal.com, Metricool, SimplyBook.me, Gemini en Make: partnerlink. Gemini zonder target=_blank.
     p=PL.get(t['id'])
-    if p:
-        zelfde=t['id'] in PL_ZELFDE
-        tgt='' if zelfde else ' target="_blank"'
-        zicht,aria=knoplabel(t, nieuw_tabblad=not zelfde)
-        return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener"{tgt} data-vendor="{t["id"]}" data-cta="partner" aria-label="{E(aria)}">{E(zicht)}</a>'
-    zicht,aria=knoplabel(t)
-    return f'<a class="btn ghost" href="{E(t["url"])}" rel="noopener" target="_blank" data-vendor="{t["id"]}" data-cta="outbound" aria-label="{E(aria)}">{E(zicht)}</a>'
+    if not p:
+        if t['id'] in ('canva', 'powerautomate', 'copilot', 'powerbi', 'chatgpt', 'claude', 'lechat', 'deepl', 'lookerstudio', 'googlecloudtranslate', 'calendly', 'acuity', 'albacross', 'intercom', 'wordpress', 'notuly'):
+            return f'<a href="{E(t["url"])}" rel="noopener">{E(t["naam"])}</a>'
+        return f'<a href="{E(t["url"])}" rel="noopener">Bron: {E(t["naam"])}</a>'
+    zelfde=t['id'] in PL_ZELFDE
+    tgt='' if zelfde else ' target="_blank"'
+    zicht,aria=knoplabel(t, nieuw_tabblad=not zelfde)
+    return f'<a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener"{tgt} data-vendor="{t["id"]}" data-cta="partner" aria-label="{E(aria)}">{E(zicht)}</a>'
 def partner_tekst(tid, txt):
     """Lichte partnerlink in lopende tekst. De partnerzin komt via met_noot direct onder het blok."""
     p=PL.get(tid)
@@ -383,7 +390,7 @@ for c in CAT:
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
     body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
     body+=verder_lezen(c['slug'])+faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
-    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":{'/automatiseren-zonder-code/':'2026-11-12','/ai-afbeeldingen-en-ontwerp/':'2026-11-16','/ai-assistenten/':'2026-11-17','/ai-data-analyse/':'2026-11-16','/ai-mail-en-offertes/':'2026-11-17','/ai-vertalen/':'2026-11-16','/ai-tekst-schrijven/':'2026-11-16','/ai-chatbot-website/':'2026-11-16','/online-afspraken-plannen/':'2026-11-17','/social-media-inplannen/':'2026-11-17','/ai-notuleren/':'2026-11-16'}.get(c['slug']) or MAKE_UPD.get(c['slug']) or (INBOUND_UPD.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
+    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":CTA_NEUTRAAL_PAD.get(c['slug']) or {'/automatiseren-zonder-code/':'2026-11-12','/ai-afbeeldingen-en-ontwerp/':'2026-11-16','/ai-assistenten/':'2026-11-17','/ai-data-analyse/':'2026-11-16','/ai-mail-en-offertes/':'2026-11-17','/ai-vertalen/':'2026-11-16','/ai-tekst-schrijven/':'2026-11-16','/ai-chatbot-website/':'2026-11-16','/online-afspraken-plannen/':'2026-11-17','/social-media-inplannen/':'2026-11-17','/ai-notuleren/':'2026-11-16'}.get(c['slug']) or MAKE_UPD.get(c['slug']) or (INBOUND_UPD.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
       crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
     zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)
@@ -749,7 +756,7 @@ body+='      <h2 id="tools">De tools</h2>\n'+met_noot('      <div class="results
 body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
 body+=f'      <p>Schrijf je de tekst eerst zelf? Bekijk dan de {L("/ai-tekst-schrijven/","AI-tools voor Nederlandse teksten")}.</p>\n'
 body+=faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
-graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":'2026-11-16'},
+graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":CTA_NEUTRAAL_PAD.get(c['slug'],'2026-11-16')},
   {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
   crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
 zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)

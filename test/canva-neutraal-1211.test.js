@@ -286,11 +286,14 @@ test('L7: pagina\'s van de 12 vendors (16-11) staan sinds de onbetaald-neutraal-
   const a = readFileSync(join(ROOT, 'ai-afbeeldingen-en-ontwerp/index.html'), 'utf8');
   assert.match(a, /"dateModified": "2026-11-18"/);
   assert.match(a, /bijgewerkt op 18 november 2026/);
-  for (const f of ['ai-data-analyse/index.html', 'ai-vertalen/index.html', 'ai-tekst-schrijven/index.html', 'ai-chatbot-website/index.html', 'ai-notuleren/index.html']) {
+  for (const f of ['ai-data-analyse/index.html', 'ai-vertalen/index.html', 'ai-tekst-schrijven/index.html', 'ai-notuleren/index.html']) {
     const h = readFileSync(join(ROOT, f), 'utf8');
     assert.match(h, /"dateModified": "2026-11-18"/, f);
     assert.match(h, /bijgewerkt op 18 november 2026/, f);
   }
+  const chatbot = readFileSync(join(ROOT, 'ai-chatbot-website/index.html'), 'utf8');
+  assert.match(chatbot, /"dateModified": "2026-11-19"/);
+  assert.match(chatbot, /bijgewerkt op 19 november 2026/);
   const site = readFileSync(join(ROOT, 'ai-website-maken/index.html'), 'utf8');
   assert.match(site, /"datePublished": "2026-10-27",\s*"dateModified": "2026-11-18"/);
   assert.match(site, /bijgewerkt op 18 november 2026/);

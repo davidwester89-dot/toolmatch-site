@@ -32,7 +32,7 @@ function paginas() {
 
 test('Make-partnerlink: href en rel op de vergelijking, de categoriepagina en de keuzehulp', () => {
   assert.equal(PARTNERLINKS.make, MAKE);
-  assert.deepEqual(Object.keys(PARTNERLINKS).sort(), ['calcom', 'gemini', 'make', 'metricool', 'simplybook']);
+  assert.deepEqual(Object.keys(PARTNERLINKS).sort(), ['calcom', 'gemini', 'make', 'metricool', 'simplybook', 'trengo']);
   assert.equal(PARTNER_NOOT, NOOT);
 
   const knop = vs.match(/<p class="go"><a class="btn ghost" href="([^"]*)" rel="([^"]*)" target="_blank" data-vendor="make" data-cta="partner" aria-label="([^"]*)">([^<]*)<\/a><\/p>\n      <p class="pnoot">([^<]*)<\/p>/);
@@ -114,8 +114,8 @@ test('Make-partnerlink: volgorde en datums blijven', () => {
   assert.match(vs, /bijgewerkt op 10 november 2026/);
   assert.match(auto, /"dateModified": "2026-11-18"/);  // 18-11 nuchter-stijlronde (Zapier/n8n-bronlink blijft)
   assert.match(auto, /bijgewerkt op 18 november 2026/);
-  assert.match(kh, /"dateModified": "2026-11-18"/);
-  assert.match(kh, /bijgewerkt op 18 november 2026/);
+  assert.match(kh, /"dateModified": "2026-11-19"/);
+  assert.match(kh, /bijgewerkt op 19 november 2026/);
   const hub = readFileSync('vergelijken/index.html', 'utf8');
   assert.match(hub, /"dateModified": "2026-11-10"/);
   assert.match(hub, /bijgewerkt op 10 november 2026/);
@@ -127,7 +127,7 @@ test('Make-partnerlink: volgorde en datums blijven', () => {
   assert.ok(sm.includes('<loc>https://toolmatch.nl/vergelijken/zapier-vs-make-vs-n8n/</loc><lastmod>2026-11-10</lastmod>'));
   assert.ok(sm.includes('<loc>https://toolmatch.nl/automatiseren-zonder-code/</loc><lastmod>2026-11-18</lastmod>'));
   assert.ok(sm.includes('<loc>https://toolmatch.nl/vergelijken/</loc><lastmod>2026-11-10</lastmod>'));
-  assert.ok(sm.includes('<loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>2026-11-18</lastmod>'));
+  assert.ok(sm.includes('<loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>2026-11-19</lastmod>'));
   assert.ok(sm.includes('<loc>https://toolmatch.nl/privacy/</loc><lastmod>2026-11-17</lastmod>'));
   assert.ok(sm.includes('<loc>https://toolmatch.nl/partnerlinks/</loc><lastmod>2026-10-28</lastmod>'));
   assert.ok(sm.includes('<loc>https://toolmatch.nl/gids/</loc><lastmod>2026-11-10</lastmod>'));

@@ -1,5 +1,16 @@
 import json, html, os, re, subprocess
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MAANDEN_NL=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december']
+def BUILD_ISO():
+    # L7: PUSH_DATE/BUILD_DATE bij de check; zonder env de geplande dag (19-11, na livecheck abbdcf6).
+    return os.environ.get('BUILD_DATE') or os.environ.get('PUSH_DATE') or '2026-11-19'
+def BUILD_NL():
+    y,m,d=BUILD_ISO().split('-')
+    return f"{int(d)} {MAANDEN_NL[int(m)-1]} {y}"
+# Trengo-partnerlink: alleen pagina's met een echte wijziging in deze hash.
+# /ai-chatbot-website/: body (knop + partnerzin). /keuzehulp/: client-side via partnerlinks.js.
+# Hubs niet tillen. lastmod gaat niet achteruit (beide stonden op 18-11).
+TRENGO_PAD=('/ai-chatbot-website/','/keuzehulp/')
 os.chdir(ROOT)
 D='https://toolmatch.nl'
 CSP='''<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; base-uri 'self'; form-action 'self'; object-src 'none'">'''
@@ -336,6 +347,7 @@ LASTMOD.update(CANVA_PAD)  # /gids/canva-voor-ondernemers/ + hub + inbound ontwe
 LASTMOD.update(CANVA_NEUTRAAL_PAD)  # Canva + Power Automate-CTA neutraal: ontwerp, presentatie, keuzehulp, automatiseren 12-11; /gids/ niet tillen
 LASTMOD.update(AFFILIATES_PAD)  # vier affiliate-CTA's 17-11 (Cal.com, Metricool, SimplyBook.me, Gemini); hubs niet tillen
 LASTMOD.update(CTA_NEUTRAAL_PAD); LASTMOD.update({u:WL_UPD[u] for u in WL_UPD})  # onbetaalde CTA's neutraal 17-11 (L7); hubs niet tillen
+LASTMOD.update({u:BUILD_ISO() for u in TRENGO_PAD})  # Trengo-partnerlink: alleen body/client-wijziging; datum = BUILD_DATE (nuchter_datums bewaart later via max)
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')
 
 # GitHub Pages: vaste alias, geen artikel en niet in de sitemap.

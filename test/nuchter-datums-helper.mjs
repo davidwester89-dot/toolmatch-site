@@ -22,7 +22,10 @@ export const STIJL_PADEN = new Set([
   "/vergelijken/chatgpt-vs-copilot/",
   "/websitebezoekers-herkennen/"
 ]);
-export const revisieDatum = (pad, vorige) => STIJL_PADEN.has(pad) ? '2026-11-18' : vorige;
+// Trengo-partnerlink 19-11: alleen de twee pagina's met een nieuwe body-/clientwijziging.
+export const TRENGO_DATUM = '2026-11-19';
+export const TRENGO_PADEN = new Set(['/ai-chatbot-website/', '/keuzehulp/']);
+export const revisieDatum = (pad, vorige) => TRENGO_PADEN.has(pad) ? TRENGO_DATUM : (STIJL_PADEN.has(pad) ? '2026-11-18' : vorige);
 
 const STIJL_REGELS = new Map([
   [

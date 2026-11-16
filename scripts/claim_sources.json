@@ -3004,7 +3004,7 @@
         ]
       },
       {
-        "unit": 50,
+        "unit": 51,
         "tag": "li",
         "kind": "reviewed multi-provider body/FAQ claim",
         "before": "<strong>Kijk hoe er gerekend wordt.</strong> Intercom noemt op de prijspagina naast een prijs per gebruiker ook een bedrag per opgeloste vraag van de AI-agent Fin. Trengo heeft een maandprijs met 10 gebruikers inbegrepen.",
@@ -3015,7 +3015,7 @@
         ]
       },
       {
-        "unit": 57,
+        "unit": 58,
         "tag": "p",
         "kind": "reviewed multi-provider body/FAQ claim",
         "before": "Trengo Boost kost €299 per maand bij jaarbetaling, met 10 gebruikers. Bij Tidio Starter en Intercom Essential (per gebruiker, plus een bedrag per opgeloste Fin-vraag) zie je het bedrag op de prijspagina van de aanbieder. Zie de bronnen.",

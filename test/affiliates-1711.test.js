@@ -36,7 +36,7 @@ test('PARTNERLINKS: vier affiliates met exacte reflinks, Gemini in zelfde tab', 
   assert.equal(PARTNERLINKS.simplybook, URLS.simplybook);
   assert.equal(PARTNERLINKS.gemini, URLS.gemini);
   assert.equal(PARTNERLINKS.make, 'https://www.make.com/en/register?pc=toolmatch');
-  assert.deepEqual(Object.keys(PARTNERLINKS).sort(), ['calcom', 'gemini', 'make', 'metricool', 'simplybook']);
+  assert.deepEqual(Object.keys(PARTNERLINKS).sort(), ['calcom', 'gemini', 'make', 'metricool', 'simplybook', 'trengo']);
   assert.deepEqual(PARTNERLINKS_ZELFDE_TAB, ['gemini']);
 
   const cal = TOOLS.find((t) => t.id === 'calcom');
@@ -130,7 +130,7 @@ test('L7 17-11: alleen pagina\'s met bodywijziging; hubs niet gelift; lastmod ni
     '/ai-assistenten/': '2026-11-18',
     '/ai-mail-en-offertes/': '2026-11-18',
     '/ai-presentatie-maken/': '2026-11-18',
-    '/keuzehulp/': '2026-11-18',
+    '/keuzehulp/': '2026-11-19',
     '/privacy/': '2026-11-17',
   };
   const stayed = {
@@ -139,7 +139,7 @@ test('L7 17-11: alleen pagina\'s met bodywijziging; hubs niet gelift; lastmod ni
     '/ai-data-analyse/': '2026-11-18',
     '/ai-vertalen/': '2026-11-18',
     '/ai-tekst-schrijven/': '2026-11-18',
-    '/ai-chatbot-website/': '2026-11-18',
+    '/ai-chatbot-website/': '2026-11-19',
     '/ai-notuleren/': '2026-11-18',
     '/ai-website-maken/': '2026-11-18',
     '/websitebezoekers-herkennen/': '2026-11-18',
@@ -169,7 +169,7 @@ test('L7 17-11: alleen pagina\'s met bodywijziging; hubs niet gelift; lastmod ni
     ['ai-assistenten/index.html', /"dateModified": "2026-11-18"/, /bijgewerkt op 18 november 2026/],
     ['ai-mail-en-offertes/index.html', /"dateModified": "2026-11-18"/, /bijgewerkt op 18 november 2026/],
     ['ai-presentatie-maken/index.html', /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-18"/, /bijgewerkt op <time datetime="2026-11-18">18 november 2026<\/time>/],
-    ['keuzehulp/index.html', /"dateModified": "2026-11-18"/, /bijgewerkt op 18 november 2026/],
+    ['keuzehulp/index.html', /"dateModified": "2026-11-19"/, /bijgewerkt op 19 november 2026/],
     ['privacy/index.html', /"dateModified": "2026-11-17"/, /bijgewerkt op 17 november 2026/],
   ];
   for (const [f, dm, bij] of vis) {

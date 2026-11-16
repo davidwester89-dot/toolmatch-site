@@ -19,7 +19,7 @@ const amp = (u) => u.replace(/&/g, '&amp;');
 const BETAALD = new Set([...Object.values(PARTNERLINKS), ...Object.values(PARTNERLINKS_PAGINA)].map(amp));
 const CTA = /class="[^"]*\bbtn\b|role="button"|data-cta=|data-vendor=|data-pos=|rel="[^"]*\bsponsored\b|[?&](utm_|ref=)/i;
 const href = (tag) => (tag.match(/href="([^"]*)"/) || [])[1];
-const NEUTRAAL_1711 = ['amberscript', 'fireflies', 'n8n', 'notta', 'otter', 'pitch', 'tidio', 'tldv', 'trengo', 'zapier', 'hubspot', 'pipedrive', 'zoho', 'buffer', 'hootsuite'];
+const NEUTRAAL_1711 = ['amberscript', 'fireflies', 'n8n', 'notta', 'otter', 'pitch', 'tidio', 'tldv', 'zapier', 'hubspot', 'pipedrive', 'zoho', 'buffer', 'hootsuite'];
 
 /** Fouten: elke CTA-achtige <a> in html waarvan de href geen goedgekeurde partnerlink is. */
 export function onbetaaldeCtas(html) {
@@ -88,13 +88,13 @@ test('statisch: elke knop/data-cta/data-vendor/sponsored-link op de site is een 
     assert.doesNotMatch(src, /data-cta="outbound"/, f);
   }
   assert.equal(fout.join('\n'), '', fout.join('\n'));
-  assert.equal(betaald, 10, 'betaalde links: Make 2×, Hostinger, Wix, Cal.com, SimplyBook.me, Metricool, Gemini 3×');
+  assert.equal(betaald, 11, 'betaalde links: Make 2×, Hostinger, Wix, Cal.com, SimplyBook.me, Metricool, Gemini 3×, Trengo');
 });
 
-test('17-11 geneutraliseerde merken: Bron-link op de kaart, geen knop; partnerlijst ongewijzigd', () => {
+test('17-11 geneutraliseerde merken: Bron-link op de kaart, geen knop; Trengo is sindsdien partner', () => {
   const pages = {
     'ai-notuleren/index.html': ['amberscript', 'notta', 'otter', 'tldv'],
-    'ai-chatbot-website/index.html': ['tidio', 'trengo'],
+    'ai-chatbot-website/index.html': ['tidio'],
     'automatiseren-zonder-code/index.html': ['n8n', 'zapier'],
     'ai-afbeeldingen-en-ontwerp/index.html': ['pitch'],
     'crm-klein-bedrijf/index.html': ['hubspot', 'pipedrive', 'zoho'],
@@ -119,14 +119,14 @@ test('17-11 geneutraliseerde merken: Bron-link op de kaart, geen knop; partnerli
     assert.deepEqual(o, { href: TOOLS.find((x) => x.id === id).url, rel: 'noopener', partner: false, target: '' }, id);
     assert.ok(!NEUTRAAL_NAAM.includes(id));
   }
-  assert.deepEqual(Object.keys(PARTNERLINKS).sort(), ['calcom', 'gemini', 'make', 'metricool', 'simplybook']);
+  assert.deepEqual(Object.keys(PARTNERLINKS).sort(), ['calcom', 'gemini', 'make', 'metricool', 'simplybook', 'trengo']);
   assert.equal(PARTNERLINKS.simplybook, 'https://simplybook.me?ref=dave_west_fd136');
   assert.equal(PARTNERLINKS.gemini, 'https://sharegoogleworkspace.advocate.impact.com/mQZoWo9');
+  assert.equal(PARTNERLINKS.trengo, 'https://trengo.com/getdemo?kfl_ln=matchcheck-toolmatch');
   for (const [id, u] of Object.entries({ ...PARTNERLINKS, ...PARTNERLINKS_PAGINA })) if (id !== 'simplybook') assert.doesNotMatch(u, /dave/i, id);
   const ouder = (p) => execFileSync('git', ['show', `${PARENT}:${p}`], { cwd: ROOT, encoding: 'utf8' });
   const blok = (s, naam) => (s.match(new RegExp(`export const ${naam} = \\{[\\s\\S]*?\\};`)) || [])[0];
   const pl = readFileSync(join(ROOT, 'js/lib/partnerlinks.js'), 'utf8');
-  assert.equal(blok(pl, 'PARTNERLINKS'), blok(ouder('js/lib/partnerlinks.js'), 'PARTNERLINKS'));
   assert.equal(blok(pl, 'PARTNERLINKS_PAGINA'), blok(ouder('js/lib/partnerlinks.js'), 'PARTNERLINKS_PAGINA'));
   // Stijlrelease 18-11 voegt alleen CFG.bodyOnlyHubs toe (geen datumvrijstelling); ALLOW_NAME, exempt en BEKEND_* blijven byte-gelijk.
   const BODY_ONLY = '  // Geen datumlift door alleen een gewijzigd kind; bij eigen body geldt de gewone L7-plicht.\n  bodyOnlyHubs: ["/gids/", "/vergelijken/"],\n';

@@ -5,14 +5,16 @@
 // Google Workspace/Gemini: Impact Advocate, goedgekeurd 10-11-2026. Reflink mQZoWo9 (share-medium DIRECT). Geen target=_blank, niet framen. Geplaatst 17-11-2026.
 // Canva, Power Automate, Copilot, Power BI en de twaalf vendors van 16-11 (ChatGPT, Claude, Le Chat, DeepL, Looker Studio, Google Cloud Translation, Calendly, Acuity, Albacross, Intercom, WordPress.org, Notuly) staan er bewust niet in: geen open affiliate; links blijven neutraal.
 // 17-11: alles wat hier niet in staat, krijgt geen knop meer maar een neutrale bronlink (rel noopener, geen btn/data-cta/target/sponsored).
-// Dat geldt ook voor merken waarvan de aanvraag loopt of geblokkeerd is (o.a. Zapier, n8n, Tidio, tl;dv, Notta, Otter.ai, Trengo, Pitch, Fireflies, Amberscript);
+// Dat geldt ook voor merken waarvan de aanvraag loopt of geblokkeerd is (o.a. Zapier, n8n, Tidio, tl;dv, Notta, Otter.ai, Pitch, Fireflies, Amberscript);
 // zij krijgen pas weer een knop als hun partnerlink is goedgekeurd en hier staat (partnermanager-statuslog, 12-11-2026).
+// Trengo: eigen programma, MM-OK 16-11-2026. Trackinglink /getdemo?kfl_ln=matchcheck-toolmatch (90 dagen cookie, last-click). Geplaatst 19-11-2026 (herbouw op b9e47c3). Dessa niet geplaatst.
 export const PARTNERLINKS = {
   make: 'https://www.make.com/en/register?pc=toolmatch',
   calcom: 'https://refer.cal.com/toolmatch-egfa',
   metricool: 'https://i.mtr.cool/toolmatch',
   simplybook: 'https://simplybook.me?ref=dave_west_fd136',
   gemini: 'https://sharegoogleworkspace.advocate.impact.com/mQZoWo9',
+  trengo: 'https://trengo.com/getdemo?kfl_ln=matchcheck-toolmatch',
 };
 
 // Partnerlinks die niet in een nieuw tabblad mogen openen en niet in een iframe horen (Google Workspace/Gemini, Impact Advocate).

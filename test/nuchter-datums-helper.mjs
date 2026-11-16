@@ -23,9 +23,22 @@ export const STIJL_PADEN = new Set([
   "/websitebezoekers-herkennen/"
 ]);
 // 19-11: Trengo-partnerlink (twee pagina's) + Canva-gids (privacy-URL-fix, body al in b9e47c3). Hub /gids/ blijft 10-11.
+// Extra: inlinks naar /boekingssysteem-salon/ tillen /online-afspraken-plannen/ (keuzehulp stond al op 19-11 via Trengo).
 export const TRENGO_DATUM = '2026-11-19';
 export const TRENGO_PADEN = new Set(['/ai-chatbot-website/', '/keuzehulp/', '/gids/canva-voor-ondernemers/']);
-export const revisieDatum = (pad, vorige) => TRENGO_PADEN.has(pad) ? TRENGO_DATUM : (STIJL_PADEN.has(pad) ? '2026-11-18' : vorige);
+export const LATERE_REVISIE = {
+  '/online-afspraken-plannen/': '2026-11-19',
+};
+export const revisieDatum = (pad, vorige) => {
+  const kandidaten = [vorige, STIJL_PADEN.has(pad) ? '2026-11-18' : null, TRENGO_PADEN.has(pad) ? TRENGO_DATUM : null, LATERE_REVISIE[pad]].filter(Boolean);
+  return kandidaten.sort().at(-1);
+};
+export const revisieDatumZichtbaar = (pad, vorige) => {
+  const d = revisieDatum(pad, vorige);
+  const [y, m, day] = d.split('-');
+  const maanden = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+  return `${Number(day)} ${maanden[Number(m) - 1]} ${y}`;
+};
 
 const STIJL_REGELS = new Map([
   [

@@ -1,12 +1,13 @@
-// L7 19-11: alleen /gids/canva-voor-ondernemers/ krijgt de pushdatum voor de
-// privacy-URL-fix (body al in b9e47c3). datePublished blijft 10-11. Hub /gids/ niet tillen.
+// L7 19-11: Canva-gids (privacy-URL-fix, body al in b9e47c3), Trengo-pagina's,
+// plus /boekingssysteem-salon/ en inlink op /online-afspraken-plannen/.
+// datePublished Canva blijft 10-11. Hub /gids/ niet tillen.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const PAD = '/gids/canva-voor-ondernemers/';
 const D = '2026-11-19';
-const VERWACHT_1911 = new Set(['/ai-chatbot-website/', '/keuzehulp/', PAD]);
+const VERWACHT_1911 = new Set(['/ai-chatbot-website/', '/keuzehulp/', PAD, '/boekingssysteem-salon/', '/online-afspraken-plannen/']);
 
 test('Canva-gids: datePublished blijft 10-11; dateModified, bijgewerkt en lastmod zijn 19-11', () => {
   const h = readFileSync('gids/canva-voor-ondernemers/index.html', 'utf8');
@@ -16,7 +17,7 @@ test('Canva-gids: datePublished blijft 10-11; dateModified, bijgewerkt en lastmo
   assert.ok(sm.includes(`<loc>https://toolmatch.nl${PAD}</loc><lastmod>${D}</lastmod>`));
 });
 
-test('L7 19-11: alleen de drie gewijzigde pagina’s hebben lastmod 19-11; hub /gids/ blijft 10-11', () => {
+test('L7 19-11: lastmod 19-11 alleen op de gewijzigde pagina’s (Canva, Trengo, salon + inlink); hub /gids/ blijft 10-11', () => {
   const sm = readFileSync('sitemap.xml', 'utf8');
   const last19 = [...sm.matchAll(/<loc>https:\/\/toolmatch\.nl([^<]*)<\/loc><lastmod>2026-11-19<\/lastmod>/g)].map((m) => m[1]);
   assert.deepEqual(last19.sort(), [...VERWACHT_1911].sort());

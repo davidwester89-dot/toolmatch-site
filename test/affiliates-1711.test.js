@@ -1,4 +1,4 @@
-import { revisieDatum, normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
+import { revisieDatum, revisieDatumZichtbaar, normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
 // Vier goedgekeurde affiliate-links (17-11): Cal.com, Metricool, SimplyBook.me, Google Workspace/Gemini.
 // Alleen bestaande CTA's, via PARTNERLINKS. Ranking identiek (match.js/tools.js ongewijzigd).
 // Gemini: geen target=_blank, niet framen. Bron-/prijslinks blijven gewone links.
@@ -125,12 +125,12 @@ test('Gemini-partnerlink: nergens target=_blank of iframe; keuzehulp volgt uitga
 test('L7 17-11: alleen pagina\'s met bodywijziging; hubs niet gelift; lastmod niet achteruit', () => {
   const sm = readFileSync('sitemap.xml', 'utf8');
   const lifted = {
-    '/online-afspraken-plannen/': '2026-11-18',
+    '/online-afspraken-plannen/': revisieDatum('/online-afspraken-plannen/', '2026-11-18'),
     '/social-media-inplannen/': '2026-11-17',
     '/ai-assistenten/': '2026-11-18',
     '/ai-mail-en-offertes/': '2026-11-18',
     '/ai-presentatie-maken/': '2026-11-18',
-    '/keuzehulp/': '2026-11-19',
+    '/keuzehulp/': revisieDatum('/keuzehulp/', '2026-11-18'),
     '/privacy/': '2026-11-17',
   };
   const stayed = {
@@ -164,12 +164,12 @@ test('L7 17-11: alleen pagina\'s met bodywijziging; hubs niet gelift; lastmod ni
   }
 
   const vis = [
-    ['online-afspraken-plannen/index.html', /"dateModified": "2026-11-18"/, /bijgewerkt op 18 november 2026/],
+    ['online-afspraken-plannen/index.html', new RegExp(`"dateModified": "${revisieDatum('/online-afspraken-plannen/', '2026-11-18')}"`), new RegExp(`bijgewerkt op ${revisieDatumZichtbaar('/online-afspraken-plannen/', '2026-11-18')}`)],
     ['social-media-inplannen/index.html', /"dateModified": "2026-11-17"/, /bijgewerkt op 17 november 2026/],
     ['ai-assistenten/index.html', /"dateModified": "2026-11-18"/, /bijgewerkt op 18 november 2026/],
     ['ai-mail-en-offertes/index.html', /"dateModified": "2026-11-18"/, /bijgewerkt op 18 november 2026/],
     ['ai-presentatie-maken/index.html', /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-18"/, /bijgewerkt op <time datetime="2026-11-18">18 november 2026<\/time>/],
-    ['keuzehulp/index.html', /"dateModified": "2026-11-19"/, /bijgewerkt op 19 november 2026/],
+    ['keuzehulp/index.html', new RegExp(`"dateModified": "${revisieDatum('/keuzehulp/', '2026-11-18')}"`), new RegExp(`bijgewerkt op ${revisieDatumZichtbaar('/keuzehulp/', '2026-11-18')}`)],
     ['privacy/index.html', /"dateModified": "2026-11-17"/, /bijgewerkt op 17 november 2026/],
   ];
   for (const [f, dm, bij] of vis) {

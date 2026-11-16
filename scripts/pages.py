@@ -58,7 +58,7 @@ KH=f'''    <div class="kh-wrap">
 {FORM}    </div>
     <div class="prose wide">
       <h2 id="zo-werkt-het">Zo werkt de keuzehulp</h2>
-      <p>Je antwoorden geven punten. Een tool die gemaakt is voor jouw doel krijgt de meeste punten, een tool die het als bijfunctie kan minder. Daarna tellen een gratis versie of een lage prijs mee als je budget klein is, een teamabonnement als je met meer mensen werkt, opslag in de EU als je dat belangrijk vindt, en hoe makkelijk je ermee start. Bij gelijke punten staan de tools op alfabetische volgorde.</p>
+      <p>Je antwoorden geven punten. Een tool die gemaakt is voor jouw doel krijgt de meeste punten, een tool die het als bijfunctie kan minder. Daarna tellen een gratis versie of een lage prijs mee als je budget klein is, een teamabonnement als je met meer mensen werkt, opslag in de EU als je dat belangrijk vindt, en hoe makkelijk je ermee start. Bij gelijke punten staan de tools op alfabetische volgorde. Zoek je een boekingssysteem voor een kapsalon of beautysalon? De keuzehulp is een eerste selectie. Voor no-shows, aanbetaling en boeken via je website of Google staat een aparte uitleg op <a href="/boekingssysteem-salon/">boekingssysteem salon</a>.</p>
       <ul>
         <li><strong>Geen invloed van vergoedingen.</strong> De berekening kent geen partnerlinks. Staat er onder een resultaat ooit een partnerlink, dan wordt dat bij de knoppen vermeld en verandert de volgorde niet. Lees meer over <a href="/partnerlinks/">partnerlinks</a>.</li>
         <li><strong>Alleen wat we konden controleren.</strong> Prijzen en privacygegevens komen van de site van de aanbieder. Konden we iets niet bevestigen, dan staat er "niet gecontroleerd" en telt het niet als pluspunt.</li>

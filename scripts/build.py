@@ -348,6 +348,7 @@ LASTMOD['/privacy/']='2026-11-09'  # directe partnerlink naast Daisycon (L7, 9-1
 LASTMOD.update(CANVA_PAD)  # /gids/canva-voor-ondernemers/ + hub + inbound ontwerp 10-11 (L7)
 LASTMOD.update(CANVA_NEUTRAAL_PAD)  # Canva + Power Automate-CTA neutraal: ontwerp, presentatie, keuzehulp, automatiseren 12-11; /gids/ niet tillen
 LASTMOD.update(AFFILIATES_PAD)  # vier affiliate-CTA's 17-11 (Cal.com, Metricool, SimplyBook.me, Gemini); hubs niet tillen
+LASTMOD.update(SALON_INLINK_PAD)  # inlink naar /boekingssysteem-salon/ vanaf afspraken + keuzehulp 19-11 (L7)
 LASTMOD.update(CTA_NEUTRAAL_PAD); LASTMOD.update({u:WL_UPD[u] for u in WL_UPD})  # onbetaalde CTA's neutraal 17-11 (L7); hubs niet tillen
 LASTMOD.update({u:BUILD_ISO() for u in TRENGO_PAD})  # Trengo-partnerlink: alleen body/client-wijziging; datum = BUILD_DATE (nuchter_datums bewaart later via max)
 LASTMOD[CANVA]=BUILD_ISO()  # Canva-gids: privacy-URL-fix live op 19-11; alleen deze pagina, hub /gids/ niet tillen

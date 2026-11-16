@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dateFields, readSitemap } from '../scripts/l7check.mjs';
 import { STIJL_PADEN, revisieDatum } from './nuchter-datums-helper.mjs';
-test('stijlrelease 18-11: exacte bijgewerkt-/lastmod-/dateModified-datums, uitsluitend op de vastgelegde pagina’s', () => {
+test('stijlrelease 18-11: bijgewerkt-/lastmod-/dateModified-datums, uitsluitend op de vastgelegde pagina’s (vloer 18-11; latere inhoudelijke revisie mag hoger)', () => {
   const out = '.';
   const sitemap = readSitemap(out);
   for (const pad of STIJL_PADEN) {

@@ -274,7 +274,8 @@ test('L7: automatiseren 17-11 (Zapier/n8n-bronlink); gids, /gids/ en vs-Make bli
   assert.match(auto, /"dateModified": "2026-11-18"/);
   assert.match(auto, /bijgewerkt op 18 november 2026/);
   const gids = readFileSync(join(ROOT, 'gids/canva-voor-ondernemers/index.html'), 'utf8');
-  assert.match(gids, /"datePublished": "2026-11-10",\s*"dateModified": "2026-11-18"/);
+  const d = revisieDatum('/gids/canva-voor-ondernemers/', '2026-11-18');
+  assert.match(gids, new RegExp(`"datePublished": "2026-11-10",\\s*"dateModified": "${d}"`));
 });
 
 test('L7: pagina\'s van de 12 vendors (16-11) staan sinds de onbetaald-neutraal-hash op 17-11 (eigen bodywijziging of zelfde push); hubs niet gelift', () => {

@@ -348,6 +348,7 @@ LASTMOD.update(CANVA_NEUTRAAL_PAD)  # Canva + Power Automate-CTA neutraal: ontwe
 LASTMOD.update(AFFILIATES_PAD)  # vier affiliate-CTA's 17-11 (Cal.com, Metricool, SimplyBook.me, Gemini); hubs niet tillen
 LASTMOD.update(CTA_NEUTRAAL_PAD); LASTMOD.update({u:WL_UPD[u] for u in WL_UPD})  # onbetaalde CTA's neutraal 17-11 (L7); hubs niet tillen
 LASTMOD.update({u:BUILD_ISO() for u in TRENGO_PAD})  # Trengo-partnerlink: alleen body/client-wijziging; datum = BUILD_DATE (nuchter_datums bewaart later via max)
+LASTMOD[CANVA]=BUILD_ISO()  # Canva-gids: privacy-URL-fix live op 19-11; alleen deze pagina, hub /gids/ niet tillen
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')
 
 # GitHub Pages: vaste alias, geen artikel en niet in de sitemap.

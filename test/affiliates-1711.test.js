@@ -144,7 +144,7 @@ test('L7 17-11: alleen pagina\'s met bodywijziging; hubs niet gelift; lastmod ni
     '/ai-website-maken/': '2026-11-18',
     '/websitebezoekers-herkennen/': '2026-11-18',
     '/gids/': '2026-11-10',
-    '/gids/canva-voor-ondernemers/': '2026-11-18',
+    '/gids/canva-voor-ondernemers/': '2026-11-19',
     '/gids/wat-kosten-ai-abonnementen/': '2026-10-30',
     '/vergelijken/': '2026-11-10',
     '/vergelijken/chatgpt-vs-gemini/': '2026-10-30',

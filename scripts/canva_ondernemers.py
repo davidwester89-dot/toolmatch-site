@@ -6,6 +6,8 @@
 # Geen betaald Canva-affiliate: informatieve gids zonder commerciële CTA; alleen feitelijke bronlinks. /ai-presentatie-maken/ blijft multi-tool.
 CANVA='/gids/canva-voor-ondernemers/'
 CANVA_UPD='2026-11-10'
+# Privacy-URL-fix (b9e47c3) gaat op 19-11 live: dateModified en zichtbaar bijgewerkt volgen BUILD_DATE (standaard 19-11). datePublished blijft 10-11. Hub /gids/ niet tillen.
+CANVA_MOD=BUILD_ISO()
 # nieuwe pagina + hub /gids/ (nieuw kind) + inbound op ontwerp-hub (zichtbare wijziging, L7)
 CANVA_PAD={CANVA:CANVA_UPD,'/gids/':CANVA_UPD,'/ai-afbeeldingen-en-ontwerp/':CANVA_UPD,'/keuzehulp/':CANVA_UPD}
 # CTA-neutralisatie 12-11 (Canva, Power Automate, Copilot, Power BI): alleen pagina's met bodywijziging. Hubs niet tillen.
@@ -88,8 +90,8 @@ CANVA_BODY=f'''      <h2 id="free-vs-pro">Free vs Pro: wat je als zzp’er merkt
 _ct='Canva voor ondernemers: Free vs Pro en prijzen'
 _cd='Canva Free vs Pro voor zzp’ers: templates, merkkit, prijzen in euro van Canva, en wanneer Copilot of Gemini genoeg is voor social en presentaties.'
 _ch1='Canva voor ondernemers: Free vs Pro en wat het kost'
-_cb=CANVA_BODY+faq_html(CANVA_FAQ)+canva_bronnen(CANVA_BRON)+f'      <p class="note">Redactie ToolMatch · bijgewerkt op <time datetime="{CANVA_UPD}">10 november 2026</time></p>\n'
-_cg=[{"@type":"Article","@id":D+CANVA+"#artikel","headline":_ch1,"description":_cd,"inLanguage":"nl-NL","url":D+CANVA,"mainEntityOfPage":D+CANVA,"datePublished":CANVA_UPD,"dateModified":CANVA_UPD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
+_cb=CANVA_BODY+faq_html(CANVA_FAQ)+canva_bronnen(CANVA_BRON)+f'      <p class="note">Redactie ToolMatch · bijgewerkt op <time datetime="{CANVA_MOD}">{BUILD_NL()}</time></p>\n'
+_cg=[{"@type":"Article","@id":D+CANVA+"#artikel","headline":_ch1,"description":_cd,"inLanguage":"nl-NL","url":D+CANVA,"mainEntityOfPage":D+CANVA,"datePublished":CANVA_UPD,"dateModified":CANVA_MOD,"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
   crumbs_ld([('Home','/'),('Gidsen','/gids/'),('Canva voor ondernemers',CANVA)]),faq_ld(CANVA,CANVA_FAQ)]
 write(CANVA.strip('/')+'/index.html',page(CANVA,_ct,_cd,'Canva voor ondernemers',_ch1,'Free of Pro voor je bedrijf? Templates, merkkit en prijzen in euro van Canva, plus wanneer Copilot of Gemini genoeg is.',_cb,wide=True,extra=ldscript(_cg)))
 SPOKES.append(CANVA)

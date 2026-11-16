@@ -55,12 +55,12 @@ test('canva-ondernemers: alleen feitelijke Canva-bronlinks, geen commerciële CT
   const inlineLinks = canvaLinks.filter(([tag]) => tag.includes('class="claim-source"'));
   assert.ok(inlineLinks.length > 0, 'gecontroleerde inline bronlinks op claims');
   for (const [tag, url] of inlineLinks) {
-    assert.ok(['https://www.canva.com/nl_nl/abonnementen/', 'https://www.canva.com/nl_nl/policies/privacy-policy/'].includes(url));
+    assert.ok(['https://www.canva.com/nl_nl/abonnementen/', 'https://www.canva.com/policies/privacy-policy/'].includes(url));
     assert.doesNotMatch(tag, /sponsored|data-cta=|data-vendor=|role="button"/);
   }
   assert.deepEqual(originalLinks.map((m) => m[1]), [
     'https://www.canva.com/nl_nl/abonnementen/',
-    'https://www.canva.com/nl_nl/policies/privacy-policy/',
+    'https://www.canva.com/policies/privacy-policy/',
   ]);
   for (const [tag] of originalLinks) assert.doesNotMatch(tag, /class=|role="button"|data-cta=|data-vendor=/);
   assert.doesNotMatch(main, /Naar de site van Canva|data-vendor="canva"|Begin bij Gratis|Kies Pro|Kies Business|Gratis om te testen|dan is Canva de ontwerptool/);

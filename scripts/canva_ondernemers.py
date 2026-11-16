@@ -29,7 +29,7 @@ CANVA_NEUTRAAL_PAD={
 }
 P_CANVA=('Canva: Abonnementen en prijzen','https://www.canva.com/nl_nl/abonnementen/')
 P_CANVA_HELP=('Canva Help: Abonnementen vergelijken','https://www.canva.com/help/about-canva/')
-P_CANVA_PRIV=('Canva: Privacybeleid','https://www.canva.com/nl_nl/policies/privacy-policy/')
+P_CANVA_PRIV=('Canva: Privacybeleid','https://www.canva.com/policies/privacy-policy/')
 CANVA_SRC=[P_CANVA,P_CANVA_PRIV,
  ('ToolMatch: AI presentatie maken','https://toolmatch.nl/ai-presentatie-maken/'),
  ('ToolMatch: AI veilig gebruiken','https://toolmatch.nl/gids/ai-veilig-gebruiken/'),

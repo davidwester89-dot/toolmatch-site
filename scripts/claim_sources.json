@@ -5410,9 +5410,9 @@
         "tag": "p",
         "kind": "reviewed body/FAQ claim",
         "before": "In een ontwerp zetten zzp’ers vaak klantnamen, logo’s van opdrachtgevers of prijsvoorstellen. Canva heeft een privacybeleid; wat er precies met jouw bestanden gebeurt, lees je daar en in de voorwaarden van Canva. Zet persoonsgegevens of vertrouwelijke cijfers alleen in een tool als je weet wat de aanbieder ermee doet. Praktische stappen staan in <a href=\"/gids/ai-veilig-gebruiken/\">AI veilig gebruiken in je bedrijf</a>.",
-        "after": "<a class=\"claim-source\" href=\"https://www.canva.com/nl_nl/policies/privacy-policy/\" rel=\"noopener\">In een ontwerp zetten zzp’ers vaak klantnamen, logo’s van opdrachtgevers of prijsvoorstellen. Canva heeft een privacybeleid; wat er precies met jouw bestanden gebeurt, lees je daar en in de voorwaarden van Canva. Zet persoonsgegevens of vertrouwelijke cijfers alleen in een tool als je weet wat de aanbieder ermee doet. Praktische stappen staan in </a><a href=\"/gids/ai-veilig-gebruiken/\">AI veilig gebruiken in je bedrijf</a>.",
+        "after": "<a class=\"claim-source\" href=\"https://www.canva.com/policies/privacy-policy/\" rel=\"noopener\">In een ontwerp zetten zzp’ers vaak klantnamen, logo’s van opdrachtgevers of prijsvoorstellen. Canva heeft een privacybeleid; wat er precies met jouw bestanden gebeurt, lees je daar en in de voorwaarden van Canva. Zet persoonsgegevens of vertrouwelijke cijfers alleen in een tool als je weet wat de aanbieder ermee doet. Praktische stappen staan in </a><a href=\"/gids/ai-veilig-gebruiken/\">AI veilig gebruiken in je bedrijf</a>.",
         "sources": [
-          "https://www.canva.com/nl_nl/policies/privacy-policy/"
+          "https://www.canva.com/policies/privacy-policy/"
         ]
       },
       {

@@ -165,7 +165,7 @@ export const TOOLS = [
     bronnen: [['Cal.com Pricing', 'https://cal.com/pricing']] },
   { id: 'simplybook', naam: 'SimplyBook.me', url: 'https://simplybook.me/', doelen: [],
     wat: 'Boekingssysteem met een eigen boekingswebsite; in hogere plannen ook betalingen en aanbetalingen.',
-    gratis: true, prijs: 'Basic; betalingen en aanbetalingen vanaf Standard (de bedragen zie je op de prijspagina van SimplyBook.me)', prijsMaand: 11.9, prijsMaandBron: 'intern', prijsPer: 'team', team: true, instap: 'eenvoudig', // INTERN budgetgetal: alleen voor de budgetvraag, nooit tonen. Geen europrijs op een NL-pagina; getal van de prijspagina zoals eerder gecontroleerd, niet omgerekend.
+    gratis: true, prijs: 'Basic; betalingen, aanbetalingen en fooien bij het Basic-plan (de bedragen zie je op de prijspagina van SimplyBook.me)', prijsMaand: 11.9, prijsMaandBron: 'intern', prijsPer: 'team', team: true, instap: 'eenvoudig', // INTERN budgetgetal: alleen voor de budgetvraag, nooit tonen. Geen europrijs op een NL-pagina; getal van de prijspagina zoals eerder gecontroleerd, niet omgerekend.
     eu: null, privacy: null,
     bronnen: [['SimplyBook.me Pricing', 'https://simplybook.me/en/pricing']] },
   { id: 'acuity', naam: 'Acuity Scheduling', url: 'https://acuityscheduling.com/', doelen: [],

@@ -63,3 +63,9 @@ const STIJL_REGELS = new Map([
   ]
 ]);
 export const normaliseerStijl = (code) => code.split('\n').map((regel) => STIJL_REGELS.get(regel) || regel).join('\n');
+// SimplyBook-prijsclaim 16-11: Payments/Deposits/Tips staan bij Basic, niet vanaf Standard.
+// Normaliseer alleen die ene prijsregel zodat ranking-tests match.js strikt blijven toetsen.
+const SIMPLYBOOK_PRIJS_OUD = "Basic; betalingen en aanbetalingen vanaf Standard (de bedragen zie je op de prijspagina van SimplyBook.me)";
+const SIMPLYBOOK_PRIJS_NIEUW = "Basic; betalingen, aanbetalingen en fooien bij het Basic-plan (de bedragen zie je op de prijspagina van SimplyBook.me)";
+export const normaliseerSimplybookPrijs = (code) => code.replaceAll(SIMPLYBOOK_PRIJS_OUD, SIMPLYBOOK_PRIJS_NIEUW);
+export const normaliseerStijlEnFeiten = (code) => normaliseerSimplybookPrijs(normaliseerStijl(code));

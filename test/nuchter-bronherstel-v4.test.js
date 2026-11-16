@@ -15,7 +15,7 @@ test('SC-v4: meetbare productclaims noemen hun bron als onderwerp in de eigen al
     ['ai-notuleren/index.html', 'dan laat Microsoft ook'],
     ['ai-data-analyse/index.html', 'Microsoft laat Copilot daar gegevens analyseren'],
     ['vergelijken/chatgpt-vs-claude/index.html', 'Anthropic traint bij de zakelijke plannen standaard niet op je inhoud'],
-    ['online-afspraken-plannen/index.html', 'SimplyBook.me zet betalingen en aanbetalingen vanaf Standard'],
+    ['online-afspraken-plannen/index.html', 'SimplyBook.me zet betalingen, aanbetalingen en fooien bij het Basic-plan'],
     ['ai-website-maken/index.html', 'Wix biedt Nederlandstalige klantenservice.'],
   ];
   for (const [file, phrase] of cases) assert.ok(withoutClaimSources(readFileSync(file,'utf8')).includes(phrase), file+': '+phrase);

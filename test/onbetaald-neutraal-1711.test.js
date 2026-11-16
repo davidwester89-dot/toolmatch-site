@@ -11,7 +11,7 @@ import { join } from 'node:path';
 import { VRAGEN, match } from '../js/lib/match.js';
 import { TOOLS } from '../js/lib/tools.js';
 import { PARTNERLINKS, PARTNERLINKS_PAGINA, uitgaand, bronTekst, NEUTRAAL_NAAM } from '../js/lib/partnerlinks.js';
-import { normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte stijlrevisie 18-11; geen ranking- of datumgate uitgezet.
+import { normaliseerStijl, normaliseerStijlEnFeiten } from './nuchter-datums-helper.mjs'; // Exacte stijlrevisie 18-11; geen ranking- of datumgate uitgezet.
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const PARENT = 'f4dccde60af44c5cc703e9a618ce4c1f6437ea2c';
@@ -135,10 +135,9 @@ test('17-11 geneutraliseerde merken: Bron-link op de kaart, geen knop; Trengo is
   assert.equal(cfgNu.replace(BODY_ONLY, ''), ouder('scripts/l7.config.mjs'), 'ALLOW_NAME/l7.config ongewijzigd');
 });
 
-test('ranking: match.js en tools.js byte-gelijk aan f4dccde (na exacte stijlrevisie 18-11); partnerlinks beïnvloeden de volgorde niet', () => {
-  for (const f of ['js/lib/match.js', 'js/lib/tools.js']) {
-    assert.equal(normaliseerStijl(readFileSync(join(ROOT, f), 'utf8')), normaliseerStijl(execFileSync('git', ['show', `${PARENT}:${f}`], { cwd: ROOT, encoding: 'utf8' })), f);
-  }
+test('ranking: match.js byte-gelijk aan f4dccde (na exacte stijlrevisie 18-11); tools.js alleen SimplyBook-prijsclaim gewijzigd; partnerlinks beïnvloeden de volgorde niet', () => {
+  assert.equal(normaliseerStijl(readFileSync(join(ROOT, 'js/lib/match.js'), 'utf8')), normaliseerStijl(execFileSync('git', ['show', `${PARENT}:js/lib/match.js`], { cwd: ROOT, encoding: 'utf8' })), 'js/lib/match.js');
+  assert.equal(normaliseerStijlEnFeiten(readFileSync(join(ROOT, 'js/lib/tools.js'), 'utf8')), normaliseerStijlEnFeiten(execFileSync('git', ['show', `${PARENT}:js/lib/tools.js`], { cwd: ROOT, encoding: 'utf8' })), 'js/lib/tools.js');
   assert.doesNotMatch(readFileSync(join(ROOT, 'js/lib/match.js'), 'utf8'), /^\s*import[^\n]*partnerlinks/m);
 });
 

@@ -1,4 +1,4 @@
-import { revisieDatum, revisieDatumZichtbaar, normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
+import { revisieDatum, revisieDatumZichtbaar, normaliseerStijl, normaliseerStijlEnFeiten } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
 // Vier goedgekeurde affiliate-links (17-11): Cal.com, Metricool, SimplyBook.me, Google Workspace/Gemini.
 // Alleen bestaande CTA's, via PARTNERLINKS. Ranking identiek (match.js/tools.js ongewijzigd).
 // Gemini: geen target=_blank, niet framen. Bron-/prijslinks blijven gewone links.
@@ -215,7 +215,7 @@ test('ranking identiek aan 31926c9: match.js en tools.js byte-gelijk, 0 volgorde
   const matchOld = execFileSync('git', ['show', `${PARENT}:js/lib/match.js`], { encoding: 'utf8' });
   const toolsOld = execFileSync('git', ['show', `${PARENT}:js/lib/tools.js`], { encoding: 'utf8' });
   assert.equal(normaliseerStijl(matchNow), normaliseerStijl(matchOld));
-  assert.equal(normaliseerStijl(toolsNow), normaliseerStijl(toolsOld));
+  assert.equal(normaliseerStijlEnFeiten(toolsNow), normaliseerStijlEnFeiten(toolsOld));
 
   const ks = Object.keys(VRAGEN);
   const alle = [];

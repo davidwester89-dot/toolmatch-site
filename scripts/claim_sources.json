@@ -2122,8 +2122,8 @@
         "unit": 18,
         "tag": "td",
         "kind": "summary table: provider fact",
-        "before": "Basic; betalingen en aanbetalingen vanaf Standard (de bedragen zie je op de prijspagina van SimplyBook.me)",
-        "after": "<a class=\"claim-source\" href=\"https://simplybook.me/en/pricing\" rel=\"noopener\">Basic; betalingen en aanbetalingen vanaf Standard (de bedragen zie je op de prijspagina van SimplyBook.me)</a>",
+        "before": "Basic; betalingen, aanbetalingen en fooien bij het Basic-plan (de bedragen zie je op de prijspagina van SimplyBook.me)",
+        "after": "<a class=\"claim-source\" href=\"https://simplybook.me/en/pricing\" rel=\"noopener\">Basic; betalingen, aanbetalingen en fooien bij het Basic-plan (de bedragen zie je op de prijspagina van SimplyBook.me)</a>",
         "sources": [
           "https://simplybook.me/en/pricing"
         ]
@@ -2242,8 +2242,8 @@
         "unit": 52,
         "tag": "p",
         "kind": "tool card: feature/plan/limit",
-        "before": "<strong>Past als</strong> je een eigen boekingssite wilt en klanten misschien vooraf wilt laten betalen: SimplyBook.me zet betalingen en aanbetalingen vanaf Standard in zijn pakketten.",
-        "after": "<a class=\"claim-source\" href=\"https://simplybook.me/en/pricing\" rel=\"noopener\"><strong>Past als</strong> je een eigen boekingssite wilt en klanten misschien vooraf wilt laten betalen: SimplyBook.me zet betalingen en aanbetalingen vanaf Standard in zijn pakketten.</a>",
+        "before": "<strong>Past als</strong> je een eigen boekingssite wilt en klanten misschien vooraf wilt laten betalen: SimplyBook.me zet betalingen, aanbetalingen en fooien bij het Basic-plan.",
+        "after": "<a class=\"claim-source\" href=\"https://simplybook.me/en/pricing\" rel=\"noopener\"><strong>Past als</strong> je een eigen boekingssite wilt en klanten misschien vooraf wilt laten betalen: SimplyBook.me zet betalingen, aanbetalingen en fooien bij het Basic-plan.</a>",
         "sources": [
           "https://simplybook.me/en/pricing"
         ]
@@ -2262,8 +2262,8 @@
         "unit": 54,
         "tag": "dd",
         "kind": "tool card: feature/plan/limit",
-        "before": "Basic; betalingen en aanbetalingen vanaf Standard (de bedragen zie je op de prijspagina van SimplyBook.me)",
-        "after": "<a class=\"claim-source\" href=\"https://simplybook.me/en/pricing\" rel=\"noopener\">Basic; betalingen en aanbetalingen vanaf Standard (de bedragen zie je op de prijspagina van SimplyBook.me)</a>",
+        "before": "Basic; betalingen, aanbetalingen en fooien bij het Basic-plan (de bedragen zie je op de prijspagina van SimplyBook.me)",
+        "after": "<a class=\"claim-source\" href=\"https://simplybook.me/en/pricing\" rel=\"noopener\">Basic; betalingen, aanbetalingen en fooien bij het Basic-plan (de bedragen zie je op de prijspagina van SimplyBook.me)</a>",
         "sources": [
           "https://simplybook.me/en/pricing"
         ]
@@ -2294,8 +2294,8 @@
         "unit": 70,
         "tag": "p",
         "kind": "reviewed body/FAQ claim",
-        "before": "Bij SimplyBook.me kan dat volgens de aanbieder vanaf het Standard-abonnement. Bij de andere tools hebben we dat niet gecontroleerd.",
-        "after": "<a class=\"claim-source\" href=\"https://simplybook.me/en/pricing\" rel=\"noopener\">Bij SimplyBook.me kan dat volgens de aanbieder vanaf het Standard-abonnement. Bij de andere tools hebben we dat niet gecontroleerd.</a>",
+        "before": "Bij SimplyBook.me kan dat volgens de aanbieder vanaf het Basic-abonnement. Bij de andere tools hebben we dat niet gecontroleerd.",
+        "after": "<a class=\"claim-source\" href=\"https://simplybook.me/en/pricing\" rel=\"noopener\">Bij SimplyBook.me kan dat volgens de aanbieder vanaf het Basic-abonnement. Bij de andere tools hebben we dat niet gecontroleerd.</a>",
         "sources": [
           "https://simplybook.me/en/pricing"
         ]

@@ -1,6 +1,6 @@
 // Trengo-partnerlink (19-11, herbouw op b9e47c3): goedgekeurde CTA via PARTNERLINKS.
 // Link exact: https://trengo.com/getdemo?kfl_ln=matchcheck-toolmatch
-// rel="sponsored nofollow noopener" + partnerzin. Ranking identiek (match.js/tools.js ongewijzigd).
+// rel="sponsored nofollow noopener" + partnerzin. Ranking identiek (match.js ongewijzigd; tools.js alleen SimplyBook-prijsclaim).
 // Tidio, Notta en overige onbetaalde merken blijven bronlink. Dessa niet geplaatst.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -10,6 +10,7 @@ import { join } from 'node:path';
 import { match, VRAGEN } from '../js/lib/match.js';
 import { TOOLS } from '../js/lib/tools.js';
 import { uitgaand, PARTNERLINKS, PARTNERLINKS_PAGINA, PARTNER_NOOT, bronTekst } from '../js/lib/partnerlinks.js';
+import { normaliseerSimplybookPrijs } from './nuchter-datums-helper.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const PARENT = 'b9e47c3428ab854525d08faf911b8cecbe45dce2';
@@ -80,10 +81,9 @@ test('onbetaalde merken blijven bronlink; geen Dessa; partnerzin alleen bij spon
   assert.equal(PARTNER_NOOT, NOOT);
 });
 
-test('ranking: match.js en tools.js byte-gelijk aan b9e47c3; 324 profielen, zelfde volgorde, Trengo even vaak in top 3', () => {
-  for (const f of ['js/lib/match.js', 'js/lib/tools.js']) {
-    assert.equal(readFileSync(join(ROOT, f), 'utf8'), execFileSync('git', ['show', `${PARENT}:${f}`], { cwd: ROOT, encoding: 'utf8' }), f);
-  }
+test('ranking: match.js byte-gelijk aan b9e47c3; tools.js alleen SimplyBook-prijsclaim gewijzigd; 324 profielen, zelfde volgorde, Trengo even vaak in top 3', () => {
+  assert.equal(readFileSync(join(ROOT, 'js/lib/match.js'), 'utf8'), execFileSync('git', ['show', `${PARENT}:js/lib/match.js`], { cwd: ROOT, encoding: 'utf8' }), 'js/lib/match.js');
+  assert.equal(normaliseerSimplybookPrijs(readFileSync(join(ROOT, 'js/lib/tools.js'), 'utf8')), normaliseerSimplybookPrijs(execFileSync('git', ['show', `${PARENT}:js/lib/tools.js`], { cwd: ROOT, encoding: 'utf8' })), 'js/lib/tools.js');
   assert.doesNotMatch(readFileSync(join(ROOT, 'js/lib/match.js'), 'utf8'), /^\s*import[^\n]*partnerlinks/m);
 
   const ks = Object.keys(VRAGEN);

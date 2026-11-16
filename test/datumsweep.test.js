@@ -31,7 +31,7 @@ test('datumsweep: een kaart met een later bekeken bron noemt die datum, net als 
     for (const kaart of h.split('<article class="res tool"').slice(1)) {
       const src = kaart.split('<p class="src">')[1]?.split('</p>')[0];
       if (!src) continue;
-      const kaartdatum = src.match(/gecontroleerd op (\d+ oktober 2026)/)[1];
+      const kaartdatum = src.match(/gecontroleerd op (\d+ (?:januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december) 2026)/)[1];
       const urls = [...src.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
       const later = [...new Set(urls.filter((u) => laat.has(u) && laat.get(u) !== kaartdatum).map((u) => laat.get(u)))];
       if (later.length) { n++; assert.ok(src.includes('Nederlandse prijspagina bekeken op ' + later[0]), p + ' ' + urls[0]); }

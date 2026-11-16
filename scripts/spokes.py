@@ -49,7 +49,7 @@ def faq_html(faq):
 # Bronnen die voor de valuta-fix op 26-10 voor het eerst zijn bekeken.
 BRON_DATUM={'https://notuly.nl/prijzen':'30 oktober 2026','https://notuly.nl/privacy':'30 oktober 2026','https://www.notta.ai/nl/pricing':'30 oktober 2026','https://workspace.google.com/intl/nl/business/':'26 oktober 2026','https://www.deepl.com/nl/pro':'26 oktober 2026'}
 # NL-IP-prijscheck 30-10 (site-checks/2026-10-30/tm-nl-ip-prijscheck.md): prijspagina's opnieuw bekeken vanuit Nederland.
-BRON_BEKEKEN={'https://chatgpt.com/nl-NL/pricing':'30 oktober 2026','https://chatgpt.com/pricing':'30 oktober 2026','https://claude.com/pricing':'30 oktober 2026','https://calendly.com/pricing':'30 oktober 2026'}
+BRON_BEKEKEN={'https://chatgpt.com/nl-NL/pricing':'30 oktober 2026','https://chatgpt.com/pricing':'30 oktober 2026','https://claude.com/pricing':'30 oktober 2026','https://calendly.com/pricing':'30 oktober 2026','https://simplybook.me/en/pricing':'16 november 2026'}
 def bronnen_html(srcs):
     seen=[]; 
     for s in srcs:
@@ -57,7 +57,13 @@ def bronnen_html(srcs):
     return '      <h2 id="bronnen">Bronnen</h2>\n      <ul class="bronnen">\n'+''.join(f'        <li>{X(u,E(n.replace(' (NL-pagina van de aanbieder)','')))}, {('NL-pagina van de aanbieder, bekeken op '+BRON_DATUM[u]) if u in BRON_DATUM else 'bekeken op '+BRON_BEKEKEN.get(u,GCN)}</li>\n' for n,u in seen)+'      </ul>\n'
 # Datumsweep 30-10: een kaart noemt naast "gecontroleerd op" ook de datum waarop een Nederlandse prijspagina later is nagelezen
 # (BRON_DATUM, valuta-fix cd561d0 26-10), zodat de kaart niet tegenspreekt wat er in de bronnenlijst staat.
-def kaartdatum(t): return datum_nl(t['gecontroleerd']) if t.get('gecontroleerd') else GCN
+def kaartdatum(t):
+    if t.get('gecontroleerd'): return datum_nl(t['gecontroleerd'])
+    # SimplyBook-prijsclaim hertest 16-11: Payments/Deposits/Tips staan bij Basic.
+    urls=[u for _,u in t.get('bronnen',[])]
+    if 'https://simplybook.me/en/pricing' in urls and 'https://simplybook.me/en/pricing' in BRON_BEKEKEN:
+        return BRON_BEKEKEN['https://simplybook.me/en/pricing']
+    return GCN
 def nagelezen(t):
     d=sorted({BRON_DATUM[u] for _,u in t['bronnen'] if u in BRON_DATUM and BRON_DATUM[u]!=kaartdatum(t)})
     b=sorted({BRON_BEKEKEN[u] for _,u in t['bronnen'] if u in BRON_BEKEKEN and BRON_BEKEKEN[u]!=kaartdatum(t)})
@@ -265,12 +271,12 @@ cat('/online-afspraken-plannen/','Online afspraken laten plannen door klanten | 
  [('acuity','je als dienstverlener afspraken plant en intakeformulieren en herinneringen wilt.'),
   ('calcom','je alleen werkt en gratis wilt beginnen, of later met een team.'),
   ('calendly','je een bekende planner wilt met een gratis versie.'),
-  ('simplybook','je een eigen boekingssite wilt en klanten misschien vooraf wilt laten betalen: SimplyBook.me zet betalingen en aanbetalingen vanaf Standard in zijn pakketten.')],
+  ('simplybook','je een eigen boekingssite wilt en klanten misschien vooraf wilt laten betalen: SimplyBook.me zet betalingen, aanbetalingen en fooien bij het Basic-plan.')],
  ['<strong>Koppelt hij met je agenda?</strong> Kijk of de planner werkt met de agenda die je al gebruikt, zodat je niet dubbel geboekt wordt.',
   '<strong>Betalen vooraf?</strong> Wil je dat klanten bij het boeken betalen, kijk dan of dat in het abonnement zit. Op deze pagina hebben we dat alleen bij SimplyBook.me bevestigd.',
   '<strong>Prijs per persoon of per bedrijf.</strong> Sommige planners rekenen per gebruiker, andere per account.'],
  [('Wat is de beste gratis afsprakenplanner?','Calendly, Cal.com en SimplyBook.me hebben een gratis versie. Welke past, hangt af van wat je nodig hebt; wij zetten ze op alfabetische volgorde.'),
-  ('Kunnen klanten vooraf betalen?','Bij SimplyBook.me kan dat volgens de aanbieder vanaf het Standard-abonnement. Bij de andere tools hebben we dat niet gecontroleerd.'),
+  ('Kunnen klanten vooraf betalen?','Bij SimplyBook.me kan dat volgens de aanbieder vanaf het Basic-abonnement. Bij de andere tools hebben we dat niet gecontroleerd.'),
   ('Krijgen klanten een herinnering?','De meeste planners sturen een bevestiging. Of herinneringen in jouw abonnement zitten, verschilt per tool en plan; check dat op de prijspagina.')])
 
 cat('/ai-afbeeldingen-en-ontwerp/','AI voor afbeeldingen, logo’s en presentaties | ToolMatch',

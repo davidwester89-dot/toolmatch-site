@@ -1,4 +1,4 @@
-import { revisieDatum, normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
+import { revisieDatum, normaliseerStijl, normaliseerStijlEnFeiten } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
 // CTA-neutralisatie: Canva, Power Automate, Copilot en Power BI (12-11)
 // plus twaalf vendors zonder betaalde route (16-11). Knoppen worden gewone bronlinks.
 // Ranking, teksten en prijzen blijven gelijk. Lopende/aanvraagbare merken (o.a. Zapier, n8n,
@@ -94,7 +94,7 @@ test('ranking ongewijzigd: beeld, automatiseren, schrijven en data', () => {
   const matchNow = readFileSync(join(ROOT, 'js/lib/match.js'), 'utf8');
   const toolsParent = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:js/lib/tools.js`], { cwd: ROOT, encoding: 'utf8' });
   const matchParent = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:js/lib/match.js`], { cwd: ROOT, encoding: 'utf8' });
-  assert.equal(normaliseerStijl(toolsNow), normaliseerStijl(toolsParent), 'tools.js wijkt af van parent');
+  assert.equal(normaliseerStijlEnFeiten(toolsNow), normaliseerStijlEnFeiten(toolsParent), 'tools.js wijkt af van parent (op de SimplyBook-prijsclaim na)');
   assert.equal(normaliseerStijl(matchNow), normaliseerStijl(matchParent), 'match.js wijkt af van parent');
   assert.deepEqual(match({ doel: 'beeld' }).map((r) => r.tool.id), ['canva', 'pitch', 'chatgpt', 'lechat']);
   assert.deepEqual(match({ doel: 'automatiseren' }).map((r) => r.tool.id), ['zapier', 'make', 'n8n', 'powerautomate']);

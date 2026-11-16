@@ -315,6 +315,7 @@ exec(open('scripts/spokes.py').read())
 exec(open('scripts/website_leads.py').read())
 exec(open('scripts/ai_presentatie.py').read())
 exec(open('scripts/canva_ondernemers.py').read())
+exec(open('scripts/boekingssysteem_salon.py').read())
 URLS+=SPOKES
 # Pagina's met schema-update 26-10: Article image (vergelijken/gids) en BreadcrumbList (losse pagina's).
 LASTMOD={u:'2026-10-26' for u in URLS if u in BC_LOSSE or (u.startswith(('/vergelijken/','/gids/')) and u not in ('/vergelijken/','/gids/'))}
@@ -328,6 +329,7 @@ LASTMOD['/keuzehulp/']='2026-11-10'  # register-URL in partnerlinks.js telt als 
 LASTMOD.update(PRIJS_UPD)  # NL-IP-prijscheck 30-10 (L7)
 LASTMOD.update(HUB_UPD)  # hubs /gids/ en /vergelijken/ = nieuwste kind 2026-10-30 (L7-hubregel)
 LASTMOD.update({'/':'2026-11-03','/over/':'2026-11-03'})  # partner-FAQ en /over/ actueel: partnerlinks staan live (externe feedback nov, L7)
+LASTMOD.update(BS_PAD)  # nieuwe pagina /boekingssysteem-salon/ 19-11 (L7)
 LASTMOD.update(PRES_PAD)  # nieuwe pagina /ai-presentatie-maken/ + link terug op /ai-afbeeldingen-en-ontwerp/ 3-11 (L7)
 LASTMOD.update(INBOUND_UPD)  # /ai-tekst-schrijven/ Verder lezen + /ai-presentatie-maken/ 5-11 (L7)
 LASTMOD.update(MAKE_UPD)  # Make-partnerlink 9-11, na LOGO_UPD (die de twee pagina's nog op 30-10 zet)

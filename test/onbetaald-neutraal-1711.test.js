@@ -11,6 +11,7 @@ import { join } from 'node:path';
 import { VRAGEN, match } from '../js/lib/match.js';
 import { TOOLS } from '../js/lib/tools.js';
 import { PARTNERLINKS, PARTNERLINKS_PAGINA, uitgaand, bronTekst, NEUTRAAL_NAAM } from '../js/lib/partnerlinks.js';
+import { normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte stijlrevisie 18-11; geen ranking- of datumgate uitgezet.
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const PARENT = 'f4dccde60af44c5cc703e9a618ce4c1f6437ea2c';
@@ -127,12 +128,16 @@ test('17-11 geneutraliseerde merken: Bron-link op de kaart, geen knop; partnerli
   const pl = readFileSync(join(ROOT, 'js/lib/partnerlinks.js'), 'utf8');
   assert.equal(blok(pl, 'PARTNERLINKS'), blok(ouder('js/lib/partnerlinks.js'), 'PARTNERLINKS'));
   assert.equal(blok(pl, 'PARTNERLINKS_PAGINA'), blok(ouder('js/lib/partnerlinks.js'), 'PARTNERLINKS_PAGINA'));
-  assert.equal(readFileSync(join(ROOT, 'scripts/l7.config.mjs'), 'utf8'), ouder('scripts/l7.config.mjs'), 'ALLOW_NAME/l7.config ongewijzigd');
+  // Stijlrelease 18-11 voegt alleen CFG.bodyOnlyHubs toe (geen datumvrijstelling); ALLOW_NAME, exempt en BEKEND_* blijven byte-gelijk.
+  const BODY_ONLY = '  // Geen datumlift door alleen een gewijzigd kind; bij eigen body geldt de gewone L7-plicht.\n  bodyOnlyHubs: ["/gids/", "/vergelijken/"],\n';
+  const cfgNu = readFileSync(join(ROOT, 'scripts/l7.config.mjs'), 'utf8');
+  assert.ok(cfgNu.split(BODY_ONLY).length <= 2, 'bodyOnlyHubs hooguit één keer');
+  assert.equal(cfgNu.replace(BODY_ONLY, ''), ouder('scripts/l7.config.mjs'), 'ALLOW_NAME/l7.config ongewijzigd');
 });
 
-test('ranking: match.js en tools.js byte-gelijk aan f4dccde; partnerlinks beïnvloeden de volgorde niet', () => {
+test('ranking: match.js en tools.js byte-gelijk aan f4dccde (na exacte stijlrevisie 18-11); partnerlinks beïnvloeden de volgorde niet', () => {
   for (const f of ['js/lib/match.js', 'js/lib/tools.js']) {
-    assert.equal(readFileSync(join(ROOT, f), 'utf8'), execFileSync('git', ['show', `${PARENT}:${f}`], { cwd: ROOT, encoding: 'utf8' }), f);
+    assert.equal(normaliseerStijl(readFileSync(join(ROOT, f), 'utf8')), normaliseerStijl(execFileSync('git', ['show', `${PARENT}:${f}`], { cwd: ROOT, encoding: 'utf8' })), f);
   }
   assert.doesNotMatch(readFileSync(join(ROOT, 'js/lib/match.js'), 'utf8'), /^\s*import[^\n]*partnerlinks/m);
 });

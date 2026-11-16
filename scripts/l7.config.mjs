@@ -9,6 +9,8 @@ rec(0, {});
 console.log(JSON.stringify(out, (k, v) => (/logo|^prijsMaand/i.test(k) ? undefined : v)));`;
 const keuzehulpUitslag = (outDir) => execFileSync('node', ['--input-type=module', '-e', UITSLAG], { cwd: outDir, encoding: 'utf8', maxBuffer: 1 << 28 });
 export const CFG = {
+  // Geen datumlift door alleen een gewijzigd kind; bij eigen body geldt de gewone L7-plicht.
+  bodyOnlyHubs: ["/gids/", "/vergelijken/"],
   // build.py schrijft de html in de repo; assemble.py zet alleen publieke bestanden (allowlist via git ls-files) in _site.
   build: (dir, env) => {
     execSync('git init -q && git add -A && python3 scripts/build.py && git add -A && python3 scripts/assemble.py _site', { cwd: dir, env, stdio: 'ignore', shell: '/bin/bash' });

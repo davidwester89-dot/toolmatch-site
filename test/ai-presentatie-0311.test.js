@@ -43,11 +43,11 @@ test('ai-presentatie: bronnen alleen naam + link, zonder datum', () => {
 
 test('L7: /ai-presentatie-maken/ datePublished 3-11, dateModified 17-11 (Gemini-partnerlink); ontwerp-hub 17-11 (Pitch-CTA neutraal)', () => {
   const sm = readFileSync('sitemap.xml', 'utf8');
-  assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-presentatie-maken/</loc><lastmod>2026-11-17</lastmod>`));
-  assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-afbeeldingen-en-ontwerp/</loc><lastmod>2026-11-17</lastmod>`), 'hub 17-11 (eigen bodywijziging: Pitch-bronlink)');
-  assert.match(H, /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-17"/);
-  assert.match(H, /bijgewerkt op <time datetime="2026-11-17">17 november 2026<\/time>/);
+  assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-presentatie-maken/</loc><lastmod>2026-11-18</lastmod>`));
+  assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-afbeeldingen-en-ontwerp/</loc><lastmod>2026-11-18</lastmod>`), 'hub 16-11');
+  assert.match(H, /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-18"/);
+  assert.match(H, /bijgewerkt op <time datetime="2026-11-18">18 november 2026<\/time>/);
   const a = readFileSync('ai-afbeeldingen-en-ontwerp/index.html', 'utf8');
-  assert.match(a, /"dateModified": "2026-11-17"/);
-  assert.match(a, /bijgewerkt op 17 november 2026/);
+  assert.match(a, /"dateModified": "2026-11-18"/);
+  assert.match(a, /bijgewerkt op 18 november 2026/);
 });

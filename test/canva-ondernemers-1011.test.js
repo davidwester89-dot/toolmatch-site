@@ -1,3 +1,4 @@
+import { revisieDatum } from './nuchter-datums-helper.mjs';
 // Nieuwe gids /gids/canva-voor-ondernemers/ (SEO-refresh wk46, pushdatum 10-11-2026).
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -50,21 +51,28 @@ test('canva-ondernemers: alleen feitelijke Canva-bronlinks, geen commerciële CT
   assert.doesNotMatch(b, /bekeken op|geraadpleegd|20\d\d/);
   assert.doesNotMatch(main, /rel="sponsored/);
   const canvaLinks = [...main.matchAll(/<a\b[^>]*href="(https:\/\/www\.canva\.com[^"]*)"[^>]*>/g)];
-  assert.deepEqual(canvaLinks.map((m) => m[1]), [
+  const originalLinks = canvaLinks.filter(([tag]) => !tag.includes('class="claim-source"'));
+  const inlineLinks = canvaLinks.filter(([tag]) => tag.includes('class="claim-source"'));
+  assert.ok(inlineLinks.length > 0, 'gecontroleerde inline bronlinks op claims');
+  for (const [tag, url] of inlineLinks) {
+    assert.ok(['https://www.canva.com/nl_nl/abonnementen/', 'https://www.canva.com/nl_nl/policies/privacy-policy/'].includes(url));
+    assert.doesNotMatch(tag, /sponsored|data-cta=|data-vendor=|role="button"/);
+  }
+  assert.deepEqual(originalLinks.map((m) => m[1]), [
     'https://www.canva.com/nl_nl/abonnementen/',
     'https://www.canva.com/nl_nl/policies/privacy-policy/',
   ]);
-  for (const [tag] of canvaLinks) assert.doesNotMatch(tag, /class=|role="button"|data-cta=|data-vendor=/);
+  for (const [tag] of originalLinks) assert.doesNotMatch(tag, /class=|role="button"|data-cta=|data-vendor=/);
   assert.doesNotMatch(main, /Naar de site van Canva|data-vendor="canva"|Begin bij Gratis|Kies Pro|Kies Business|Gratis om te testen|dan is Canva de ontwerptool/);
 });
 
 test('L7 10-11: nieuwe gids en hub /gids/ blijven 10-11; ontwerp-hub en keuzehulp later 12-11 (Canva-CTA neutraal)', () => {
   const sm = readFileSync('sitemap.xml', 'utf8');
   for (const p of ['/gids/canva-voor-ondernemers/', '/gids/']) {
-    assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>2026-11-10</lastmod>`), p);
+    assert.ok(sm.includes(`<loc>https://toolmatch.nl${p}</loc><lastmod>${revisieDatum(p, '2026-11-10')}</lastmod>`), p);
   }
-  assert.match(H, /"datePublished": "2026-11-10",\s*"dateModified": "2026-11-10"/);
-  assert.match(H, /bijgewerkt op <time datetime="2026-11-10">10 november 2026<\/time>/);
+  assert.match(H, /"datePublished": "2026-11-10",\s*"dateModified": "2026-11-18"/);
+  assert.match(H, /bijgewerkt op <time datetime="2026-11-18">18 november 2026<\/time>/);
   const hub = readFileSync('gids/index.html', 'utf8');
   assert.ok(hub.includes('href="/gids/canva-voor-ondernemers/"'));
   assert.match(hub, /"dateModified": "2026-11-10"/);

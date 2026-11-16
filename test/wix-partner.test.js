@@ -1,5 +1,5 @@
 import { withoutClaimSources } from './claim-source-helper.mjs';
-import { revisieDatum, normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
+import { revisieDatum, revisieDatumZichtbaar, normaliseerStijl } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
 // Commerciële Wix-knop op /ai-website-maken/: officiële Impact Dutch WSB-link (ad 2152480).
 // Alleen die exit. Bronnen, prijspagina, tekst, volgorde en de keuzehulp-uitslag blijven zoals ze waren.
 import { test } from 'node:test';
@@ -56,8 +56,8 @@ test('Wix-CTA: geen extra parameter of fragment op de trackinglink', () => {
 
 test('Wix-CTA L7: keuzehulp-datum mee, uitslagbestand ongemoeid', () => {
   const kh = readFileSync('keuzehulp/index.html', 'utf8');
-  assert.match(kh, /"dateModified": "2026-11-18"/);
-  assert.match(kh, /bijgewerkt op 18 november 2026/);
+  assert.match(kh, new RegExp(`"dateModified": "${revisieDatum('/keuzehulp/', '2026-11-18')}"`));
+  assert.match(kh, new RegExp(`bijgewerkt op ${revisieDatumZichtbaar('/keuzehulp/', '2026-11-18')}`));
   assert.match(kh, /gecontroleerd op 20 oktober 2026/);
-  assert.ok(readFileSync('sitemap.xml', 'utf8').includes('<loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>2026-11-18</lastmod>'));
+  assert.ok(readFileSync('sitemap.xml', 'utf8').includes(`<loc>https://toolmatch.nl/keuzehulp/</loc><lastmod>${revisieDatum('/keuzehulp/', '2026-11-18')}</lastmod>`));
 });

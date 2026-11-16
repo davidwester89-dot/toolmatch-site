@@ -22,7 +22,20 @@ export const STIJL_PADEN = new Set([
   "/vergelijken/chatgpt-vs-copilot/",
   "/websitebezoekers-herkennen/"
 ]);
-export const revisieDatum = (pad, vorige) => STIJL_PADEN.has(pad) ? '2026-11-18' : vorige;
+export const LATERE_REVISIE = {
+  '/keuzehulp/': '2026-11-19',
+  '/online-afspraken-plannen/': '2026-11-19',
+};
+export const revisieDatum = (pad, vorige) => {
+  const kandidaten = [vorige, STIJL_PADEN.has(pad) ? '2026-11-18' : null, LATERE_REVISIE[pad]].filter(Boolean);
+  return kandidaten.sort().at(-1);
+};
+export const revisieDatumZichtbaar = (pad, vorige) => {
+  const d = revisieDatum(pad, vorige);
+  const [y, m, day] = d.split('-');
+  const maanden = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+  return `${Number(day)} ${maanden[Number(m) - 1]} ${y}`;
+};
 
 const STIJL_REGELS = new Map([
   [

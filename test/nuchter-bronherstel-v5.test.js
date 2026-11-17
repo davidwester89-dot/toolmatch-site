@@ -1,4 +1,5 @@
 import { test } from 'node:test';
+import { ECTA_BLOK_PY } from './e-cta-helper.mjs'; // E-CTA-1: unit-indexen tellen zonder de CTA-blokken A/C (eigen test)
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -32,7 +33,7 @@ test('SC-v5: alle zeven bronloze claims hebben de uitgever als onderwerp, met ex
 test('volledige sweep: elk beoordeeld fragment staat exact in de build; cijfers/tekst, oude links en bronnen blijven gelijk', () => {
   assert.equal(plan.length, 21);
   assert.equal(new Set(plan.map((p) => p.page)).size, 21);
-  const result = JSON.parse(py(`from claim_sources import Document\nfrom pathlib import Path\nimport json\nplan=json.loads(Path('scripts/claim_sources.json').read_text())\ncount=0\nfor page in plan:\n d=Document(Path(page['file']).read_text()); units=d.units(); sources=d.source_urls()\n for e in page['edits']:\n  assert d.inner(units[e['unit']])==e['after'],(page['file'],e['unit'])\n  assert set(e['sources'])<=sources\n  assert Document('<main>'+e['before']+'</main>').text(Document('<main>'+e['before']+'</main>').nodes[0])==Document('<main>'+e['after']+'</main>').text(Document('<main>'+e['after']+'</main>').nodes[0])\n  count+=1\nprint(json.dumps({'count':count}))`));
+  const result = JSON.parse(py(`from claim_sources import Document\nfrom pathlib import Path\nimport json,re\nECTA=${ECTA_BLOK_PY}\nplan=json.loads(Path('scripts/claim_sources.json').read_text())\ncount=0\nfor page in plan:\n d=Document(ECTA.sub('',Path(page['file']).read_text())); units=d.units(); sources=d.source_urls()\n for e in page['edits']:\n  assert d.inner(units[e['unit']])==e['after'],(page['file'],e['unit'])\n  assert set(e['sources'])<=sources\n  assert Document('<main>'+e['before']+'</main>').text(Document('<main>'+e['before']+'</main>').nodes[0])==Document('<main>'+e['after']+'</main>').text(Document('<main>'+e['after']+'</main>').nodes[0])\n  count+=1\nprint(json.dumps({'count':count}))`));
   assert.equal(result.count, plan.reduce((n, p) => n + p.edits.length, 0));
   assert.ok(result.count > 500, 'niet alleen zeven losse SC-zinnen');
   for (const p of plan) for (const e of p.edits) {

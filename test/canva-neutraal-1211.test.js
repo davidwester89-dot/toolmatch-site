@@ -5,6 +5,7 @@ import { revisieDatum, normaliseerStijl, normaliseerStijlEnFeiten } from './nuch
 // HubSpot, Make) bleven knoppen tot 17-11; sinds 17-11 heeft alleen een goedgekeurde partnerlink nog een knop
 // (zie onbetaald-neutraal-1711.test.js). Cal.com, Metricool, SimplyBook.me en Gemini krijgen in 17-11 een partnerlink.
 import { test } from 'node:test';
+import { zonderEcta } from './e-cta-helper.mjs'; // E-CTA-1: CTA-blokken A/C hebben een eigen test
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -252,7 +253,7 @@ test('Zapier- en n8n-knoppen waren byte-gelijk tot 17-11; sinds 17-11 neutrale b
   assert.ok(auto.includes('<p class="go"><a href="https://n8n.io/" rel="noopener">Bron: n8n</a></p>'));
   assert.equal((auto.match(/data-vendor="(zapier|n8n)"/g) || []).length, 0);
   // Hele vergelijkingspagina blijft byte-gelijk, afgezien van de exacte gedeelde mobiele nav-template.
-  assert.equal(vs, metMobielMenu(parentVs));
+  assert.equal(zonderEcta(vs), metMobielMenu(parentVs)); // E-CTA-1: keuzehulp-blokken A/C hebben een eigen test
   assert.match(vs, /pc=toolmatch/);
   assert.match(vs, /"dateModified": "2026-11-10"/);
   // Keuzehulp: geen uitzondering per merk; Zapier en n8n vallen onder !o.partner (bronlink).
@@ -357,7 +358,7 @@ test('Make/Hostinger/Wix: knoppen byte-gelijk aan parent', () => {
     let parent;
     try { parent = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:${relF}`], { cwd: ROOT, encoding: 'utf8' }); }
     catch { continue; }
-    const now = readFileSync(f, 'utf8');
+    const now = zonderEcta(readFileSync(f, 'utf8')); // E-CTA-1: CTA-blokken A/C hebben een eigen test
     const a = parent.match(re) || [];
     const b = now.match(re) || [];
     if (a.join('\n') !== b.join('\n')) diffs.push(relF + '\n  parent: ' + a.join(' | ') + '\n  now: ' + b.join(' | '));

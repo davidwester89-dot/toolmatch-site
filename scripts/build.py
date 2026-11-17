@@ -377,3 +377,5 @@ exec(open('scripts/nuchter_datums.py').read())
 # Reviewed source anchors on the actual claims; source lists and schema stay intact.
 from claim_sources import apply_plan
 apply_plan()
+# E-CTA-1 (17-11): CTA-blokken A/C op de pagina's van de PM-partnerkaart; geen datumwijziging (scripts/e-cta.mjs).
+subprocess.run(['node','scripts/e-cta-apply.mjs'],check=True)

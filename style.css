@@ -213,3 +213,13 @@ h3 .tlogo{width:32px;height:32px;vertical-align:-7px;margin-right:10px}
 .tbl th[scope=row] > a:has(> .tlogo){display:inline-flex;align-items:flex-start;gap:8px}
 .tbl th[scope=row] > a > .tlogo{margin:0}
 .tbl th[scope=col] > .tlogo{display:block;margin:0 0 6px}
+
+/* E-CTA-1 (17-11-2026): keuzebox na de intro (A) en afsluiter (C). Statische HTML, vaste plek: geen layout-shift. */
+.ecta{margin:24px 0;padding:16px 20px;border:1px solid var(--line,#dcdce6);border-radius:16px;background:#fff}
+.ecta-kop{margin:0 0 10px}
+.ecta-lijst{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.ecta-kaart{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0;padding:0;border:0}
+.ecta-naam{font-weight:700;min-width:7em}
+.ecta-label{font-size:.875rem;color:var(--muted,#555)}
+.ecta-knoppen,.ecta-top{margin:0 0 8px}
+.ecta-alt{margin:8px 0 0}

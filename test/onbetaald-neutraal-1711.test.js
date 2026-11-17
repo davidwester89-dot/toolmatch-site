@@ -4,6 +4,7 @@
 // Deze test faalt zodra er weer een onbetaalde CTA verschijnt, in welke positie dan ook (dus ook in de top 3).
 // Ranking: match.js en tools.js byte-gelijk aan f4dccde. Partnermanager-status: rekentools/partners (12-11-2026).
 import { test } from 'node:test';
+import { zonderEcta } from './e-cta-helper.mjs'; // E-CTA-1: CTA-blokken A/C hebben een eigen test
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -82,7 +83,7 @@ test('statisch: elke knop/data-cta/data-vendor/sponsored-link op de site is een 
   const fout = [];
   let betaald = 0;
   for (const f of walk(ROOT).filter((x) => /\.html$/.test(x))) {
-    const src = readFileSync(f, 'utf8');
+    const src = zonderEcta(readFileSync(f, 'utf8')); // E-CTA-1: blokken A/C apart getoetst in test/e-cta-1.test.js
     for (const tag of onbetaaldeCtas(src)) fout.push(`${f.slice(ROOT.length)}: ${tag}`);
     betaald += [...src.matchAll(/<a\b[^>]*rel="sponsored nofollow noopener"[^>]*>/g)].length;
     assert.doesNotMatch(src, /data-cta="outbound"/, f);
@@ -132,7 +133,10 @@ test('17-11 geneutraliseerde merken: Bron-link op de kaart, geen knop; Trengo is
   const BODY_ONLY = '  // Geen datumlift door alleen een gewijzigd kind; bij eigen body geldt de gewone L7-plicht.\n  bodyOnlyHubs: ["/gids/", "/vergelijken/"],\n';
   const cfgNu = readFileSync(join(ROOT, 'scripts/l7.config.mjs'), 'utf8');
   assert.ok(cfgNu.split(BODY_ONLY).length <= 2, 'bodyOnlyHubs hooguit één keer');
-  assert.equal(cfgNu.replace(BODY_ONLY, ''), ouder('scripts/l7.config.mjs'), 'ALLOW_NAME/l7.config ongewijzigd');
+  // E-CTA-1 (17-11) voegt alleen stripCta toe (CTA-blokken tellen niet als body; geen datumvrijstelling); vraagt SC-OK.
+  const STRIP_CTA = '  // E-CTA-1 (plan MM 17-11, Dave via GB2): de CTA-blokken A/C (scripts/e-cta.mjs) tellen niet als bodywijziging; geen datum-lift. Vraagt SC-OK.\n  stripCta: [/<aside class="ecta[^"]*"[^>]*data-ecta="[AC]"[^>]*>[\\s\\S]*?<\\/aside>/g],\n';
+  assert.ok(cfgNu.split(STRIP_CTA).length <= 2, 'stripCta hooguit één keer');
+  assert.equal(cfgNu.replace(BODY_ONLY, '').replace(STRIP_CTA, ''), ouder('scripts/l7.config.mjs'), 'ALLOW_NAME/l7.config ongewijzigd');
 });
 
 test('ranking: match.js byte-gelijk aan f4dccde (na exacte stijlrevisie 18-11); tools.js alleen SimplyBook-prijsclaim gewijzigd; partnerlinks beïnvloeden de volgorde niet', () => {

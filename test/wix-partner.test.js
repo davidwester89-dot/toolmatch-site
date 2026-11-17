@@ -3,6 +3,7 @@ import { revisieDatum, revisieDatumZichtbaar, normaliseerStijl } from './nuchter
 // Commerciële Wix-knop op /ai-website-maken/: officiële Impact Dutch WSB-link (ad 2152480).
 // Alleen die exit. Bronnen, prijspagina, tekst, volgorde en de keuzehulp-uitslag blijven zoals ze waren.
 import { test } from 'node:test';
+import { zonderEcta } from './e-cta-helper.mjs'; // E-CTA-1: CTA-blokken A/C hebben een eigen test
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { PARTNERLINKS, PARTNERLINKS_PAGINA } from '../js/lib/partnerlinks.js';
@@ -27,7 +28,7 @@ test('Wix-CTA: exacte Impact-link, disclosure, sponsored/noopener en analytics-a
 });
 
 test('Wix-CTA: trackinglink alleen op die knop; overige links en de volgorde blijven', () => {
-  assert.equal(html.split(WIX).length - 1, 1, 'trackinglink hoort één keer op de pagina');
+  assert.equal(zonderEcta(html).split(WIX).length - 1, 1, 'trackinglink hoort één keer op de pagina (buiten de E-CTA-1-blokken)');
   assert.doesNotMatch(html, /2049257/);
   assert.doesNotMatch(readFileSync('js/lib/partnerlinks.js', 'utf8'), /2049257/);
   assert.equal(withoutClaimSources(html).split('href="https://nl.wix.com/pricing"').length - 1, 3);

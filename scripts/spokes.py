@@ -123,18 +123,33 @@ def partner_tekst(tid, txt):
     tab='' if zelfde else ' (opent in een nieuw tabblad)'
     return f'<a href="{E(p)}" rel="sponsored nofollow noopener"{tgt} data-cta="partner" aria-label="{E(txt)}{tab}">{E(txt)}</a>'
 def partner_tekst_b(tid, txt, pos='mid'):
-    """E-CTA-1 B-tekstlink: zelfde rel als partner_tekst, plus data-vendor en data-pos=mid (vendor-tip 17-11)."""
+    """E-CTA-1 B-tekstlink in bestaande zinnen: label (partnerlink), data-vendor/data-pos, aria-label + nieuw tabblad."""
     p=PL.get(tid)
     if not p: return ''
     zelfde=tid in PL_ZELFDE
     tgt='' if zelfde else ' target="_blank"'
+    zicht=txt if 'partnerlink' in txt.lower() else f'{txt} (partnerlink)'
     tab='' if zelfde else ' (opent in een nieuw tabblad)'
-    return f'<a href="{E(p)}" rel="sponsored nofollow noopener"{tgt} data-vendor="{tid}" data-cta="partner" data-pos="{pos}" aria-label="{E(txt)}{tab}">{E(txt)}</a>'
+    return f'<a href="{E(p)}" rel="sponsored nofollow noopener"{tgt} data-vendor="{tid}" data-cta="partner" data-pos="{pos}" aria-label="{E(zicht)}{tab}">{E(zicht)}</a>'
 PNOOT='      <p class="pnoot">Sommige links zijn partnerlinks; dat verandert de volgorde nooit.</p>\n'
 def met_noot(blok):
     """Precies één partnerzin direct na een blok waarin een partnerlink (rel sponsored) staat; anders niets."""
     return blok+PNOOT if re.search(r'<a\s[^>]*rel="[^"]*\bsponsored\b',blok) else blok
 def datum_nl(iso): y,m,d=iso.split('-'); return f'{int(d)} {MAANDEN[int(m)-1]} {y}'
+def bron_regel(t):
+    """Bestaande bronzin: bij B-merken wordt alleen de merknaam een tekstlink, 'Pricing' blijft de bronlink."""
+    if t['id'] in ('calcom','simplybook') and t.get('bronnen'):
+        delen=[]
+        for n,u in t['bronnen']:
+            naam=t['naam']
+            if n.startswith(naam):
+                rest=n[len(naam):].lstrip()
+                delen.append((partner_tekst_b(t['id'], naam)+(' '+X(u,E(rest)) if rest else '')).strip())
+            else:
+                delen.append(X(u,E(n)))
+        return ', '.join(delen)
+    return ', '.join(X(u,E(n)) for n,u in t['bronnen'])
+
 def kaart(t,past):
     pv=f'\n        <p class="priv">{E(t["privacy"])}</p>' if t.get('privacy') else ''
     return f'''      <article class="res tool" id="{t['id']}">
@@ -149,7 +164,7 @@ def kaart(t,past):
           <div><dt>Nederlands</dt><dd>{JN(t.get('nl'))}</dd></div>
           <div><dt>Instap</dt><dd>{INSTAP[t['instap']]} <small>(onze indeling)</small></dd></div>
         </dl>{'<p>Opslag en verwerkersovereenkomst zijn opgaven van de aanbieder.</p>' if t.get('eu') in EUL or dpa(t) != 'Onbekend' else ''}{pv}
-        <p class="src">Bron: {', '.join(X(u,E(n)) for n,u in t['bronnen'])} · gecontroleerd op {kaartdatum(t)}{nagelezen(t)}</p>
+        <p class="src">Bron: {bron_regel(t)} · gecontroleerd op {kaartdatum(t)}{nagelezen(t)}</p>
         <p class="go">{uit(t)}</p>
       </article>
 '''
@@ -407,24 +422,7 @@ for c in CAT:
     body=c['intro']+'      <h2 id="overzicht">In het kort</h2>\n      <p>De tools staan op alfabetische volgorde, niet op rangorde. Welke past, hangt af van je situatie.</p>\n'+kort_tabel(ids,'Overzicht van de tools')
     body+='      <h2 id="tools">De tools</h2>\n'+met_noot('      <div class="results">\n'+''.join(kaart(T[i],p) for i,p in c['tools'])+'      </div>\n')
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
-    # E-CTA-1: op /online-afspraken-plannen/ dezelfde <p> met eigen B-alinea (geen unitverschuiving).
-    # Op de overige 9 CAT-pagina's de zin 'Nog niet zeker? Doe de keuzehulp…' vóór blok C weglaten
-    # (C houdt die kop). /ai-assistenten/ had die zin al niet.
-    if c['slug']=='/online-afspraken-plannen/':
-        body+=f'      <p>Voor een boekingspagina waarop klanten zelf een moment kiezen kun je onder meer naar {partner_tekst_b("calcom","Cal.com")} of {partner_tekst_b("simplybook","SimplyBook.me")}. Cal.com past als je alleen werkt, of later met een team. SimplyBook.me past als je een eigen boekingssite wilt en klanten misschien vooraf wilt laten betalen: SimplyBook.me zet betalingen, aanbetalingen en fooien bij het Basic-plan.</p>\n'
-    elif c['slug'] not in (
-        '/ai-assistenten/',
-        '/ai-tekst-schrijven/',
-        '/ai-mail-en-offertes/',
-        '/ai-chatbot-website/',
-        '/ai-afbeeldingen-en-ontwerp/',
-        '/ai-notuleren/',
-        '/ai-data-analyse/',
-        '/automatiseren-zonder-code/',
-        '/social-media-inplannen/',
-        '/crm-klein-bedrijf/',
-    ):
-        body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n'
+    body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
     body+=verder_lezen(c['slug'])+faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
     graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":SALON_INLINK_PAD.get(c['slug']) or (BUILD_ISO() if c['slug'] in TRENGO_PAD else CTA_NEUTRAAL_PAD.get(c['slug'])) or {'/automatiseren-zonder-code/':'2026-11-12','/ai-afbeeldingen-en-ontwerp/':'2026-11-16','/ai-assistenten/':'2026-11-17','/ai-data-analyse/':'2026-11-16','/ai-mail-en-offertes/':'2026-11-17','/ai-vertalen/':'2026-11-16','/ai-tekst-schrijven/':'2026-11-16','/ai-chatbot-website/':'2026-11-16','/online-afspraken-plannen/':'2026-11-17','/social-media-inplannen/':'2026-11-17','/ai-notuleren/':'2026-11-16'}.get(c['slug']) or MAKE_UPD.get(c['slug']) or (INBOUND_UPD.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},

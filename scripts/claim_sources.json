@@ -1364,7 +1364,7 @@
         ]
       },
       {
-        "unit": 77,
+        "unit": 78,
         "tag": "p",
         "kind": "reviewed multi-provider body/FAQ claim",
         "before": "DeepL is gemaakt voor vertalen en het verbeteren van bestaande tekst. ChatGPT is een algemene assistent die ook nieuwe teksten schrijft en andere taken doet.",
@@ -1632,7 +1632,7 @@
         ]
       },
       {
-        "unit": 74,
+        "unit": 75,
         "tag": "p",
         "kind": "reviewed body/FAQ claim",
         "before": "Copilot Business is een betaalde invoegtoepassing bij een geschikt Microsoft 365 Business-abonnement. Wat er in andere versies van Outlook zit, hebben we niet gecontroleerd.",
@@ -2039,7 +2039,7 @@
         ]
       },
       {
-        "unit": 88,
+        "unit": 89,
         "tag": "p",
         "kind": "reviewed multi-provider body/FAQ claim",
         "before": "Notta, Notuly, Otter en tl;dv hebben een gratis versie met beperkingen; bij Notuly zijn dat 3 gesprekken per maand. Bij Amberscript zagen we geen gratis versie op de prijspagina.",
@@ -2784,7 +2784,7 @@
         ]
       },
       {
-        "unit": 58,
+        "unit": 59,
         "tag": "p",
         "kind": "reviewed multi-provider body/FAQ claim",
         "before": "Zapier en Make hebben een gratis versie met beperkingen; Power Automate heeft een gratis proefversie van 30 dagen. n8n kun je volgens de aanbieder zelf hosten met de Community Edition; de door n8n gehoste versie is betaald.",
@@ -2796,7 +2796,7 @@
         ]
       },
       {
-        "unit": 59,
+        "unit": 60,
         "tag": "p",
         "kind": "reviewed multi-provider body/FAQ claim",
         "before": "Power Automate Premium kost €13,00 per gebruiker per maand bij jaarbetaling (excl. btw) en n8n Starter €20 per maand bij jaarbetaling, volgens de aanbieders. Het bedrag van Zapier Professional (750 taken) zie je op de prijspagina van Zapier. De prijs van Make konden we niet controleren.",
@@ -3015,7 +3015,7 @@
         ]
       },
       {
-        "unit": 57,
+        "unit": 58,
         "tag": "p",
         "kind": "reviewed multi-provider body/FAQ claim",
         "before": "Trengo Boost kost €299 per maand bij jaarbetaling, met 10 gebruikers. Bij Tidio Starter en Intercom Essential (per gebruiker, plus een bedrag per opgeloste Fin-vraag) zie je het bedrag op de prijspagina van de aanbieder. Zie de bronnen.",
@@ -3283,7 +3283,7 @@
         ]
       },
       {
-        "unit": 71,
+        "unit": 72,
         "tag": "p",
         "kind": "reviewed body/FAQ claim",
         "before": "ChatGPT noemt op de prijspagina ook extensies voor Excel en Google Sheets. Controleer de uitkomsten altijd zelf.",
@@ -3293,7 +3293,7 @@
         ]
       },
       {
-        "unit": 72,
+        "unit": 73,
         "tag": "p",
         "kind": "reviewed body/FAQ claim",
         "before": "Ja, Looker Studio is gratis. Voor Looker Studio Pro betaal je per gebruiker per project per maand; het bedrag zie je op de pagina van Google.",
@@ -3303,7 +3303,7 @@
         ]
       },
       {
-        "unit": 73,
+        "unit": 74,
         "tag": "p",
         "kind": "reviewed multi-provider body/FAQ claim",
         "before": "Power BI is van Microsoft en past bij Excel en Microsoft 365. Looker Studio is van Google en past bij Sheets en Analytics. Allebei hebben ze een gratis instap.",

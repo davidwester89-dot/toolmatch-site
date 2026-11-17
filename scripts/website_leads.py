@@ -24,7 +24,7 @@ def wl_knop(vid,naam,url):
     if not p: return f'<p class="go"><a href="{E(url)}" rel="noopener">Bron: {E(naam)}</a></p>'
     return met_noot(f'<p class="go"><a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{vid}" data-cta="partner" aria-label="Naar de site van {E(naam)} (opent in een nieuw tabblad)">Naar de site van {E(naam)}</a></p>\n').rstrip('\n')
 def wl_tekst(vid,naam,slug=None,pos='mid'):
-    """Tekstlink naar een betaalde partner (E-CTA-1 B). Hostinger krijgt ws=tm-<slug>-mid."""
+    """E-CTA-1 B-tekstlink in bestaande zinnen. Hostinger krijgt ws=tm-<slug>-mid. Zichtbaar label, aria-label, nieuw tabblad."""
     p=PLP.get(vid)
     if not p: return E(naam)
     href=p
@@ -34,7 +34,9 @@ def wl_tekst(vid,naam,slug=None,pos='mid'):
         q=dict(parse_qsl(u.query, keep_blank_values=True))
         q['ws']='tm-'+slug.strip('/').replace('/','-')+'-'+pos
         href=urlunparse((u.scheme,u.netloc,u.path,u.params,urlencode(q),u.fragment))
-    return f'<a href="{E(href)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{vid}" data-cta="partner" data-pos="{pos}">{E(naam)}</a>'
+    zicht=naam if 'partnerlink' in naam.lower() else f'{naam} (partnerlink)'
+    tab=' (opent in een nieuw tabblad)'
+    return f'<a href="{E(href)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{vid}" data-cta="partner" data-pos="{pos}" aria-label="{E(zicht)}{tab}">{E(zicht)}</a>'
 WLID={'Albacross':'albacross','Leadfeeder (Dealfront)':'leadfeeder','Leadinfo':'leadinfo','Hostinger':'hostinger','JouwWeb':'jouwweb','Wix':'wix','WordPress (zelf hosten)':'wordpress'}
 def wl_tabel(label,cols,rows,slug=None):
     th=''.join(f'<th scope="col">{LG(WLID[c])}{E(c)}</th>' for c in cols)
@@ -48,11 +50,7 @@ def wl_tabel(label,cols,rows,slug=None):
       </div>
 '''
 def wl_zet(slug,title,desc,crumb,h1,lead,body,faq,srcs):
-    b=''
-    if slug=='/ai-website-maken/':
-        # Na de FAQ (laatste claim_sources-eenheid is 75), zodat bestaande units niet verschuiven.
-        b=met_noot(f'      <p>Een eerste website met AI bouw je onder meer met {wl_tekst("hostinger","Hostinger",slug)} of {wl_tekst("wix","Wix")}. Hostinger past als je alles in één pakket wilt en lang vooruit betalen geen bezwaar is; Wix als je later wilt uitbreiden met boekingen of een winkel.</p>\n')
-    body=body+faq_html(faq)+b+wl_bronnen(srcs)+f'      <p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026{(", bijgewerkt op "+wl_datum(WL_UPD[slug])) if slug in WL_UPD else ""}, bronnen bekeken op {WL_CHECK}{(', '+WL_HERCHECK[slug]) if slug in WL_HERCHECK else ''}. Prijzen zoals de aanbieder ze vermeldt.</p>\n'
+    body=body+faq_html(faq)+wl_bronnen(srcs)+f'      <p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026{(", bijgewerkt op "+wl_datum(WL_UPD[slug])) if slug in WL_UPD else ""}, bronnen bekeken op {WL_CHECK}{(', '+WL_HERCHECK[slug]) if slug in WL_HERCHECK else ''}. Prijzen zoals de aanbieder ze vermeldt.</p>\n'
     graph=[{"@type":"Article","@id":D+slug+"#artikel","headline":h1,"description":desc,"inLanguage":"nl-NL","url":D+slug,"mainEntityOfPage":D+slug,"datePublished":WL_PUB,"dateModified":WL_UPD.get(slug,WL_PUB),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),(crumb,slug)]),faq_ld(slug,faq)]
     write(slug.strip('/')+'/index.html',page(slug,title,desc,crumb,h1,lead,body,wide=True,extra=ldscript(graph)+WL_EXTRA))
@@ -85,7 +83,7 @@ A_BODY=f'''      <h2 id="wat-het-doet">Wat een AI-websitebouwer wel en niet voor
  ('AI','Bouwen met AI (handmatig of Agentic), met AI-credits per plan.','AI-functies genoemd in de pakketvergelijking.','Site maken vanuit één prompt.','Niet genoemd op de pagina\'s die we bekeken.'),
  ('Nederlands','Nederlandstalige site; taal van de support niet gecontroleerd.','Nederlandstalige site, persoonlijke ondersteuning.','Wix biedt Nederlandstalige klantenservice.','Nederlandstalige site (nl.wordpress.org).')],slug='/ai-website-maken/')}      <p>Bij Wix noemen we geen bedragen: Wix toont prijzen per land, en de uiteindelijke prijs zie je op de aankooppagina.</p>
       <h2 id="opties">De opties</h2>
-      <h3 id="hostinger">{LG('hostinger',32)}Hostinger Website Bouwer</h3>
+      <h3 id="hostinger">{LG('hostinger',32)}{wl_tekst("hostinger","Hostinger Website Bouwer","/ai-website-maken/")}</h3>
       <p>Hostinger verkoopt de AI Bouwer als pakket met hosting, domein en e-mail. Je beschrijft je idee, de AI maakt een eerste versie en met "Ga live" staat hij online. Premium is voor maximaal 3 websites; voor een webshop noemt Hostinger Onbeperkt. Premium kost €9,99 per maand (verlengprijs); de eerste 48 maanden €1,99 per maand (€95,52 vooraf). Onbeperkt kost €16,99 per maand; de eerste 48 maanden €2,99. Alles excl. btw.</p>
       <p><strong>Past als</strong> je alles in één pakket wilt en lang vooruit betalen geen bezwaar is.</p>
       {wl_knop('hostinger','Hostinger','https://www.hostinger.com/nl/website-maken-met-ai')}
@@ -93,7 +91,7 @@ A_BODY=f'''      <h2 id="wat-het-doet">Wat een AI-websitebouwer wel en niet voor
       <p>Lite (€5,50 per maand) toont advertenties op je site. Pro (€10 per maand) heeft een eigen mailbox en een webshop voor 10 producten, Business (€20 per maand) een webshop zonder limiet. Standaardtarieven bij jaarbetaling, exclusief btw. Je domeinnaam staat op jouw naam, zodat je hem later kunt verhuizen.</p>
       <p><strong>Past als</strong> je een eenvoudige zakelijke site wilt en per maand wilt kunnen betalen, met een korte opzegtermijn.</p>
       {wl_knop('jouwweb','JouwWeb','https://www.jouwweb.nl/')}
-      <h3 id="wix">{LG('wix',32)}Wix</h3>
+      <h3 id="wix">{LG('wix',32)}{wl_tekst("wix","Wix")}</h3>
       <p>Je kunt gratis beginnen, met een adres als naam.wixsite.com en Wix-branding. Met een Premium-pakket koppel je een eigen domein en verdwijnt die branding. Betalingen ontvangen en afspraken laten boeken kan vanaf Core. De pakketten zijn Light, Core, Business en Business Elite; de prijzen staan op de <a href="https://nl.wix.com/pricing" target="_blank" rel="noopener">prijspagina van Wix</a>.</p>
       <p><strong>Past als</strong> je eerst gratis wilt bouwen en later wilt uitbreiden met boekingen of een winkel.</p>
       {wl_knop('wix','Wix','https://www.wix.com/')}

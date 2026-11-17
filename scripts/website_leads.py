@@ -51,7 +51,7 @@ def wl_zet(slug,title,desc,crumb,h1,lead,body,faq,srcs):
     b=''
     if slug=='/ai-website-maken/':
         # Na de FAQ (laatste claim_sources-eenheid is 75), zodat bestaande units niet verschuiven.
-        b=met_noot(f'      <p>Van de betaalde merken op deze pagina: {wl_tekst("hostinger","Hostinger",slug)} en {wl_tekst("wix","Wix")}.</p>\n')
+        b=met_noot(f'      <p>Een eerste website met AI bouw je onder meer met {wl_tekst("hostinger","Hostinger",slug)} of {wl_tekst("wix","Wix")}. Hostinger past als je alles in één pakket wilt en lang vooruit betalen geen bezwaar is; Wix als je later wilt uitbreiden met boekingen of een winkel.</p>\n')
     body=body+faq_html(faq)+b+wl_bronnen(srcs)+f'      <p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026{(", bijgewerkt op "+wl_datum(WL_UPD[slug])) if slug in WL_UPD else ""}, bronnen bekeken op {WL_CHECK}{(', '+WL_HERCHECK[slug]) if slug in WL_HERCHECK else ''}. Prijzen zoals de aanbieder ze vermeldt.</p>\n'
     graph=[{"@type":"Article","@id":D+slug+"#artikel","headline":h1,"description":desc,"inLanguage":"nl-NL","url":D+slug,"mainEntityOfPage":D+slug,"datePublished":WL_PUB,"dateModified":WL_UPD.get(slug,WL_PUB),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),(crumb,slug)]),faq_ld(slug,faq)]

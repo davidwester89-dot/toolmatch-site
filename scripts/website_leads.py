@@ -83,7 +83,7 @@ A_BODY=f'''      <h2 id="wat-het-doet">Wat een AI-websitebouwer wel en niet voor
  ('AI','Bouwen met AI (handmatig of Agentic), met AI-credits per plan.','AI-functies genoemd in de pakketvergelijking.','Site maken vanuit één prompt.','Niet genoemd op de pagina\'s die we bekeken.'),
  ('Nederlands','Nederlandstalige site; taal van de support niet gecontroleerd.','Nederlandstalige site, persoonlijke ondersteuning.','Wix biedt Nederlandstalige klantenservice.','Nederlandstalige site (nl.wordpress.org).')],slug='/ai-website-maken/')}      <p>Bij Wix noemen we geen bedragen: Wix toont prijzen per land, en de uiteindelijke prijs zie je op de aankooppagina.</p>
       <h2 id="opties">De opties</h2>
-      <h3 id="hostinger">{LG('hostinger',32)}{wl_tekst("hostinger","Hostinger Website Bouwer","/ai-website-maken/")}</h3>
+      <h3 id="hostinger">{LG('hostinger',32)}Hostinger Website Bouwer</h3>
       <p>Hostinger verkoopt de AI Bouwer als pakket met hosting, domein en e-mail. Je beschrijft je idee, de AI maakt een eerste versie en met "Ga live" staat hij online. Premium is voor maximaal 3 websites; voor een webshop noemt Hostinger Onbeperkt. Premium kost €9,99 per maand (verlengprijs); de eerste 48 maanden €1,99 per maand (€95,52 vooraf). Onbeperkt kost €16,99 per maand; de eerste 48 maanden €2,99. Alles excl. btw.</p>
       <p><strong>Past als</strong> je alles in één pakket wilt en lang vooruit betalen geen bezwaar is.</p>
       {wl_knop('hostinger','Hostinger','https://www.hostinger.com/nl/website-maken-met-ai')}
@@ -91,7 +91,7 @@ A_BODY=f'''      <h2 id="wat-het-doet">Wat een AI-websitebouwer wel en niet voor
       <p>Lite (€5,50 per maand) toont advertenties op je site. Pro (€10 per maand) heeft een eigen mailbox en een webshop voor 10 producten, Business (€20 per maand) een webshop zonder limiet. Standaardtarieven bij jaarbetaling, exclusief btw. Je domeinnaam staat op jouw naam, zodat je hem later kunt verhuizen.</p>
       <p><strong>Past als</strong> je een eenvoudige zakelijke site wilt en per maand wilt kunnen betalen, met een korte opzegtermijn.</p>
       {wl_knop('jouwweb','JouwWeb','https://www.jouwweb.nl/')}
-      <h3 id="wix">{LG('wix',32)}{wl_tekst("wix","Wix")}</h3>
+      <h3 id="wix">{LG('wix',32)}Wix</h3>
       <p>Je kunt gratis beginnen, met een adres als naam.wixsite.com en Wix-branding. Met een Premium-pakket koppel je een eigen domein en verdwijnt die branding. Betalingen ontvangen en afspraken laten boeken kan vanaf Core. De pakketten zijn Light, Core, Business en Business Elite; de prijzen staan op de <a href="https://nl.wix.com/pricing" target="_blank" rel="noopener">prijspagina van Wix</a>.</p>
       <p><strong>Past als</strong> je eerst gratis wilt bouwen en later wilt uitbreiden met boekingen of een winkel.</p>
       {wl_knop('wix','Wix','https://www.wix.com/')}

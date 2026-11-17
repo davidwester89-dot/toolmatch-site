@@ -137,7 +137,7 @@ def met_noot(blok):
     return blok+PNOOT if re.search(r'<a\s[^>]*rel="[^"]*\bsponsored\b',blok) else blok
 def datum_nl(iso): y,m,d=iso.split('-'); return f'{int(d)} {MAANDEN[int(m)-1]} {y}'
 def bron_regel(t):
-    """Bestaande bronzin: bij B-merken wordt alleen de merknaam een tekstlink, 'Pricing' blijft de bronlink."""
+    """NIET GEBRUIKT sinds v3 (SEO-besluit 10, 17-11): een bronregel blijft een bronlink, nooit een partnerlink."""
     if t['id'] in ('calcom','simplybook') and t.get('bronnen'):
         delen=[]
         for n,u in t['bronnen']:
@@ -164,7 +164,7 @@ def kaart(t,past):
           <div><dt>Nederlands</dt><dd>{JN(t.get('nl'))}</dd></div>
           <div><dt>Instap</dt><dd>{INSTAP[t['instap']]} <small>(onze indeling)</small></dd></div>
         </dl>{'<p>Opslag en verwerkersovereenkomst zijn opgaven van de aanbieder.</p>' if t.get('eu') in EUL or dpa(t) != 'Onbekend' else ''}{pv}
-        <p class="src">Bron: {bron_regel(t)} · gecontroleerd op {kaartdatum(t)}{nagelezen(t)}</p>
+        <p class="src">Bron: {', '.join(X(u,E(n)) for n,u in t['bronnen'])} · gecontroleerd op {kaartdatum(t)}{nagelezen(t)}</p>
         <p class="go">{uit(t)}</p>
       </article>
 '''

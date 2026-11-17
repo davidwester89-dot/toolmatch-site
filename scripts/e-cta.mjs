@@ -52,7 +52,7 @@ function knop(cfg, partner, path, blok, n, cls) {
   const k = cfg.knop || {};
   const tekst = k.tekst ? k.tekst(partner) : `Bekijk ${partner.naam}`;
   const aria = k.aria ? ` aria-label="${esc(k.aria(partner))}"` : '';
-  return `<a class="${cls}" href="${esc(href)}" rel="${REL}"${target} data-vendor="${partner.vendor}" data-cta="${k.dataCta || 'outbound'}" data-ecta-pos="${blok}${n}"${ph}${aria}>${esc(tekst)}</a> <span class="ecta-label">${LABEL}</span>`;
+  return `<a class="${cls}" href="${esc(href)}" rel="${REL}"${target} data-vendor="${partner.vendor}" data-cta="${k.dataCta || 'outbound'}" data-pos="${POS[blok]}" data-ecta-pos="${blok}${n}"${ph}${aria}>${esc(tekst)}</a> <span class="ecta-label">${LABEL}</span>`;
 }
 
 // Optioneel per site (cfg.noot): partnerzin onderaan een blok mét betaalde links (site-conventie, bv. p.pnoot).
@@ -60,18 +60,27 @@ const noot = (cfg) => cfg.noot || '';
 
 const pmAttr = (cfg) => (cfg.pmKaart ? '' : ' data-ecta-placeholder="pm-kaart"');
 
+// Interne links in de blokken (keuzehulp/vergelijker; fallback én 'Of doe de keuzehulp'/C-knop naast partners). data-vendor = vaste interne waarde ('keuzehulp' of 'vergelijker',
+// INTERN_VENDORS), nooit een merk-id, zodat het bestaande vendor_click-event (consent.js: a[data-vendor]) ze telt en ze los
+// van echte affiliates te filteren zijn. data-pos = POS van het blok (top/eind). Geen nieuw event. (SEO-review c120387, 17-11)
+export const INTERN_VENDORS = ['keuzehulp', 'vergelijker'];
+function intern(cfg, soort, blok, cls = '', tekst = cfg[soort].tekst) {
+  const d = cfg[soort];
+  return `<a${cls ? ` class="${cls}"` : ''} href="${d.href}" data-cta="ecta-${blok.toLowerCase()}" data-vendor="${soort}" data-pos="${POS[blok]}">${esc(tekst)}</a>`;
+}
+
 export function blokA(cfg, r) {
   if (r.fallback) {
-    return `<aside class="ecta ecta-a ecta-fallback" data-ecta="A"${pmAttr(cfg)} aria-label="Direct vergelijken"><p class="ecta-kop"><strong>Direct vergelijken</strong></p><p class="ecta-knoppen"><a class="btn" href="${cfg.keuzehulp.href}" data-cta="ecta-a">${esc(cfg.keuzehulp.tekst)}</a></p><p class="ecta-alt"><a href="${cfg.vergelijker.href}" data-cta="ecta-a">${esc(cfg.vergelijker.tekst)}</a></p></aside>`;
+    return `<aside class="ecta ecta-a ecta-fallback" data-ecta="A"${pmAttr(cfg)} aria-label="Direct vergelijken"><p class="ecta-kop"><strong>Direct vergelijken</strong></p><p class="ecta-knoppen">${intern(cfg, 'keuzehulp', 'A', 'btn')}</p><p class="ecta-alt">${intern(cfg, 'vergelijker', 'A')}</p></aside>`;
   }
   const kaarten = r.partners.slice(0, MAX_A).map((p, i) => `<li class="ecta-kaart"><span class="ecta-naam">${esc(p.naam)}</span> ${knop(cfg, p, r.path, 'A', i + 1, 'btn ecta-knop')}</li>`).join('');
-  return `<aside class="ecta ecta-a" data-ecta="A"${pmAttr(cfg)} aria-label="Direct vergelijken"><p class="ecta-kop"><strong>Direct vergelijken</strong></p><ul class="ecta-lijst">${kaarten}</ul><p class="ecta-alt"><a href="${cfg.keuzehulp.href}" data-cta="ecta-a">Of doe de keuzehulp</a></p>${noot(cfg)}</aside>`;
+  return `<aside class="ecta ecta-a" data-ecta="A"${pmAttr(cfg)} aria-label="Direct vergelijken"><p class="ecta-kop"><strong>Direct vergelijken</strong></p><ul class="ecta-lijst">${kaarten}</ul><p class="ecta-alt">${intern(cfg, 'keuzehulp', 'A', '', 'Of doe de keuzehulp')}</p>${noot(cfg)}</aside>`;
 }
 
 export function blokC(cfg, r) {
-  const kh = `<p class="ecta-knoppen"><a class="btn" href="${cfg.keuzehulp.href}" data-cta="ecta-c">${esc(cfg.keuzehulp.tekst)}</a></p>`;
+  const kh = `<p class="ecta-knoppen">${intern(cfg, 'keuzehulp', 'C', 'btn')}</p>`;
   if (r.fallback) {
-    return `<aside class="ecta ecta-c ecta-fallback" data-ecta="C"${pmAttr(cfg)} aria-label="Verder kiezen"><p class="ecta-kop"><strong>Nog niet zeker?</strong></p>${kh}<p class="ecta-alt"><a href="${cfg.vergelijker.href}" data-cta="ecta-c">${esc(cfg.vergelijker.tekst)}</a></p></aside>`;
+    return `<aside class="ecta ecta-c ecta-fallback" data-ecta="C"${pmAttr(cfg)} aria-label="Verder kiezen"><p class="ecta-kop"><strong>Nog niet zeker?</strong></p><p class="ecta-knoppen">${intern(cfg, 'keuzehulp', 'C', 'btn')}</p><p class="ecta-alt">${intern(cfg, 'vergelijker', 'C')}</p></aside>`;
   }
   return `<aside class="ecta ecta-c" data-ecta="C"${pmAttr(cfg)} aria-label="Verder kiezen"><p class="ecta-kop"><strong>Nog niet zeker?</strong></p>${kh}<p class="ecta-top">${esc((cfg.knop && cfg.knop.cIntro) || 'Of ga direct naar')} ${knop(cfg, r.partners[0], r.path, 'C', 1, 'btn ghost ecta-knop')}</p>${noot(cfg)}</aside>`;
 }

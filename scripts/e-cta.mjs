@@ -25,7 +25,7 @@ export function resolve(cfg, path) {
     const p = cfg.partners[id];
     if (!p) throw new Error(`E-CTA-1 ${path}: onbekende partner ${id}`);
     if (!p.reflink) continue; // geen (goedgekeurde) reflink = geen CTA
-    partners.push({ id, naam: p.naam, href: p.reflink, subid: p.subid, vendor: p.vendor || id, zelfdeTab: !!p.zelfdeTab });
+    partners.push({ id, naam: p.naam, href: p.reflink, subid: p.subid, vendor: p.vendor || id, zelfdeTab: !!p.zelfdeTab, pastAls: p.pastAls || '' });
   }
   return { path, partners, fallback: partners.length < 2 };
 }
@@ -69,11 +69,15 @@ function intern(cfg, soort, blok, cls = '', tekst = cfg[soort].tekst) {
   return `<a${cls ? ` class="${cls}"` : ''} href="${d.href}" data-cta="ecta-${blok.toLowerCase()}" data-vendor="${soort}" data-pos="${POS[blok]}">${esc(tekst)}</a>`;
 }
 
+// pastAls (E-CTA-1 B, Blogschrijver 17-11): één neutrale 'Past als …'-regel per betaalde partner uit de config, alleen in keuzebox A.
+// Geen prijzen of datums; ontbreekt het veld, dan geen regel. Zit binnen <aside data-ecta="A"> en telt dus niet als bodywijziging (L7 stripCta).
+const pastAls = (p) => (p.pastAls ? `<span class="ecta-pastals">${esc(p.pastAls)}</span>` : '');
+
 export function blokA(cfg, r) {
   if (r.fallback) {
     return `<aside class="ecta ecta-a ecta-fallback" data-ecta="A"${pmAttr(cfg)} aria-label="Direct vergelijken"><p class="ecta-kop"><strong>Direct vergelijken</strong></p><p class="ecta-knoppen">${intern(cfg, 'keuzehulp', 'A', 'btn')}</p><p class="ecta-alt">${intern(cfg, 'vergelijker', 'A')}</p></aside>`;
   }
-  const kaarten = r.partners.slice(0, MAX_A).map((p, i) => `<li class="ecta-kaart"><span class="ecta-naam">${esc(p.naam)}</span> ${knop(cfg, p, r.path, 'A', i + 1, 'btn ecta-knop')}</li>`).join('');
+  const kaarten = r.partners.slice(0, MAX_A).map((p, i) => `<li class="ecta-kaart"><span class="ecta-naam">${esc(p.naam)}</span> ${knop(cfg, p, r.path, 'A', i + 1, 'btn ecta-knop')}${pastAls(p)}</li>`).join('');
   return `<aside class="ecta ecta-a" data-ecta="A"${pmAttr(cfg)} aria-label="Direct vergelijken"><p class="ecta-kop"><strong>Direct vergelijken</strong></p><ul class="ecta-lijst">${kaarten}</ul><p class="ecta-alt">${intern(cfg, 'keuzehulp', 'A', '', 'Of doe de keuzehulp')}</p>${noot(cfg)}</aside>`;
 }
 

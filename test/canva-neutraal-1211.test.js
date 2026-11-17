@@ -6,6 +6,7 @@ import { revisieDatum, normaliseerStijl, normaliseerStijlEnFeiten } from './nuch
 // (zie onbetaald-neutraal-1711.test.js). Cal.com, Metricool, SimplyBook.me en Gemini krijgen in 17-11 een partnerlink.
 import { test } from 'node:test';
 import { zonderEcta } from './e-cta-helper.mjs'; // E-CTA-1: CTA-blokken A/C hebben een eigen test
+import { zonderB } from './e-cta-b-helper.mjs'; // E-CTA-1 B: tekstlinks (data-pos="mid") hebben een eigen test
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -358,7 +359,7 @@ test('Make/Hostinger/Wix: knoppen byte-gelijk aan parent', () => {
     let parent;
     try { parent = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:${relF}`], { cwd: ROOT, encoding: 'utf8' }); }
     catch { continue; }
-    const now = zonderEcta(readFileSync(f, 'utf8')); // E-CTA-1: CTA-blokken A/C hebben een eigen test
+    const now = zonderB(zonderEcta(readFileSync(f, 'utf8'))); // E-CTA-1: CTA-blokken A/C en B-tekstlinks hebben een eigen test
     const a = parent.match(re) || [];
     const b = now.match(re) || [];
     if (a.join('\n') !== b.join('\n')) diffs.push(relF + '\n  parent: ' + a.join(' | ') + '\n  now: ' + b.join(' | '));

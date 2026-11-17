@@ -124,6 +124,7 @@ test('external tool buttons carry an aria-label with vendor, product and new-tab
     const h = readFileSync(join(ROOT, f), 'utf8');
     for (const m of h.matchAll(/<a [^>]*data-vendor="([^"]+)"[^>]*>/g)) {
       const t = byId[m[1]]; if (!t) continue;
+      if (/\sdata-pos="mid"/.test(m[0])) continue; // E-CTA-1 B: tekstlink in lopende tekst, geen knop; label-in-name apart in e-cta-1-b.test.js
       const zelfdeTab = m[1] === 'gemini';
       if (zelfdeTab) assert.doesNotMatch(m[0], /target="/, f + ' ' + m[1]);
       else assert.match(m[0], /target="_blank"/, f + ' ' + m[1]);

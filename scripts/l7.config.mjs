@@ -20,7 +20,11 @@ export const CFG = {
   // Keuzehulp: alleen een andere uitslag (alle 324 antwoordcombinaties, incl. getoonde toolvelden) telt als client-side wijziging.
   clientOutput: { '/keuzehulp/': { covers: /^js\/lib\/(tools|match)\.js$/, run: keuzehulpUitslag } },
   // E-CTA-1 (plan MM 17-11, Dave via GB2): de CTA-blokken A/C (scripts/e-cta.mjs) tellen niet als bodywijziging; geen datum-lift. Vraagt SC-OK.
-  stripCta: [/<aside class="ecta[^"]*"[^>]*data-ecta="[AC]"[^>]*>[\s\S]*?<\/aside>/g],
+  // E-CTA-1 B (17-11): tekstlink in een bestaande zin (spokes.py partner_tekst_b, website_leads.py wl_tekst) wordt ge-unwrapt tot de
+  // linktekst: de linkmarkup (incl. aria-label) en het zichtbare label ' (partnerlink)' vallen weg. Alleen <a> met
+  // rel="sponsored nofollow noopener" + data-pos="mid" + label, zonder geneste tags. Alle tekst buiten de link telt mee. Vraagt SC-OK.
+  stripCta: [/<aside class="ecta[^"]*"[^>]*data-ecta="[AC]"[^>]*>[\s\S]*?<\/aside>/g,
+    [/<a\b(?=[^>]*\srel="sponsored nofollow noopener")(?=[^>]*\sdata-pos="mid")[^>]*>([^<]*?) \(partnerlink\)<\/a>/g, '$1']],
   exempt: {},
 };
 // 'Gmail' is hier een productnaam (koppelingen van tools), geen persoonlijk adres. Alleen het woord Gmail met hoofdletter, niet

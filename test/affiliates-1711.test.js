@@ -4,6 +4,7 @@ import { revisieDatum, revisieDatumZichtbaar, normaliseerStijl, normaliseerStijl
 // Gemini: geen target=_blank, niet framen. Bron-/prijslinks blijven gewone links.
 import { test } from 'node:test';
 import { zonderEcta } from './e-cta-helper.mjs'; // E-CTA-1: CTA-blokken A/C hebben een eigen test
+import { zonderB } from './e-cta-b-helper.mjs'; // E-CTA-1 B: tekstlinks (data-pos="mid") hebben een eigen test
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -57,7 +58,7 @@ test('PARTNERLINKS: vier affiliates met exacte reflinks, Gemini in zelfde tab', 
 
 test('vier affiliates: rel sponsored op bestaande CTA-plekken; bronlinks blijven gewoon', () => {
   // E-CTA-1: zonder de CTA-blokken A/C (eigen test); de bestaande knoppen, partnerzin en telling blijven zoals ze waren.
-  const af = zonderEcta(readFileSync('online-afspraken-plannen/index.html', 'utf8'));
+  const af = zonderB(zonderEcta(readFileSync('online-afspraken-plannen/index.html', 'utf8'))); // B-tekstlinks Cal.com/SimplyBook.me: e-cta-1-b.test.js
   const soc = zonderEcta(readFileSync('social-media-inplannen/index.html', 'utf8'));
   const ass = zonderEcta(readFileSync('ai-assistenten/index.html', 'utf8'));
   const mail = zonderEcta(readFileSync('ai-mail-en-offertes/index.html', 'utf8'));

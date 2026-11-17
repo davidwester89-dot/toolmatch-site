@@ -39,10 +39,10 @@ export const ECTA = {
   keuzehulp: { href: '/keuzehulp/', tekst: 'Doe de keuzehulp' },
   vergelijker: { href: '/vergelijken/', tekst: 'Bekijk de vergelijkingen' },
   partners: {
-    calcom: { naam: 'Cal.com', reflink: PARTNERLINKS.calcom, subid: false },
-    simplybook: { naam: 'SimplyBook.me', reflink: PARTNERLINKS.simplybook, subid: false },
-    hostinger: { naam: 'Hostinger', reflink: PARTNERLINKS_PAGINA.hostinger, subid: { param: 'ws', waarde: '{site}-{slug}-{pos}' } },
-    wixWsb: { naam: 'Wix', vendor: 'wix', reflink: PARTNERLINKS_PAGINA.wix, subid: false },
+    calcom: { naam: 'Cal.com', reflink: PARTNERLINKS.calcom, subid: false, pastAls: 'Past als je alleen werkt, of later met een team.' }, // spoke-past zonder 'gratis' (niet in E-CTA-blok)
+    simplybook: { naam: 'SimplyBook.me', reflink: PARTNERLINKS.simplybook, subid: false, pastAls: 'Past als je een eigen boekingssite wilt en klanten vooraf wilt laten betalen.' }, // spoke-past / Basic-betalingen, ingekort
+    hostinger: { naam: 'Hostinger', reflink: PARTNERLINKS_PAGINA.hostinger, subid: { param: 'ws', waarde: '{site}-{slug}-{pos}' }, pastAls: 'Past als je alles in één pakket wilt en lang vooruit betalen geen bezwaar is.' }, // bestaande past-als op /ai-website-maken/
+    wixWsb: { naam: 'Wix', vendor: 'wix', reflink: PARTNERLINKS_PAGINA.wix, subid: false, pastAls: 'Past als je later wilt uitbreiden met boekingen of een winkel.' }, // bestaande past-als, zonder 'gratis' (niet in E-CTA-blok)
     make: { naam: 'Make', reflink: PARTNERLINKS.make, subid: false },
     metricool: { naam: 'Metricool', reflink: PARTNERLINKS.metricool, subid: false },
     gemini: { naam: 'Gemini in Google Workspace', reflink: PARTNERLINKS.gemini, subid: false, zelfdeTab: PARTNERLINKS_ZELFDE_TAB.includes('gemini') },

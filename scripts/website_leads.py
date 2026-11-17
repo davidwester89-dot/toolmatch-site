@@ -23,6 +23,18 @@ def wl_knop(vid,naam,url):
     # 17-11: JouwWeb, Leadinfo en Leadfeeder: aanvraag loopt of is geblokkeerd, geen goedgekeurde partnerlink. Neutrale bronlink 'Bron: Merk'.
     if not p: return f'<p class="go"><a href="{E(url)}" rel="noopener">Bron: {E(naam)}</a></p>'
     return met_noot(f'<p class="go"><a class="btn ghost" href="{E(p)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{vid}" data-cta="partner" aria-label="Naar de site van {E(naam)} (opent in een nieuw tabblad)">Naar de site van {E(naam)}</a></p>\n').rstrip('\n')
+def wl_tekst(vid,naam,slug=None,pos='mid'):
+    """Tekstlink naar een betaalde partner (E-CTA-1 B). Hostinger krijgt ws=tm-<slug>-mid."""
+    p=PLP.get(vid)
+    if not p: return E(naam)
+    href=p
+    if vid=='hostinger' and slug:
+        from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
+        u=urlparse(p)
+        q=dict(parse_qsl(u.query, keep_blank_values=True))
+        q['ws']='tm-'+slug.strip('/').replace('/','-')+'-'+pos
+        href=urlunparse((u.scheme,u.netloc,u.path,u.params,urlencode(q),u.fragment))
+    return f'<a href="{E(href)}" rel="sponsored nofollow noopener" target="_blank" data-vendor="{vid}" data-cta="partner" data-pos="{pos}">{E(naam)}</a>'
 WLID={'Albacross':'albacross','Leadfeeder (Dealfront)':'leadfeeder','Leadinfo':'leadinfo','Hostinger':'hostinger','JouwWeb':'jouwweb','Wix':'wix','WordPress (zelf hosten)':'wordpress'}
 def wl_tabel(label,cols,rows,slug=None):
     th=''.join(f'<th scope="col">{LG(WLID[c])}{E(c)}</th>' for c in cols)
@@ -36,7 +48,11 @@ def wl_tabel(label,cols,rows,slug=None):
       </div>
 '''
 def wl_zet(slug,title,desc,crumb,h1,lead,body,faq,srcs):
-    body=body+faq_html(faq)+wl_bronnen(srcs)+f'      <p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026{(", bijgewerkt op "+wl_datum(WL_UPD[slug])) if slug in WL_UPD else ""}, bronnen bekeken op {WL_CHECK}{(', '+WL_HERCHECK[slug]) if slug in WL_HERCHECK else ''}. Prijzen zoals de aanbieder ze vermeldt.</p>\n'
+    b=''
+    if slug=='/ai-website-maken/':
+        # Na de FAQ (laatste claim_sources-eenheid is 75), zodat bestaande units niet verschuiven.
+        b=met_noot(f'      <p>Van de betaalde merken op deze pagina: {wl_tekst("hostinger","Hostinger",slug)} en {wl_tekst("wix","Wix")}.</p>\n')
+    body=body+faq_html(faq)+b+wl_bronnen(srcs)+f'      <p class="note">Redactie ToolMatch · gepubliceerd op 27 oktober 2026{(", bijgewerkt op "+wl_datum(WL_UPD[slug])) if slug in WL_UPD else ""}, bronnen bekeken op {WL_CHECK}{(', '+WL_HERCHECK[slug]) if slug in WL_HERCHECK else ''}. Prijzen zoals de aanbieder ze vermeldt.</p>\n'
     graph=[{"@type":"Article","@id":D+slug+"#artikel","headline":h1,"description":desc,"inLanguage":"nl-NL","url":D+slug,"mainEntityOfPage":D+slug,"datePublished":WL_PUB,"dateModified":WL_UPD.get(slug,WL_PUB),"image":{"@type":"ImageObject","url":D+"/og.png","width":1200,"height":630},"author":{"@type":"Organization","name":"Redactie ToolMatch","@id":D+"/#organization"},"publisher":ORG},
       crumbs_ld([('Home','/'),(crumb,slug)]),faq_ld(slug,faq)]
     write(slug.strip('/')+'/index.html',page(slug,title,desc,crumb,h1,lead,body,wide=True,extra=ldscript(graph)+WL_EXTRA))

@@ -122,6 +122,14 @@ def partner_tekst(tid, txt):
     tgt='' if zelfde else ' target="_blank"'
     tab='' if zelfde else ' (opent in een nieuw tabblad)'
     return f'<a href="{E(p)}" rel="sponsored nofollow noopener"{tgt} data-cta="partner" aria-label="{E(txt)}{tab}">{E(txt)}</a>'
+def partner_tekst_b(tid, txt, pos='mid'):
+    """E-CTA-1 B-tekstlink: zelfde rel als partner_tekst, plus data-vendor en data-pos=mid (vendor-tip 17-11)."""
+    p=PL.get(tid)
+    if not p: return ''
+    zelfde=tid in PL_ZELFDE
+    tgt='' if zelfde else ' target="_blank"'
+    tab='' if zelfde else ' (opent in een nieuw tabblad)'
+    return f'<a href="{E(p)}" rel="sponsored nofollow noopener"{tgt} data-vendor="{tid}" data-cta="partner" data-pos="{pos}" aria-label="{E(txt)}{tab}">{E(txt)}</a>'
 PNOOT='      <p class="pnoot">Sommige links zijn partnerlinks; dat verandert de volgorde nooit.</p>\n'
 def met_noot(blok):
     """Precies één partnerzin direct na een blok waarin een partnerlink (rel sponsored) staat; anders niets."""
@@ -399,7 +407,11 @@ for c in CAT:
     body=c['intro']+'      <h2 id="overzicht">In het kort</h2>\n      <p>De tools staan op alfabetische volgorde, niet op rangorde. Welke past, hangt af van je situatie.</p>\n'+kort_tabel(ids,'Overzicht van de tools')
     body+='      <h2 id="tools">De tools</h2>\n'+met_noot('      <div class="results">\n'+''.join(kaart(T[i],p) for i,p in c['tools'])+'      </div>\n')
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
-    body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
+    # E-CTA-1: op /online-afspraken-plannen/ de dubbele 'Nog niet zeker?' weg, zelfde <p> behouden (geen verschuiving van claim_sources-eenheden).
+    if c['slug']=='/online-afspraken-plannen/':
+        body+=f'      <p>Van de betaalde merken op deze pagina: {partner_tekst_b("calcom","Cal.com")} en {partner_tekst_b("simplybook","SimplyBook.me")}.</p>\n'
+    elif c['slug']!='/ai-assistenten/':
+        body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n'
     body+=verder_lezen(c['slug'])+faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
     graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":SALON_INLINK_PAD.get(c['slug']) or (BUILD_ISO() if c['slug'] in TRENGO_PAD else CTA_NEUTRAAL_PAD.get(c['slug'])) or {'/automatiseren-zonder-code/':'2026-11-12','/ai-afbeeldingen-en-ontwerp/':'2026-11-16','/ai-assistenten/':'2026-11-17','/ai-data-analyse/':'2026-11-16','/ai-mail-en-offertes/':'2026-11-17','/ai-vertalen/':'2026-11-16','/ai-tekst-schrijven/':'2026-11-16','/ai-chatbot-website/':'2026-11-16','/online-afspraken-plannen/':'2026-11-17','/social-media-inplannen/':'2026-11-17','/ai-notuleren/':'2026-11-16'}.get(c['slug']) or MAKE_UPD.get(c['slug']) or (INBOUND_UPD.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},

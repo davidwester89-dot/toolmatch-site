@@ -1,4 +1,4 @@
-import { revisieDatum, normaliseerStijl, normaliseerStijlEnFeiten } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
+import { revisieDatum, revisieDatumZichtbaar, normaliseerStijl, normaliseerStijlEnFeiten } from './nuchter-datums-helper.mjs'; // Exacte latere stijlrevisie; geen ranking- of datumgate uitgezet.
 // CTA-neutralisatie: Canva, Power Automate, Copilot en Power BI (12-11)
 // plus twaalf vendors zonder betaalde route (16-11). Knoppen worden gewone bronlinks.
 // Ranking, teksten en prijzen blijven gelijk. Lopende/aanvraagbare merken (o.a. Zapier, n8n,
@@ -303,7 +303,7 @@ test('L7: pagina\'s van de 12 vendors (16-11) staan sinds de onbetaald-neutraal-
   const leads = readFileSync(join(ROOT, 'websitebezoekers-herkennen/index.html'), 'utf8');
   const leadsD = revisieDatum('/websitebezoekers-herkennen/', '2026-11-18');
   assert.match(leads, new RegExp(`"dateModified": "${leadsD}"`));
-  assert.match(leads, new RegExp(`bijgewerkt op ${leadsD === '2026-11-19' ? '19 november 2026' : '18 november 2026'}`));
+  assert.match(leads, new RegExp(`bijgewerkt op ${revisieDatumZichtbaar('/websitebezoekers-herkennen/', '2026-11-18')}`));
 });
 
 const V12 = [

@@ -90,7 +90,7 @@ test('statisch: elke knop/data-cta/data-vendor/sponsored-link op de site is een 
     assert.doesNotMatch(src, /data-cta="outbound"/, f);
   }
   assert.equal(fout.join('\n'), '', fout.join('\n'));
-  assert.equal(betaald, 11, 'betaalde links: Make 2×, Hostinger, Wix, Cal.com, SimplyBook.me, Metricool, Gemini 3×, Trengo');
+  assert.equal(betaald, 12, 'betaalde links: Make 2×, Hostinger, Wix, Cal.com, SimplyBook.me, Metricool, Gemini 3×, Trengo, Leadinfo');
 });
 
 test('17-11 geneutraliseerde merken: Bron-link op de kaart, geen knop; Trengo is sindsdien partner', () => {
@@ -110,7 +110,7 @@ test('17-11 geneutraliseerde merken: Bron-link op de kaart, geen knop; Trengo is
       assert.doesNotMatch(h, new RegExp(`data-vendor="${id}"`), `${f} ${id}`);
     }
   }
-  const wl = { 'ai-website-maken/index.html': [['https://www.jouwweb.nl/', 'JouwWeb']], 'websitebezoekers-herkennen/index.html': [['https://www.leadfeeder.com/', 'Leadfeeder'], ['https://www.leadinfo.com/nl/', 'Leadinfo']] };
+  const wl = { 'ai-website-maken/index.html': [['https://www.jouwweb.nl/', 'JouwWeb']], 'websitebezoekers-herkennen/index.html': [['https://www.leadfeeder.com/', 'Leadfeeder']] };
   for (const [f, xs] of Object.entries(wl)) {
     const h = readFileSync(join(ROOT, f), 'utf8');
     for (const [u, n] of xs) assert.ok(h.includes(`<p class="go"><a href="${u}" rel="noopener">Bron: ${n}</a></p>`), `${f} ${n}`);
@@ -129,7 +129,14 @@ test('17-11 geneutraliseerde merken: Bron-link op de kaart, geen knop; Trengo is
   const ouder = (p) => execFileSync('git', ['show', `${PARENT}:${p}`], { cwd: ROOT, encoding: 'utf8' });
   const blok = (s, naam) => (s.match(new RegExp(`export const ${naam} = \\{[\\s\\S]*?\\};`)) || [])[0];
   const pl = readFileSync(join(ROOT, 'js/lib/partnerlinks.js'), 'utf8');
-  assert.equal(blok(pl, 'PARTNERLINKS_PAGINA'), blok(ouder('js/lib/partnerlinks.js'), 'PARTNERLINKS_PAGINA'));
+  const paginaOud = blok(ouder('js/lib/partnerlinks.js'), 'PARTNERLINKS_PAGINA');
+  const paginaNu = blok(pl, 'PARTNERLINKS_PAGINA');
+  assert.match(paginaNu, /hostinger: 'https:\/\/jf79\.net\/c\/\?si=16780&li=1722914&wi=440699&ws=&dl=nl%2Fwebsite-maken-met-ai'/);
+  assert.match(paginaNu, /wix: 'https:\/\/wix\.pxf\.io\/c\/7989613\/2152480\/25616\?trafcat=wsb'/);
+  assert.match(paginaNu, /leadinfo: 'https:\/\/glp8\.net\/c\/\?si=20609&li=1873842&wi=440699&ws=&dl='/);
+  assert.match(paginaOud, /hostinger: 'https:\/\/jf79\.net\/c\/\?si=16780&li=1722914&wi=440699&ws=&dl=nl%2Fwebsite-maken-met-ai'/);
+  assert.match(paginaOud, /wix: 'https:\/\/wix\.pxf\.io\/c\/7989613\/2152480\/25616\?trafcat=wsb'/);
+  assert.doesNotMatch(paginaOud, /leadinfo:/);
   // Stijlrelease 18-11 voegt alleen CFG.bodyOnlyHubs toe (geen datumvrijstelling); ALLOW_NAME, exempt en BEKEND_* blijven byte-gelijk.
   const BODY_ONLY = '  // Geen datumlift door alleen een gewijzigd kind; bij eigen body geldt de gewone L7-plicht.\n  bodyOnlyHubs: ["/gids/", "/vergelijken/"],\n';
   const cfgNu = readFileSync(join(ROOT, 'scripts/l7.config.mjs'), 'utf8');

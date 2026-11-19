@@ -4910,7 +4910,7 @@
         ]
       },
       {
-        "unit": 47,
+        "unit": 48,
         "tag": "p",
         "kind": "reviewed body/FAQ claim",
         "before": "Een bedrijfsnaam is nog geen klant. Zet de bedrijven die echt interessant zijn in een <a href=\"/crm-klein-bedrijf/\">CRM voor een klein bedrijf</a>, zodat je ziet wie je al sprak en welke offerte nog openstaat. Koppelt je tool niet rechtstreeks met je CRM, dan kan het vaak via een koppelingstool; Leadinfo noemt Zapier en Make. Lees hoe je <a href=\"/automatiseren-zonder-code/\">apps koppelt zonder code</a>.",
@@ -4920,7 +4920,7 @@
         ]
       },
       {
-        "unit": 49,
+        "unit": 50,
         "tag": "p",
         "kind": "reviewed body/FAQ claim",
         "before": "Je ziet bedrijven, geen namen van bezoekers. Tools als Leadinfo koppelen het IP-adres aan een bedrijf. Leadinfo zegt ruwweg 30% van de bezoekers als bedrijf te herkennen.",
@@ -4930,7 +4930,7 @@
         ]
       },
       {
-        "unit": 50,
+        "unit": 51,
         "tag": "p",
         "kind": "reviewed body/FAQ claim",
         "before": "Dat hangt af van hoe je de tool gebruikt. Volgens de Autoriteit Persoonsgegevens kan een IP-adres een persoonsgegeven zijn, en informatie over een klein bedrijf ook iets zeggen over de eigenaar. Informeer bezoekers in je privacyverklaring. Leadinfo raadt zelf aan om toestemming te vragen voordat de trackingcode actief wordt.",
@@ -4940,7 +4940,7 @@
         ]
       },
       {
-        "unit": 51,
+        "unit": 52,
         "tag": "p",
         "kind": "reviewed multi-provider body/FAQ claim",
         "before": "Voor het kleinste aantal bedrijven per maand: Albacross Starter €59, Leadinfo Starter €69 en Leadfeeder Discover €79, alle drie per maand bij jaarbetaling. Leadfeeder Lite is gratis, met de laatste 100 bedrijven per maand.",
@@ -4952,7 +4952,7 @@
         ]
       },
       {
-        "unit": 52,
+        "unit": 53,
         "tag": "p",
         "kind": "reviewed multi-provider body/FAQ claim",
         "before": "Ja, alle drie de tools noemen een proefperiode van 14 dagen. Alle drie zeggen dat je daarvoor geen creditcard nodig hebt.",

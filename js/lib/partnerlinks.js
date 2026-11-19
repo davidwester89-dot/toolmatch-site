@@ -24,9 +24,11 @@ export const PARTNERLINKS_ZELFDE_TAB = ['gemini'];
 // Ook dit leest de match NOOIT; de volgorde op die pagina's blijft alfabetisch.
 // Hostinger: Daisycon-campagne 16780, goedgekeurd op 27-10-2026.
 // Wix: Impact Dutch WSB, contract 25616, ad 2152480. Link exact uit het portaal; niet aanpassen.
+// Leadinfo: Daisycon-campagne 20609, media 440699, MM-OK 19-11-2026. Link exact uit het portaal; niet aanpassen.
 export const PARTNERLINKS_PAGINA = {
   hostinger: 'https://jf79.net/c/?si=16780&li=1722914&wi=440699&ws=&dl=nl%2Fwebsite-maken-met-ai',
   wix: 'https://wix.pxf.io/c/7989613/2152480/25616?trafcat=wsb',
+  leadinfo: 'https://glp8.net/c/?si=20609&li=1873842&wi=440699&ws=&dl=',
 };
 
 /** Uitgaande link: partnerlink (rel sponsored nofollow noopener, met label) als die er is, anders de officiële site als neutrale bronlink.

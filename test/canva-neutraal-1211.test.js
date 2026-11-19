@@ -301,8 +301,9 @@ test('L7: pagina\'s van de 12 vendors (16-11) staan sinds de onbetaald-neutraal-
   assert.match(site, /"datePublished": "2026-10-27",\s*"dateModified": "2026-11-18"/);
   assert.match(site, /bijgewerkt op 18 november 2026/);
   const leads = readFileSync(join(ROOT, 'websitebezoekers-herkennen/index.html'), 'utf8');
-  assert.match(leads, /"dateModified": "2026-11-18"/);
-  assert.match(leads, /bijgewerkt op 18 november 2026/);
+  const leadsD = revisieDatum('/websitebezoekers-herkennen/', '2026-11-18');
+  assert.match(leads, new RegExp(`"dateModified": "${leadsD}"`));
+  assert.match(leads, new RegExp(`bijgewerkt op ${leadsD === '2026-11-19' ? '19 november 2026' : '18 november 2026'}`));
 });
 
 const V12 = [
@@ -371,6 +372,11 @@ test('Make/Hostinger/Wix: knoppen byte-gelijk aan parent', () => {
   const parentPl = execFileSync('git', ['show', `${PARENT_NEUTRAAL}:js/lib/partnerlinks.js`], { cwd: ROOT, encoding: 'utf8' });
   const nowPl = readFileSync(join(ROOT, 'js/lib/partnerlinks.js'), 'utf8');
   const pagina = (s) => (s.match(/export const PARTNERLINKS_PAGINA = \{[\s\S]*?\};/) || [])[0];
-  assert.equal(pagina(nowPl), pagina(parentPl), 'PARTNERLINKS_PAGINA (Hostinger/Wix) ongewijzigd');
+  assert.match(pagina(nowPl), /hostinger: 'https:\/\/jf79\.net\/c\/\?si=16780&li=1722914&wi=440699&ws=&dl=nl%2Fwebsite-maken-met-ai'/, 'Hostinger ongewijzigd');
+  assert.match(pagina(nowPl), /wix: 'https:\/\/wix\.pxf\.io\/c\/7989613\/2152480\/25616\?trafcat=wsb'/, 'Wix ongewijzigd');
+  assert.match(pagina(nowPl), /leadinfo: 'https:\/\/glp8\.net\/c\/\?si=20609&li=1873842&wi=440699&ws=&dl='/, 'Leadinfo-trackinglink');
+  assert.doesNotMatch(pagina(parentPl), /leadinfo:/, 'parent zonder Leadinfo');
+  assert.match(pagina(parentPl), /hostinger: 'https:\/\/jf79\.net\/c\/\?si=16780&li=1722914&wi=440699&ws=&dl=nl%2Fwebsite-maken-met-ai'/);
+  assert.match(pagina(parentPl), /wix: 'https:\/\/wix\.pxf\.io\/c\/7989613\/2152480\/25616\?trafcat=wsb'/);
   assert.match(parentPl, /make: 'https:\/\/www\.make\.com\/en\/register\?pc=toolmatch'/);
 });

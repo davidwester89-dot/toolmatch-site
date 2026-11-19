@@ -31,6 +31,7 @@ export const LEADINFO_DATUM = '2026-11-25';
 export const LEADINFO_PADEN = new Set(['/websitebezoekers-herkennen/']);
 export const LATERE_REVISIE = {
   '/online-afspraken-plannen/': '2026-11-19',
+  '/ai-presentatie-maken/': '2026-11-26',  // inlink Canva-gids in de lead (techronde 19-11, push 26-11)
 };
 export const revisieDatum = (pad, vorige) => {
   const kandidaten = [vorige, STIJL_PADEN.has(pad) ? '2026-11-18' : null, TRENGO_PADEN.has(pad) ? TRENGO_DATUM : null, LEADINFO_PADEN.has(pad) ? LEADINFO_DATUM : null, LATERE_REVISIE[pad]].filter(Boolean);

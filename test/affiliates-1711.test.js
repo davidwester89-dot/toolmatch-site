@@ -132,7 +132,7 @@ test('L7 17-11: alleen pagina\'s met bodywijziging; hubs niet gelift; lastmod ni
     '/social-media-inplannen/': '2026-11-17',
     '/ai-assistenten/': '2026-11-18',
     '/ai-mail-en-offertes/': '2026-11-18',
-    '/ai-presentatie-maken/': '2026-11-18',
+    '/ai-presentatie-maken/': revisieDatum('/ai-presentatie-maken/', '2026-11-18'),
     '/keuzehulp/': revisieDatum('/keuzehulp/', '2026-11-18'),
     '/privacy/': '2026-11-17',
   };
@@ -171,7 +171,7 @@ test('L7 17-11: alleen pagina\'s met bodywijziging; hubs niet gelift; lastmod ni
     ['social-media-inplannen/index.html', /"dateModified": "2026-11-17"/, /bijgewerkt op 17 november 2026/],
     ['ai-assistenten/index.html', /"dateModified": "2026-11-18"/, /bijgewerkt op 18 november 2026/],
     ['ai-mail-en-offertes/index.html', /"dateModified": "2026-11-18"/, /bijgewerkt op 18 november 2026/],
-    ['ai-presentatie-maken/index.html', /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-18"/, /bijgewerkt op <time datetime="2026-11-18">18 november 2026<\/time>/],
+    ['ai-presentatie-maken/index.html', new RegExp(`"datePublished": "2026-11-03",\\s*"dateModified": "${revisieDatum('/ai-presentatie-maken/', '2026-11-18')}"`), new RegExp(`bijgewerkt op <time datetime="${revisieDatum('/ai-presentatie-maken/', '2026-11-18')}">${revisieDatumZichtbaar('/ai-presentatie-maken/', '2026-11-18')}</time>`)],
     ['keuzehulp/index.html', new RegExp(`"dateModified": "${revisieDatum('/keuzehulp/', '2026-11-18')}"`), new RegExp(`bijgewerkt op ${revisieDatumZichtbaar('/keuzehulp/', '2026-11-18')}`)],
     ['privacy/index.html', /"dateModified": "2026-11-17"/, /bijgewerkt op 17 november 2026/],
   ];

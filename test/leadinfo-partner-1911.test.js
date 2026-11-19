@@ -63,7 +63,8 @@ test('websitebezoekers-herkennen: Albacross en Leadfeeder blijven bronlink; volg
 });
 
 test('Leadinfo-partnerknop: alleen deze pagina; datum gelift; keuzehulp en ranking ongemoeid', () => {
-  const d = [revisieDatum('/websitebezoekers-herkennen/', '2026-11-18'), process.env.BUILD_DATE || process.env.PUSH_DATE].filter(Boolean).sort().at(-1);
+  // Vaste datum sinds ee9a5be (LEADINFO_DATUM 25-11); volgt de env niet, zodat een latere push (bv. 26-11) hem niet tilt.
+  const d = revisieDatum('/websitebezoekers-herkennen/', '2026-11-18');
   assert.match(html, new RegExp(`"datePublished": "2026-10-27",\\s*"dateModified": "${d}"`));
   const [y, m, day] = d.split('-');
   const zicht = `${Number(day)} ${['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'][Number(m) - 1]} ${y}`;

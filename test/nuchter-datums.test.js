@@ -9,10 +9,8 @@ test('stijlrelease 18-11: bijgewerkt-/lastmod-/dateModified-datums, uitsluitend 
   for (const pad of STIJL_PADEN) {
     const file = pad.endsWith('.html') ? out + pad : out + pad + 'index.html';
     const fields = dateFields(readFileSync(file, 'utf8'));
-    const envIso = process.env.BUILD_DATE || process.env.PUSH_DATE;
-    const verwacht = LEADINFO_PADEN.has(pad)
-      ? [revisieDatum(pad, '2026-11-18'), envIso].filter(Boolean).sort().at(-1)
-      : revisieDatum(pad, '2026-11-18');
+    // Leadinfo-pagina heeft sinds ee9a5be een vaste datum (LEADINFO_DATUM in revisieDatum); volgt de env niet meer.
+    const verwacht = revisieDatum(pad, '2026-11-18');
     assert.equal(fields.visible, verwacht, pad + ': zichtbaar');
     assert.equal(sitemap.get(pad), verwacht, pad + ': sitemap');
     for (const date of [...fields.ld, ...fields.og]) assert.equal(date, verwacht, pad + ': dateModified');

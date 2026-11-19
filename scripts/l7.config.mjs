@@ -3,10 +3,13 @@ import { execSync, execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 const UITSLAG = `
 import { match, VRAGEN } from './js/lib/match.js';
+import { TOOLS } from './js/lib/tools.js';
+import { uitgaand } from './js/lib/partnerlinks.js';
 const keys = Object.keys(VRAGEN); const out = [];
 const rec = (i, a) => { if (i === keys.length) { out.push([a, match(a)]); return; } for (const v of VRAGEN[keys[i]]) rec(i + 1, { ...a, [keys[i]]: v }); };
 rec(0, {});
-console.log(JSON.stringify(out, (k, v) => (/logo|^prijsMaand/i.test(k) ? undefined : v)));`;
+const knoppen = TOOLS.map((t) => [t.id, uitgaand(t)]);
+console.log(JSON.stringify({ out, knoppen }, (k, v) => (/logo|^prijsMaand/i.test(k) ? undefined : v)));`;
 const keuzehulpUitslag = (outDir) => execFileSync('node', ['--input-type=module', '-e', UITSLAG], { cwd: outDir, encoding: 'utf8', maxBuffer: 1 << 28 });
 export const CFG = {
   // Geen datumlift door alleen een gewijzigd kind; bij eigen body geldt de gewone L7-plicht.
@@ -17,8 +20,11 @@ export const CFG = {
     return join(dir, '_site');
   },
   hubs: [],
-  // Keuzehulp: alleen een andere uitslag (alle 324 antwoordcombinaties, incl. getoonde toolvelden) telt als client-side wijziging.
-  clientOutput: { '/keuzehulp/': { covers: /^js\/lib\/(tools|match)\.js$/, run: keuzehulpUitslag } },
+  // Keuzehulp: alleen een andere uitslag (324 combinaties, toolvelden) of andere keuzehulp-knoppen (PARTNERLINKS via uitgaand)
+  // telt als client-side wijziging. partnerlinks.js hoort bij covers: een wijziging in PARTNERLINKS_PAGINA (alleen
+  // inhoudspagina's, bv. Leadinfo) verandert de keuzehulp niet en mag de datum niet tillen. Een echte PARTNERLINKS-wijziging
+  // (knop onder een resultaat) zit in knoppen en telt wel.
+  clientOutput: { '/keuzehulp/': { covers: /^js\/lib\/(tools|match|partnerlinks)\.js$/, run: keuzehulpUitslag } },
   // E-CTA-1 (plan MM 17-11, Dave via GB2): de CTA-blokken A/C (scripts/e-cta.mjs) tellen niet als bodywijziging; geen datum-lift. Vraagt SC-OK.
   // E-CTA-1 B (17-11): tekstlink in een bestaande zin (spokes.py partner_tekst_b, website_leads.py wl_tekst) wordt ge-unwrapt tot de
   // linktekst: de linkmarkup (incl. aria-label) en het zichtbare label ' (partnerlink)' vallen weg. Alleen <a> met

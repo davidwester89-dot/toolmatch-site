@@ -2,8 +2,9 @@ import json, html, os, re, subprocess
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MAANDEN_NL=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december']
 def BUILD_ISO():
-    # L7: PUSH_DATE/BUILD_DATE bij de check; zonder env de geplande dag (19-11, na livecheck abbdcf6).
-    return os.environ.get('BUILD_DATE') or os.environ.get('PUSH_DATE') or '2026-11-19'
+    # 19-11-keten (Trengo, Canva-privacy-URL, salon-inlinks; tip dac368a) is live op 19-11: vaste datum, volgt BUILD_DATE niet meer.
+    # Latere hashes zetten hun eigen datum per pagina (bv. PRES_UPD in ai_presentatie.py, techronde 19-11, push 20-11).
+    return '2026-11-19'
 def BUILD_NL():
     y,m,d=BUILD_ISO().split('-')
     return f"{int(d)} {MAANDEN_NL[int(m)-1]} {y}"

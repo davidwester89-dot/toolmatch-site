@@ -41,13 +41,18 @@ test('ai-presentatie: bronnen alleen naam + link, zonder datum', () => {
   assert.doesNotMatch(b, /bekeken op|geraadpleegd|20\d\d/);
 });
 
-test('L7: /ai-presentatie-maken/ datePublished 3-11, dateModified 17-11 (Gemini-partnerlink); ontwerp-hub 17-11 (Pitch-CTA neutraal)', () => {
+test('L7: /ai-presentatie-maken/ datePublished 3-11, dateModified 20-11 (inlink Canva-gids, techronde 19-11); ontwerp-hub 18-11', () => {
   const sm = readFileSync('sitemap.xml', 'utf8');
-  assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-presentatie-maken/</loc><lastmod>2026-11-18</lastmod>`));
+  assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-presentatie-maken/</loc><lastmod>2026-11-20</lastmod>`));
   assert.ok(sm.includes(`<loc>https://toolmatch.nl/ai-afbeeldingen-en-ontwerp/</loc><lastmod>2026-11-18</lastmod>`), 'hub 16-11');
-  assert.match(H, /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-18"/);
-  assert.match(H, /bijgewerkt op <time datetime="2026-11-18">18 november 2026<\/time>/);
+  assert.match(H, /"datePublished": "2026-11-03",\s*"dateModified": "2026-11-20"/);
+  assert.match(H, /bijgewerkt op <time datetime="2026-11-20">20 november 2026<\/time>/);
   const a = readFileSync('ai-afbeeldingen-en-ontwerp/index.html', 'utf8');
   assert.match(a, /"dateModified": "2026-11-18"/);
   assert.match(a, /bijgewerkt op 18 november 2026/);
+});
+
+test('techronde 19-11: lead linkt naar de Canva-gids (bestaande zin, één link)', () => {
+  assert.match(H, /<p class="lead">Een eerste versie van je presentatie in een paar minuten\. Hier staan <a href="\/gids\/canva-voor-ondernemers\/">Canva<\/a>, Copilot en Gemini naast elkaar/);
+  assert.equal((H.match(/href="\/gids\/canva-voor-ondernemers\/"/g) || []).length, 1);
 });

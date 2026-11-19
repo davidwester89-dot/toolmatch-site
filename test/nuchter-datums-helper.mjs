@@ -28,6 +28,7 @@ export const TRENGO_DATUM = '2026-11-19';
 export const TRENGO_PADEN = new Set(['/ai-chatbot-website/', '/keuzehulp/', '/gids/canva-voor-ondernemers/']);
 export const LATERE_REVISIE = {
   '/online-afspraken-plannen/': '2026-11-19',
+  '/ai-presentatie-maken/': '2026-11-20',  // inlink Canva-gids in de lead (techronde 19-11, push 20-11)
 };
 export const revisieDatum = (pad, vorige) => {
   const kandidaten = [vorige, STIJL_PADEN.has(pad) ? '2026-11-18' : null, TRENGO_PADEN.has(pad) ? TRENGO_DATUM : null, LATERE_REVISIE[pad]].filter(Boolean);

@@ -36,15 +36,17 @@ ZM_BODY=f'''      <h2 id="wat-je-nodig-hebt">Wat je nodig hebt</h2>
       </ul>
       <h2 id="pakketten">Google Workspace, Microsoft 365 of mail bij je hosting</h2>
       <p>Google Workspace en Microsoft 365 rekenen per gebruiker per maand. Elke medewerker met een eigen mailbox telt als gebruiker. De bedragen zijn exclusief btw, zoals de aanbieders ze tonen.</p>
-      <div class="table-wrap"><table>
-        <caption>Mailpakketten per gebruiker per maand</caption>
-        <thead><tr><th scope="col">Pakket</th><th scope="col">Met jaarcontract</th><th scope="col">Per maand opzegbaar</th><th scope="col">Opslag en extra's</th></tr></thead>
-        <tbody>
+      <div class="tbl" role="region" aria-label="Mailpakketten per gebruiker per maand" tabindex="0">
+        <table>
+          <caption class="sr">Mailpakketten per gebruiker per maand</caption>
+          <thead><tr><th scope="col">Pakket</th><th scope="col">Met jaarcontract</th><th scope="col">Per maand opzegbaar</th><th scope="col">Opslag en extra's</th></tr></thead>
+          <tbody>
           <tr><th scope="row">Google Workspace Business Starter</th><td>€ 6,80</td><td>€ 8,10</td><td>30 GB per gebruiker; Gemini in Gmail en als chat</td></tr>
           <tr><th scope="row">Google Workspace Business Standard</th><td>€ 13,60</td><td>€ 16,20</td><td>2 TB per gebruiker</td></tr>
           <tr><th scope="row">Microsoft 365 Business Basic</th><td>€ 6,07</td><td>€ 7,28</td><td>Web- en mobiele versies van Word, Excel, PowerPoint en Outlook; Teams</td></tr>
-        </tbody>
-      </table></div>
+          </tbody>
+        </table>
+      </div>
       <ul>
         <li><strong>Google Workspace</strong> past als je al in Gmail en Google Docs werkt. In Business Starter zit ook Gemini in Gmail en als chat. Of dat beter past dan ChatGPT, lees je in {L('/vergelijken/chatgpt-vs-gemini/','ChatGPT vs Gemini')}.</li>
         <li><strong>Microsoft 365</strong> past als je met Outlook, Word en Excel werkt. Copilot is daar een betaalde invoegtoepassing; zie {L('/vergelijken/chatgpt-vs-copilot/','ChatGPT vs Copilot')}. {X(M365_BASIC,'Bron: Microsoft 365 Business Basic')}</li>

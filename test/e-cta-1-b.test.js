@@ -112,7 +112,8 @@ test('E-CTA-1 B: alleen bestaande woorden gelinkt; koppen en bronregels byte-gel
     // dat is geen B-tekstlink. Koppen en bronregels blijven gelijk aan de stand vóór B.
     // /ai-presentatie-maken/: techronde 19-11 (push 26-11) zet één interne link op het bestaande woord «Canva» in de lead;
     // de tekst zelf blijft gelijk, dus die link halen we weg vóór de vergelijking.
-    const zonderTechInlink = (x) => (p === '/ai-presentatie-maken/' ? x.replace('<a href="/gids/canva-voor-ondernemers/">Canva</a>', 'Canva') : x);
+    // /ai-mail-en-offertes/: wk48 (push 27-11) voegt in de intro één zin met een inlink naar /zakelijk-e-mailadres-aanmaken/ toe; die zin halen we weg vóór de vergelijking.
+    const zonderTechInlink = (x) => (p === '/ai-presentatie-maken/' ? x.replace('<a href="/gids/canva-voor-ondernemers/">Canva</a>', 'Canva') : p === '/ai-mail-en-offertes/' ? x.replace(' Heb je nog geen mailadres op je eigen domein? Lees hoe je een <a href="/zakelijk-e-mailadres-aanmaken/">zakelijk e-mailadres aanmaakt</a>.', '') : x);
     if (p !== '/websitebezoekers-herkennen/') {
       assert.equal(bodyFingerprint(zonderTechInlink(h), CFG), bodyFingerprint(oud, CFG), `${p}: tekst gewijzigd t.o.v. ${PRE_B}`);
     }

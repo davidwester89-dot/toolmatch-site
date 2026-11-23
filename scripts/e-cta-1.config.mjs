@@ -66,6 +66,7 @@ export const ECTA = {
     '/websitebezoekers-herkennen/': KEUZEHULP,
     '/ai-presentatie-maken/': KEUZEHULP,
     '/boekingssysteem-salon/': KEUZEHULP, // niet op de kaart (nieuwe pagina 19-11): voorlopig alleen keuzehulp
+    '/zakelijk-e-mailadres-aanmaken/': KEUZEHULP, // niet op de kaart (nieuwe pagina 27-11): alleen keuzehulp, zoals /boekingssysteem-salon/
     // Vergelijken
     '/vergelijken/': KEUZEHULP,
     '/vergelijken/chatgpt-vs-copilot/': KEUZEHULP,

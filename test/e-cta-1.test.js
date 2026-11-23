@@ -11,11 +11,11 @@ import { TOOLS } from '../js/lib/tools.js';
 import { ECTA } from '../scripts/e-cta-1.config.mjs';
 import { PARTNERLINKS, PARTNERLINKS_PAGINA } from '../js/lib/partnerlinks.js';
 
-// Site-adapter ToolMatch: 28 kaartpagina's + /boekingssysteem-salon/ (nieuw 19-11) = 29. Build = scripts/build.py (schrijft in de repo).
+// Site-adapter ToolMatch: 28 kaartpagina's + /boekingssysteem-salon/ (nieuw 19-11) + /zakelijk-e-mailadres-aanmaken/ (nieuw 27-11) = 30. Build = scripts/build.py (schrijft in de repo).
 const ROOT = join(import.meta.dirname || new URL('.', import.meta.url).pathname, '..');
 const SITE = {
   root: ROOT,
-  aantal: 29,
+  aantal: 30,
   build: () => execSync('python3 scripts/build.py', { cwd: ROOT, stdio: 'ignore' }),
   file: (p) => join(ROOT, p, 'index.html'),
   gidsBlog: () => ['/gids/', ...readdirSync(join(ROOT, 'gids'), { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => `/gids/${d.name}/`)],

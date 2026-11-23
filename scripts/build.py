@@ -335,6 +335,7 @@ exec(open('scripts/website_leads.py').read())
 exec(open('scripts/ai_presentatie.py').read())
 exec(open('scripts/canva_ondernemers.py').read())
 exec(open('scripts/boekingssysteem_salon.py').read())
+exec(open('scripts/zakelijk_mail.py').read())
 URLS+=SPOKES
 # Pagina's met schema-update 26-10: Article image (vergelijken/gids) en BreadcrumbList (losse pagina's).
 LASTMOD={u:'2026-10-26' for u in URLS if u in BC_LOSSE or (u.startswith(('/vergelijken/','/gids/')) and u not in ('/vergelijken/','/gids/'))}
@@ -360,6 +361,7 @@ LASTMOD.update(SALON_INLINK_PAD)  # inlink naar /boekingssysteem-salon/ vanaf af
 LASTMOD.update(CTA_NEUTRAAL_PAD); LASTMOD.update({u:WL_UPD[u] for u in WL_UPD})  # onbetaalde CTA's neutraal 17-11 (L7); hubs niet tillen. /websitebezoekers-herkennen/: Leadinfo-partnerknop, vaste lastmod 2026-11-25 uit WL_UPD (niet BUILD_ISO; nuchter_datums bewaart later via max)
 LASTMOD.update({u:TRENGO_ISO for u in TRENGO_PAD})  # Trengo-partnerlink: gecommitte 19-11, niet BUILD_ISO (PUSH_DATE zou anders tillen)
 LASTMOD[CANVA]=TRENGO_ISO  # Canva-gids: privacy-URL-fix live op 19-11; alleen deze pagina, hub /gids/ niet tillen
+LASTMOD.update(ZM_PAD); LASTMOD.update(ZM_INLINK_PAD)  # nieuwe pagina /zakelijk-e-mailadres-aanmaken/ + inlink vanaf /ai-mail-en-offertes/ 27-11 (L7)
 write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{D}{u}</loc><lastmod>{LASTMOD.get(u,GC)}</lastmod></url>\n' for u in URLS)+'</urlset>\n')
 
 # GitHub Pages: vaste alias, geen artikel en niet in de sitemap.

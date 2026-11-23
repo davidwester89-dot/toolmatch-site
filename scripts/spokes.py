@@ -34,6 +34,9 @@ CTA_NEUTRAAL_PAD={u:CTA_NEUTRAAL_UPD for u in ('/ai-afbeeldingen-en-ontwerp/','/
 AFFILIATES_PAD={'/online-afspraken-plannen/':AFFILIATES_UPD,'/social-media-inplannen/':AFFILIATES_UPD,'/ai-assistenten/':AFFILIATES_UPD,'/ai-mail-en-offertes/':AFFILIATES_UPD,'/ai-presentatie-maken/':AFFILIATES_UPD,'/keuzehulp/':AFFILIATES_UPD,'/privacy/':AFFILIATES_UPD}  # vier affiliate-CTA's 17-11 (L7); hubs niet tillen
 SALON_INLINK_UPD='2026-11-19'
 SALON_INLINK_PAD={'/online-afspraken-plannen/':SALON_INLINK_UPD,'/keuzehulp/':SALON_INLINK_UPD}  # inlink naar /boekingssysteem-salon/ 19-11 (L7)
+ZM='/zakelijk-e-mailadres-aanmaken/'
+ZM_UPD='2026-11-27'
+ZM_INLINK_PAD={'/ai-mail-en-offertes/':ZM_UPD}  # inlink naar /zakelijk-e-mailadres-aanmaken/ 27-11 (L7); vaste datum, niet BUILD_ISO
 VERDER_GIDS=('/gids/ai-veilig-gebruiken/','/gids/ai-beleid-opstellen/')
 PRIJS_UPD={'/gids/ai-veilig-gebruiken/':'2026-10-30'}  # NL-IP-prijscheck 30-10: bronnen ChatGPT/Claude opnieuw bekeken (opt-out-claims nagelezen), L7
 INBOUND_UPD={'/ai-tekst-schrijven/':'2026-11-05'}  # Verder lezen + /ai-presentatie-maken/ (techronde 5-11): zichtbare wijziging, L7
@@ -69,6 +72,7 @@ def nagelezen(t):
     b=sorted({BRON_BEKEKEN[u] for _,u in t['bronnen'] if u in BRON_BEKEKEN and BRON_BEKEKEN[u]!=kaartdatum(t)})
     return (f'; Nederlandse prijspagina bekeken op {d[0]}' if len(d)==1 else '')+(f'; prijspagina bekeken op {b[0]}' if len(b)==1 and not d else '')
 def byline(slug=None):
+    if slug in ZM_INLINK_PAD: return f'      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op {datum_nl(ZM_INLINK_PAD[slug])}. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # inlink zakelijk e-mailadres (L7 27-11)
     if slug in SALON_INLINK_PAD: return f'      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op {BUILD_NL()}. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # inlink boekingssysteem salon (L7): datum = BUILD_DATE
     if slug in TRENGO_PAD and slug not in ('/keuzehulp/','/privacy/'):
         return f'      <p class="note">Redactie ToolMatch · gecontroleerd op 20 oktober 2026, bijgewerkt op {TRENGO_NL()}. Prijzen zoals de aanbieder ze vermeldt; wat de aanbieder je bij het afsluiten aanbiedt, gaat voor.</p>\n'  # Trengo-partnerlink (L7): vaste 19-11, niet BUILD_ISO
@@ -235,7 +239,7 @@ cat('/ai-mail-en-offertes/','AI voor offertes en zakelijke mail: welke tool? | T
  'Mail en offertes','AI voor offertes en zakelijke mail',
  'Een offertetekst, een voorstel of een lastige mail sneller op papier. Hier zie je welke AI-tools in je mailprogramma zitten en welke los werken.',
  f'''      <p>Het meeste schrijfwerk voor offertes en mail gebeurt in je mailprogramma. Daarom maakt het veel uit of de AI daar al in zit: <strong>Copilot in Outlook</strong> bij Microsoft 365, <strong>Gemini in Gmail</strong> bij Google Workspace, of een losse assistent waar je tekst in en uit kopieert. Twijfel je tussen de eerste en de laatste, lees dan {L('/vergelijken/chatgpt-vs-copilot/','Copilot in Outlook of ChatGPT')}.</p>
-      <p>Deze pagina gaat over het schrijven van de tekst. De prijzen, voorwaarden en afspraken in je offerte blijven jouw werk: controleer ze altijd zelf.</p>
+      <p>Deze pagina gaat over het schrijven van de tekst. De prijzen, voorwaarden en afspraken in je offerte blijven jouw werk: controleer ze altijd zelf. Heb je nog geen mailadres op je eigen domein? Lees hoe je een {L('/zakelijk-e-mailadres-aanmaken/','zakelijk e-mailadres aanmaakt')}.</p>
 ''',
  [('copilot','je mail in Outlook staat: Microsoft laat Copilot daar mails opstellen en lange e-mailthreads samenvatten.'),
   ('gemini','je mail in Gmail staat: Gemini in Gmail zit in Google Workspace Business Starter.'),
@@ -424,7 +428,7 @@ for c in CAT:
     body+='      <h2 id="zo-kies-je">Zo kies je</h2>\n      <ul>\n'+''.join(f'        <li>{k}</li>\n' for k in c['kies'])+'      </ul>\n'
     body+=f'      <p>Nog niet zeker? {L("/keuzehulp/","Doe de keuzehulp")} en zie wat bij jouw situatie past.</p>\n' if c['slug']!='/ai-assistenten/' else ''
     body+=verder_lezen(c['slug'])+faq_html(c['faq'])+bronnen_html(srcs)+byline(c['slug'])
-    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":SALON_INLINK_PAD.get(c['slug']) or (TRENGO_ISO if c['slug'] in TRENGO_PAD else CTA_NEUTRAAL_PAD.get(c['slug'])) or {'/automatiseren-zonder-code/':'2026-11-12','/ai-afbeeldingen-en-ontwerp/':'2026-11-16','/ai-assistenten/':'2026-11-17','/ai-data-analyse/':'2026-11-16','/ai-mail-en-offertes/':'2026-11-17','/ai-vertalen/':'2026-11-16','/ai-tekst-schrijven/':'2026-11-16','/ai-chatbot-website/':'2026-11-16','/online-afspraken-plannen/':'2026-11-17','/social-media-inplannen/':'2026-11-17','/ai-notuleren/':'2026-11-16'}.get(c['slug']) or MAKE_UPD.get(c['slug']) or (INBOUND_UPD.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
+    graph=[{"@type":"CollectionPage","@id":D+c['slug'],"url":D+c['slug'],"name":c['h1'],"description":c['desc'],"inLanguage":"nl-NL","isPartOf":{"@id":D+"/#website"},"publisher":ORG,"dateModified":ZM_INLINK_PAD.get(c['slug']) or SALON_INLINK_PAD.get(c['slug']) or (TRENGO_ISO if c['slug'] in TRENGO_PAD else CTA_NEUTRAAL_PAD.get(c['slug'])) or {'/automatiseren-zonder-code/':'2026-11-12','/ai-afbeeldingen-en-ontwerp/':'2026-11-16','/ai-assistenten/':'2026-11-17','/ai-data-analyse/':'2026-11-16','/ai-mail-en-offertes/':'2026-11-17','/ai-vertalen/':'2026-11-16','/ai-tekst-schrijven/':'2026-11-16','/ai-chatbot-website/':'2026-11-16','/online-afspraken-plannen/':'2026-11-17','/social-media-inplannen/':'2026-11-17','/ai-notuleren/':'2026-11-16'}.get(c['slug']) or MAKE_UPD.get(c['slug']) or (INBOUND_UPD.get(c['slug']) or LOGO_UPD.get(c['slug'])) or (NOTULY_UPD[c['slug']] if c['slug'] in NOTULY_UPD else VERDER_UPD if c['slug'] in VERDER else VALUTA_UPD.get(c['slug'],GC))},
       {"@type":"ItemList","name":c['h1'],"itemListOrder":"https://schema.org/ItemListUnordered","itemListElement":[{"@type":"ListItem","position":n+1,"name":T[i]['naam'],"url":D+c['slug']+'#'+i} for n,i in enumerate(ids)]},
       crumbs_ld([('Home','/'),(c['crumb'],c['slug'])]),faq_ld(c['slug'],c['faq'])]
     zet(c['slug'],c['title'],c['desc'],c['crumb'],c['h1'],c['lead'],body,graph)

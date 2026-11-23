@@ -90,7 +90,7 @@ test('statisch: elke knop/data-cta/data-vendor/sponsored-link op de site is een 
     assert.doesNotMatch(src, /data-cta="outbound"/, f);
   }
   assert.equal(fout.join('\n'), '', fout.join('\n'));
-  assert.equal(betaald, 12, 'betaalde links: Make 2×, Hostinger, Wix, Cal.com, SimplyBook.me, Metricool, Gemini 3×, Trengo, Leadinfo');
+  assert.equal(betaald, 13, 'betaalde links: Make 2×, Hostinger, Wix, Cal.com, SimplyBook.me, Metricool, Gemini 4× (27-11: /zakelijk-e-mailadres-aanmaken/), Trengo, Leadinfo');
 });
 
 test('17-11 geneutraliseerde merken: Bron-link op de kaart, geen knop; Trengo is sindsdien partner', () => {
